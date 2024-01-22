@@ -29,7 +29,7 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//a");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = new Uri(searchResult.Attributes["href"]);
+                var sceneURL = new Uri(searchResult.Attributes["href"].Value);
                 string curID = Helper.Encode(sceneURL.AbsolutePath),
                     sceneName = searchResult.SelectSingleText(".//p[@class='gen12']"),
                     scenePoster = searchResult.SelectSingleText(".//img/@src"),
