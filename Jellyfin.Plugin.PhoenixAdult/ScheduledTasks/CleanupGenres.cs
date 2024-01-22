@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Tasks;
-using PhoenixAdult.Helpers;
+using PhoenixAdultRebirth.Helpers;
 
-namespace PhoenixAdult.ScheduledTasks
+namespace PhoenixAdultRebirth.ScheduledTasks
 {
     public class CleanupGenres : IScheduledTask
     {

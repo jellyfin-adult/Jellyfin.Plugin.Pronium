@@ -4,7 +4,7 @@ using MediaBrowser.Model.Logging;
 using Microsoft.Extensions.Logging;
 #endif
 
-namespace PhoenixAdult.Helpers
+namespace PhoenixAdultRebirth.Helpers
 {
     internal static class Logger
     {

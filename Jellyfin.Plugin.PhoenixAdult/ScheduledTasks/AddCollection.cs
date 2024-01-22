@@ -9,7 +9,7 @@ using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Tasks;
 
-namespace PhoenixAdult.ScheduledTasks
+namespace PhoenixAdultRebirth.ScheduledTasks
 {
     public class AddCollection : IScheduledTask
     {

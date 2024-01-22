@@ -9,8 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Helpers.Utils;
-using PhoenixAdult.Sites;
+using PhoenixAdultRebirth.Helpers.Utils;
+using PhoenixAdultRebirth.Sites;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
@@ -18,7 +18,7 @@ using MediaBrowser.Common.Net;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult.Helpers
+namespace PhoenixAdultRebirth.Helpers
 {
     internal static class Helper
     {

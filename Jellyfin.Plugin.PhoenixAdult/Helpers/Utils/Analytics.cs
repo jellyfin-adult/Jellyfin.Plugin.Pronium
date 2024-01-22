@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using PhoenixAdult.Configuration;
+using PhoenixAdultRebirth.Configuration;
 
 #if __EMBY__
 #else
 using Sentry;
 #endif
 
-namespace PhoenixAdult.Helpers.Utils
+namespace PhoenixAdultRebirth.Helpers.Utils
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "Temp")]
     public struct AnalyticsExeption

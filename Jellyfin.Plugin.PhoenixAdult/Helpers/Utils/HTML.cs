@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace PhoenixAdult.Helpers.Utils
+namespace PhoenixAdultRebirth.Helpers.Utils
 {
     internal static class HTML
     {

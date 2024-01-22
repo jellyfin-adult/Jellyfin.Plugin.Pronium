@@ -5,7 +5,7 @@ on:
       - master
     tags: ["v*"]
     paths:
-      - Jellyfin.Plugin.PhoenixAdult/**
+      - Jellyfin.Plugin.PhoenixAdultRebirth/**
       - .github/**
 
 jobs:
@@ -21,19 +21,19 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/PhoenixAdult.dll Jellyfin.Plugin.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.dll Jellyfin.Plugin.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdult.dll
-          dest: Jellyfin.Plugin.PhoenixAdult.zip
+          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.dll
+          dest: Jellyfin.Plugin.PhoenixAdultRebirth.zip
 
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: Jellyfin
           retention-days: 90
-          path: Jellyfin.Plugin.PhoenixAdult.zip
+          path: Jellyfin.Plugin.PhoenixAdultRebirth.zip
   emby:
     runs-on: windows-latest
     steps:
@@ -46,19 +46,19 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release.Emby
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/PhoenixAdult.dll ./Emby.Plugins.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/PhoenixAdult.pdb ./Emby.Plugins.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/PhoenixAdultRebirth.dll ./Emby.Plugins.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/PhoenixAdultRebirth.pdb ./Emby.Plugins.PhoenixAdultRebirth.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdult.dll
-          dest: Emby.Plugins.PhoenixAdult.zip
+          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdultRebirth.dll
+          dest: Emby.Plugins.PhoenixAdultRebirth.zip
 
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: Emby
           retention-days: 90
-          path: Emby.Plugins.PhoenixAdult.zip
+          path: Emby.Plugins.PhoenixAdultRebirth.zip
   deploy:
     runs-on: ubuntu-latest
     needs: [jellyfin, emby]
@@ -73,5 +73,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            **/Jellyfin.Plugin.PhoenixAdult.zip
-            **/Emby.Plugins.PhoenixAdult.zip
+            **/Jellyfin.Plugin.PhoenixAdultRebirth.zip
+            **/Emby.Plugins.PhoenixAdultRebirth.zip

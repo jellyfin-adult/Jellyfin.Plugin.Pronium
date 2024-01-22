@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using MediaBrowser.Model.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PhoenixAdult.Helpers;
-using PhoenixAdult.Helpers.Utils;
+using PhoenixAdultRebirth.Helpers;
+using PhoenixAdultRebirth.Helpers.Utils;
 
-namespace PhoenixAdult.ScheduledTasks
+namespace PhoenixAdultRebirth.ScheduledTasks
 {
     public class CleanupServiceData : IScheduledTask
     {

@@ -9,10 +9,10 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Helpers;
-using PhoenixAdult.Helpers.Utils;
+using PhoenixAdultRebirth.Helpers;
+using PhoenixAdultRebirth.Helpers.Utils;
 
-namespace PhoenixAdult.Sites
+namespace PhoenixAdultRebirth.Sites
 {
     public class NetworkAdultEmpire : IProviderBase
     {

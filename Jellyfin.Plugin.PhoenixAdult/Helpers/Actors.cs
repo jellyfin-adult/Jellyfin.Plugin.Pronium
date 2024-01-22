@@ -6,15 +6,15 @@ using System.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using PhoenixAdult.Configuration;
-using PhoenixAdult.Helpers.Utils;
+using PhoenixAdultRebirth.Configuration;
+using PhoenixAdultRebirth.Helpers.Utils;
 
 #if __EMBY__
 #else
 using MediaBrowser.Model.Entities;
 #endif
 
-namespace PhoenixAdult.Helpers
+namespace PhoenixAdultRebirth.Helpers
 {
     internal static class Actors
     {

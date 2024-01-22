@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using MediaBrowser.Controller.Entities;
-using PhoenixAdult.Configuration;
-using PhoenixAdult.Helpers.Utils;
+using PhoenixAdultRebirth.Configuration;
+using PhoenixAdultRebirth.Helpers.Utils;
 
-namespace PhoenixAdult.Helpers
+namespace PhoenixAdultRebirth.Helpers
 {
     internal static class Genres
     {

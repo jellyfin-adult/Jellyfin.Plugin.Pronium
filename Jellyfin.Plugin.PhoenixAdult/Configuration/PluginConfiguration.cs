@@ -1,7 +1,7 @@
 using System;
 using MediaBrowser.Model.Plugins;
 
-namespace PhoenixAdult.Configuration
+namespace PhoenixAdultRebirth.Configuration
 {
     public enum JAVActorNamingStyle
     {

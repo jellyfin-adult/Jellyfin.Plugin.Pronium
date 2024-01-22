@@ -4,11 +4,11 @@ on:
   push:
     branches: [master]
     paths:
-      - "Jellyfin.Plugin.PhoenixAdult/**"
+      - "Jellyfin.Plugin.PhoenixAdultRebirth/**"
   pull_request:
     branches: [master]
     paths:
-      - "Jellyfin.Plugin.PhoenixAdult/**"
+      - "Jellyfin.Plugin.PhoenixAdultRebirth/**"
 
 jobs:
   analyze:

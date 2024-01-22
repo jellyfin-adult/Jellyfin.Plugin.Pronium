@@ -9,8 +9,8 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Helpers;
-using PhoenixAdult.Helpers.Utils;
+using PhoenixAdultRebirth.Helpers;
+using PhoenixAdultRebirth.Helpers.Utils;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
@@ -19,7 +19,7 @@ using System.IO;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult.Providers
+namespace PhoenixAdultRebirth.Providers
 {
     public class MovieProvider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
@@ -245,7 +245,7 @@ namespace PhoenixAdult.Providers
             var provider = Helper.GetProviderBySiteID(siteNum[0]);
             if (provider != null)
             {
-                Logger.Info($"PhoenixAdult ID: {externalID}");
+                Logger.Info($"PhoenixAdultRebirth ID: {externalID}");
 
                 MetadataResult<BaseItem> res = null;
                 try

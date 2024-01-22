@@ -1,18 +1,18 @@
-# PhoenixAdult
+# PhoenixAdultRebirth
 
 This metadata provider helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site
 
-[![GPL 2.0 License](https://img.shields.io/github/license/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](./LICENSE)
-[![Current Release](https://img.shields.io/github/release/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/latest)
-[![Build status](https://img.shields.io/github/actions/workflow/status/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/release.yml)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/tag/nightly)
+[![GPL 2.0 License](https://img.shields.io/github/license/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth)](./LICENSE)
+[![Current Release](https://img.shields.io/github/release/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/releases/latest)
+[![Build status](https://img.shields.io/github/actions/workflow/status/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/release.yml)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/releases/tag/nightly)
 
 ------------
 
 ## Install
 - Repository (Jellyfin only):
-  - Add to the list this URL `https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/master/manifest.json`
+  - Add to the list this URL `https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/master/manifest.json`
 - Manual:
-  - Download Archive from [Latest Release](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/latest)
+  - Download Archive from [Latest Release](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/releases/latest)
   - Follow the [Instruction](https://jellyfin.org/docs/general/server/plugins/index.html)
 
 ## Features

@@ -8,7 +8,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using SkiaSharp;
 
-namespace PhoenixAdult.Helpers.Utils
+namespace PhoenixAdultRebirth.Helpers.Utils
 {
     internal static class ImageHelper
     {

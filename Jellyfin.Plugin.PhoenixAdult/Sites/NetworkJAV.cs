@@ -7,13 +7,13 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Providers;
+using PhoenixAdultRebirth.Providers;
 
 #if __EMBY__
 using MediaBrowser.Model.Configuration;
 #endif
 
-namespace PhoenixAdult.Sites
+namespace PhoenixAdultRebirth.Sites
 {
     public class NetworkJAV : IProviderBase
     {

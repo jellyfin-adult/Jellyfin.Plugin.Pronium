@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace PhoenixAdult.Helpers.Utils
+namespace PhoenixAdultRebirth.Helpers.Utils
 {
     internal static class GoogleSearch
     {

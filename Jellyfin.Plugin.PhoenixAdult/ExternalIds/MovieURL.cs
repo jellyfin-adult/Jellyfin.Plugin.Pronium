@@ -7,7 +7,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 #endif
 
-namespace PhoenixAdult.ExternalId
+namespace PhoenixAdultRebirth.ExternalId
 {
     public class MovieURL : IExternalId
     {
