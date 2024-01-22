@@ -26,14 +26,14 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//span[@class='gen12' and contains(., 'Movies:')]/following-sibling::div[text()] | //b[contains(., 'Content:')]/following-sibling::div//div[@class='contenedor']/div");
+            var searchResults = data.SelectNodesSafe("//a");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                var sceneURL = new Uri(searchResult.Attributes["href"]);
                 string curID = Helper.Encode(sceneURL.AbsolutePath),
-                    sceneName = searchResult.SelectSingleText(".//img/@title"),
+                    sceneName = searchResult.SelectSingleText(".//p[@class='gen12']"),
                     scenePoster = searchResult.SelectSingleText(".//img/@src"),
-                    sceneDate = searchResult.SelectSingleText(".//p[@class='genmed'] | ./text()");
+                    sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
 
                 var res = new RemoteSearchResult
                 {

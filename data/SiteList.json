@@ -759,7 +759,7 @@
       "0": [ "Manyvids", "https://www.manyvids.com", "/video/" ],
     },
     "51": {
-      "0": [ "Data18", "http://www.data18.com", "/search/?k=" ],
+      "0": [ "Data18", "http://www.data18.com", "/sys/live.php?key=" ],
     },
   },
   "SiteIDList": {
