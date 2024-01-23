@@ -24,9 +24,11 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
+            Logger.Info($"SiteData18.url: {url}");
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodesSafe("//a");
+            Logger.Info($"SiteData18.searchResults: {searchResults.Count}")
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.Attributes["href"].Value);
@@ -34,6 +36,8 @@ namespace PhoenixAdultRebirth.Sites
                     sceneName = searchResult.SelectSingleText(".//p[@class='gen12']"),
                     scenePoster = searchResult.SelectSingleText(".//img/@src"),
                     sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
+
+                Logger.Info($"SiteData18.data: {sceneURL.ToString()}, {curID}, {sceneName}, {scenePoster}, {sceneDates}");
 
                 var res = new RemoteSearchResult
                 {
