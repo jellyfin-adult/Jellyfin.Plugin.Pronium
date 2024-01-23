@@ -37,8 +37,6 @@ namespace PhoenixAdultRebirth.Sites
                     scenePoster = searchResult.SelectSingleText(".//img/@src"),
                     sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
 
-                Logger.Info($"SiteData18.data: {sceneURL.ToString()}, {curID}, {sceneName}, {scenePoster}, {sceneDate}");
-
                 var res = new RemoteSearchResult
                 {
                     Name = sceneName,
@@ -53,6 +51,8 @@ namespace PhoenixAdultRebirth.Sites
                     .Replace("March", "Mar", StringComparison.OrdinalIgnoreCase)
                     .Trim();
                 }
+
+                Logger.Info($"SiteData18.data: {sceneURL.ToString()}, {curID}, {sceneName}, {scenePoster}, {sceneDate}");
 
                 if (DateTime.TryParseExact(sceneDate, "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
@@ -117,15 +117,20 @@ namespace PhoenixAdultRebirth.Sites
             result.Item.ExternalId = sceneURL;
 
             result.Item.Name = sceneData.SelectSingleText("//h1");
-            result.Item.Overview = sceneData.SelectSingleText("//p[contains(., 'Description:') or contains(., 'Story:')]")
-                .Replace("Description:", string.Empty, StringComparison.OrdinalIgnoreCase)
-                .Replace("Story:", string.Empty, StringComparison.OrdinalIgnoreCase);
+            result.Item.Overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]")
+                .Replace("Description - ", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Replace("Story - ", string.Empty, StringComparison.OrdinalIgnoreCase);
 
             result.Item.AddStudio("Data18");
-            var studio = sceneData.SelectSingleText("//p[contains(., 'Studio:') or contains(., 'Site:')]/a/text()");
-            if (!string.IsNullOrEmpty(studio))
+            var studios = sceneData.SelectNodesSafe("//div[@class='gen12']/p[contains(., 'Network') or contains(., 'Site')]//a");
+            foreach (var studio in studios)
             {
-                result.Item.AddStudio(studio);
+                var studioName = studio.SelectSingleText("/text()");
+
+                if (!string.IsNullOrEmpty(studioName))
+                {
+                    result.Item.AddStudio(studioName);
+                }
             }
 
             if (!string.IsNullOrEmpty(sceneDate))
@@ -152,7 +157,7 @@ namespace PhoenixAdultRebirth.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodesSafe("//div[@class='contenedor']//img | //ul/li//img");
+            var actorsNode = sceneData.SelectNodesSafe("//h3[contains(., 'Cast')]/parent::div//img");
             foreach (var actorLink in actorsNode)
             {
                 var actor = new PersonInfo
