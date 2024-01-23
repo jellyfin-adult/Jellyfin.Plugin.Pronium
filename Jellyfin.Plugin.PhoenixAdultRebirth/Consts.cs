@@ -5,7 +5,7 @@ namespace PhoenixAdultRebirth
 {
     public static class Consts
     {
-        public const string DatabaseUpdateURL = "https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdultRebirth/contents/data";
+        public const string DatabaseUpdateURL = "https://api.github.com/repos/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/contents/data";
 
 #if __EMBY__
         public const string PluginInstance = "Emby.Plugins.PhoenixAdultRebirth";
