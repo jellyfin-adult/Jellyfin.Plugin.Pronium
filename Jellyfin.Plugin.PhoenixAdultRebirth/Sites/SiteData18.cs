@@ -32,7 +32,7 @@ namespace PhoenixAdultRebirth.Sites
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.Attributes["href"].Value);
-                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                string curID = Helper.Encode(sceneURL.AbsoluteUri),
                     sceneName = searchResult.SelectSingleText(".//p[@class='gen12']"),
                     scenePoster = searchResult.SelectSingleText(".//img/@src"),
                     sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
@@ -45,10 +45,10 @@ namespace PhoenixAdultRebirth.Sites
 
                 if (!string.IsNullOrEmpty(sceneDate))
                 {
-                    sceneDate = sceneDate.Trim();
+                    sceneDate = sceneDate.Replace("&nbsp;", String.Empty).Trim();
                 }
 
-                Logger.Info($"SiteData18.Search sceneURL: {sceneURL.ToString()}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
+                Logger.Info($"SiteData18.Search sceneURL: {sceneURL}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
 
                 if (DateTime.TryParse(sceneDate, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
