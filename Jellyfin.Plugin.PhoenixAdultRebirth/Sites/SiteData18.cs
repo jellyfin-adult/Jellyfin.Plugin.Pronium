@@ -24,11 +24,11 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-            Logger.Info($"SiteData18.url: {url}");
+            Logger.Info($"SiteData18.Search url: {url}");
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodesSafe("//a");
-            Logger.Info($"SiteData18.searchResults: {searchResults.Count}");
+            Logger.Info($"SiteData18.Search searchResults: {searchResults.Count}");
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.Attributes["href"].Value);
@@ -45,33 +45,17 @@ namespace PhoenixAdultRebirth.Sites
 
                 if (!string.IsNullOrEmpty(sceneDate))
                 {
-                    sceneDate = sceneDate.Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase)
-                    .Replace("June", "Jun", StringComparison.OrdinalIgnoreCase)
-                    .Replace("July", "Jul", StringComparison.OrdinalIgnoreCase)
-                    .Replace("March", "Mar", StringComparison.OrdinalIgnoreCase)
-                    .Trim();
+                    sceneDate = sceneDate.Trim();
                 }
 
-                Logger.Info($"SiteData18.data: {sceneURL.ToString()}, {curID}, {sceneName}, {scenePoster}, {sceneDate}");
+                Logger.Info($"SiteData18.Search sceneURL: {sceneURL.ToString()}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
 
-                if (DateTime.TryParseExact(sceneDate, "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                if (DateTime.TryParse(sceneDate, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     res.PremiereDate = sceneDateObj;
                 }
-                else
-                {
-                    if (DateTime.TryParseExact(sceneDate, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out sceneDateObj))
-                    {
-                        res.PremiereDate = sceneDateObj;
-                    }
-                    else
-                    {
-                        if (searchDate.HasValue)
-                        {
-                            res.PremiereDate = searchDate.Value;
-                        }
-                    }
-                }
+
+                Logger.Info($"SiteData18.Search date: {res.PremiereDate.ToString()}");
 
                 if (res.PremiereDate.HasValue)
                 {
@@ -101,6 +85,8 @@ namespace PhoenixAdultRebirth.Sites
 
             string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = string.Empty;
+
+            Logger.Info($"SiteData18.Update sceneID: {sceneID}, sceneURL: ${sceneURL}");
 
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
