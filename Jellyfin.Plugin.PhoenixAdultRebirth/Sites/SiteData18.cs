@@ -32,20 +32,16 @@ namespace PhoenixAdultRebirth.Sites
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.Attributes["href"].Value);
-                string curID = Helper.Encode(sceneURL.AbsoluteUri),
-                    sceneName = searchResult.SelectSingleText(".//p[@class='gen12']"),
-                    scenePoster = searchResult.SelectSingleText(".//img/@src"),
-                    sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
+                var curID = Helper.Encode(sceneURL.AbsoluteUri);
+                var sceneName = searchResult.SelectSingleText(".//p[@class='gen12']");
+                var scenePoster = searchResult.SelectSingleText(".//img/@src");
+                var sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
 
-                var res = new RemoteSearchResult
-                {
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
-                };
+                var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster, };
 
                 if (!string.IsNullOrEmpty(sceneDate))
                 {
-                    sceneDate = sceneDate.Replace("&nbsp;", String.Empty).Trim();
+                    sceneDate = sceneDate.Replace("&nbsp;", string.Empty).Trim();
                 }
 
                 Logger.Info($"SiteData18.Search sceneURL: {sceneURL}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
@@ -72,21 +68,17 @@ namespace PhoenixAdultRebirth.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem>() { Item = new Movie(), People = new List<PersonInfo>(), };
 
             if (sceneID == null)
             {
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]),
-                sceneDate = string.Empty;
+            var sceneURL = Helper.Decode(sceneID[0]);
+            var sceneDate = string.Empty;
 
-            Logger.Info($"SiteData18.Update sceneID: {sceneID}, sceneURL: ${sceneURL}");
+            Logger.Info($"SiteData18.Update sceneID: {sceneID[0]}, sceneURL: {sceneURL}");
 
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
@@ -99,11 +91,14 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
+            var name = sceneData.SelectSingleText("//h1");
+            var overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]");
 
+            Logger.Info($"SiteData18.Update name: {name}, overview: {overview}, sceneDate: {sceneDate}");
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleText("//h1");
-            result.Item.Overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]")
+            result.Item.Name = name;
+            result.Item.Overview = overview
                 .Replace("Description - ", string.Empty, StringComparison.OrdinalIgnoreCase)
                 .Replace("Story - ", string.Empty, StringComparison.OrdinalIgnoreCase);
 
@@ -146,14 +141,12 @@ namespace PhoenixAdultRebirth.Sites
             var actorsNode = sceneData.SelectNodesSafe("//h3[contains(., 'Cast')]/parent::div//img");
             foreach (var actorLink in actorsNode)
             {
-                var actor = new PersonInfo
-                {
-                    Name = actorLink.SelectSingleText("./@alt"),
-                    ImageUrl = actorLink.SelectSingleText("./@src"),
-                };
+                var actor = new PersonInfo { Name = actorLink.SelectSingleText("./@alt"), ImageUrl = actorLink.SelectSingleText("./@src"), };
 
                 result.People.Add(actor);
             }
+
+            Logger.Info($"SiteData18.Update genres: {result.Item.Genres.Length}, actors: {result.People.Count}");
 
             return result;
         }
@@ -179,16 +172,8 @@ namespace PhoenixAdultRebirth.Sites
             {
                 var img = node.SelectSingleText("./@href");
 
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Primary,
-                });
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Backdrop,
-                });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
             }
 
             return result;
