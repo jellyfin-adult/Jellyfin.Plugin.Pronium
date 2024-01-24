@@ -80,18 +80,14 @@ namespace PhoenixAdultRebirth.Sites
 
             Logger.Info($"SiteData18.Update sceneID: {sceneID[0]}, sceneURL: {sceneURL}");
 
-            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-            {
-                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
-            }
-
             if (sceneID.Length > 1)
             {
                 sceneDate = sceneID[1];
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-            var name = sceneData.SelectSingleText("//h1");
+            Logger.Info(sceneDate.Substring(0, 1000));
+            var name = sceneData.SelectSingleText("//h1/a");
             var overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]");
 
             Logger.Info($"SiteData18.Update name: {name}, overview: {overview}, sceneDate: {sceneDate}");
