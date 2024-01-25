@@ -21,11 +21,11 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net8.0/PhoenixAdultRebirth.dll Jellyfin.Plugin.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net8.0/PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.dll Jellyfin.Plugin.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net8.0/Jellyfin.Plugin.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net8.0/Jellyfin.Plugin.PhoenixAdultRebirth.dll
+          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.dll
           dest: Jellyfin.Plugin.PhoenixAdultRebirth.zip
 
       - uses: actions/upload-artifact@v3
