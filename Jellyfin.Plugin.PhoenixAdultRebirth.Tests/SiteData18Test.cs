@@ -21,7 +21,7 @@ public class Tests
         Assert.IsTrue(result.Count > 0);
         var id = result[0].ProviderIds.Values.FirstOrDefault();
         Assert.IsNotEmpty(id);
-        Assert.AreEqual(TestSceneUrl, Helpers.Helper.Decode(id.Split('#')[0]));
+        Assert.That(Helpers.Helper.Decode(id?.Split('#')[0]), Is.EqualTo(TestSceneUrl));
     }
 
     [Test]
@@ -30,8 +30,8 @@ public class Tests
         var result = await Site.Update(new []{51, 0}, new []{Helpers.Helper.Encode(TestSceneUrl), "2010-09-14"}, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Elite Dyke Society"));
         Assert.IsNotEmpty(result.Item.Overview);
-        Assert.AreEqual(3, result.Item.Studios.Length);
-        Assert.AreEqual(6, result.Item.Genres.Length);
-        Assert.AreEqual(2, result.People.Count);
+        Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
+        Assert.That(result.People.Count, Is.EqualTo(2));
     }
 }
