@@ -76,10 +76,10 @@ namespace PhoenixAdultRebirth.Sites
                 return result;
             }
 
-            var sceneURL = Helper.Decode(sceneID[0]);
+            var sceneUrl = Helper.Decode(sceneID[0]);
             var sceneDate = string.Empty;
 
-            Logger.Info($"SiteData18.Update sceneID: {sceneID[0]}, sceneURL: {sceneURL}");
+            Logger.Info($"SiteData18.Update sceneID: {sceneID[0]}, sceneURL: {sceneUrl}");
 
             if (sceneID.Length > 1)
             {
@@ -87,12 +87,12 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var headers = new Dictionary<string, string> { { "Cookie", "data_user_captcha=1" } };
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, headers).ConfigureAwait(false);
+            var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken, headers).ConfigureAwait(false);
             var name = sceneData.SelectSingleText("//h1/a");
             var overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]");
 
             Logger.Info($"SiteData18.Update name: {name}, sceneDate: {sceneDate}");
-            result.Item.ExternalId = sceneURL;
+            result.Item.ExternalId = sceneUrl;
 
             result.Item.Name = name;
             result.Item.Overview = overview
@@ -149,26 +149,23 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (sceneID == null)
+            if (sceneId == null)
             {
                 return result;
             }
 
-            var sceneURL = Helper.Decode(sceneID[0]);
-            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-            {
-                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
-            }
+            var sceneUrl = Helper.Decode(sceneId[0]);
+            var headers = new Dictionary<string, string> { { "Cookie", "data_user_captcha=1" } };
+            var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken, headers).ConfigureAwait(false);
+            var primaryImage = sceneData.SelectSingleNode("//img[@id='playpriimage']");
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-
-            foreach (var node in sceneData.SelectNodesSafe("//a[@data-featherlight='image']"))
+            if (primaryImage != null)
             {
-                var img = node.SelectSingleText("./@href");
+                var img = primaryImage.SelectSingleText("./@href");
 
                 result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
                 result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
