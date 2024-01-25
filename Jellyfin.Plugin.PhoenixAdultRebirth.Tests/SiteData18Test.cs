@@ -41,5 +41,6 @@ public class Tests
         var result = await _site.GetImages(new[] { 51, 0 }, new[] { Helpers.Helper.Encode(_testSceneUrl), "2010-09-14" }, null, new CancellationToken());
 
         Assert.That(result.Count(), Is.EqualTo(2));
+        Assert.That(result.First().Url, Is.EqualTo("https://cdn.dt18.com/media/t/1/scenes/1/2/44118-kelly-divine-sara-jaymes-hot-and-mean.jpg"));
     }
 }

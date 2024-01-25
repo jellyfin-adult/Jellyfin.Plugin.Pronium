@@ -165,7 +165,7 @@ namespace PhoenixAdultRebirth.Sites
 
             if (primaryImage != null)
             {
-                var img = primaryImage.SelectSingleText("./@href");
+                var img = primaryImage.Attributes["src"].Value;
 
                 result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
                 result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
