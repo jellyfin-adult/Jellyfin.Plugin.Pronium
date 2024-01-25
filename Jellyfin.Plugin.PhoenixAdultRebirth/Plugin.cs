@@ -59,7 +59,7 @@ namespace PhoenixAdultRebirth
 
         public override string Name => "PhoenixAdultRebirth";
 
-        public override Guid Id => Guid.Parse("dc40637f-6ebd-4a34-b8a1-8799629120cf");
+        public override Guid Id => Guid.Parse("172ff6fc-2297-4c96-979a-e0ad632b6120");
 
         public IEnumerable<PluginPageInfo> GetPages()
             => new[]
