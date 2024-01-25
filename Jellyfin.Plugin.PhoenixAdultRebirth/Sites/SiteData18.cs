@@ -25,7 +25,8 @@ namespace PhoenixAdultRebirth.Sites
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             Logger.Info($"SiteData18.Search url: {url}");
-            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
+            var cookies = new Dictionary<string, string> { { "data_user_captcha", "1" } };
+            var data = await HTML.ElementFromURL(url, cancellationToken, null, cookies).ConfigureAwait(false);
 
             var searchResults = data.SelectNodesSafe("//a");
             Logger.Info($"SiteData18.Search searchResults: {searchResults.Count}");
@@ -58,7 +59,7 @@ namespace PhoenixAdultRebirth.Sites
                     curID += $"#{res.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
                 }
 
-                res.ProviderIds.Add(Plugin.Instance.Name, curID);
+                res.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", curID);
 
                 result.Add(res);
             }
@@ -85,16 +86,17 @@ namespace PhoenixAdultRebirth.Sites
                 sceneDate = sceneID[1];
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-            Logger.Info(sceneDate.Substring(0, 1000));
+            var headers = new Dictionary<string, string> { { "Cookie", "data_user_captcha=1" } };
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, headers).ConfigureAwait(false);
             var name = sceneData.SelectSingleText("//h1/a");
             var overview = sceneData.SelectSingleText("//div[@class='gen12']/div[contains(., 'Description') or contains(., 'Story')]");
 
-            Logger.Info($"SiteData18.Update name: {name}, overview: {overview}, sceneDate: {sceneDate}");
+            Logger.Info($"SiteData18.Update name: {name}, sceneDate: {sceneDate}");
             result.Item.ExternalId = sceneURL;
 
             result.Item.Name = name;
             result.Item.Overview = overview
+                .Replace("&nbsp;", " ")
                 .Replace("Description - ", string.Empty, StringComparison.OrdinalIgnoreCase)
                 .Replace("Story - ", string.Empty, StringComparison.OrdinalIgnoreCase);
 
@@ -102,7 +104,7 @@ namespace PhoenixAdultRebirth.Sites
             var studios = sceneData.SelectNodesSafe("//div[@class='gen12']/p[contains(., 'Network') or contains(., 'Site')]//a");
             foreach (var studio in studios)
             {
-                var studioName = studio.SelectSingleText("/text()");
+                var studioName = studio.InnerText;
 
                 if (!string.IsNullOrEmpty(studioName))
                 {

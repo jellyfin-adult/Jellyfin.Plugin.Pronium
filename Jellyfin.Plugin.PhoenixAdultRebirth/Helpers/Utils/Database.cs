@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 
 namespace PhoenixAdultRebirth.Helpers.Utils
 {
-    internal static class Database
+    public static class Database
     {
-        private static readonly string DatabasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
+        private static readonly string DatabasePath = Plugin.Instance?.DataFolderPath != null ? Path.Combine(Plugin.Instance.DataFolderPath, "data") : "../../../../data";
 
         public static SiteListStructure SiteList { get; set; }
 

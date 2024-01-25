@@ -19,60 +19,57 @@ namespace PhoenixAdultRebirth.Helpers.Utils
     {
         static HTTP()
         {
-            CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
+            if (Plugin.Instance != null)
             {
-                MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
-            };
+                CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL) { MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds, };
 
-            if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
-            {
-                Logger.Info("Proxy Enabled");
-                var proxy = new List<ProxyInfo>();
-
-                if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
+                if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
                 {
-                    proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, Plugin.Instance.Configuration.ProxyPort));
-                    CloudflareHandler.ProxyUrl = $"socks5://{Plugin.Instance.Configuration.ProxyHost}:{Plugin.Instance.Configuration.ProxyPort}";
+                    Logger.Info("Proxy Enabled");
+                    var proxy = new List<ProxyInfo>();
+
+                    if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
+                    {
+                        proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, Plugin.Instance.Configuration.ProxyPort));
+                        CloudflareHandler.ProxyUrl = $"socks5://{Plugin.Instance.Configuration.ProxyHost}:{Plugin.Instance.Configuration.ProxyPort}";
+                    }
+                    else
+                    {
+                        proxy.Add(new ProxyInfo(
+                            Plugin.Instance.Configuration.ProxyHost,
+                            Plugin.Instance.Configuration.ProxyPort,
+                            Plugin.Instance.Configuration.ProxyLogin,
+                            Plugin.Instance.Configuration.ProxyPassword));
+                    }
+
+                    Proxy = new HttpToSocks5Proxy(proxy.ToArray());
+                }
+
+                HttpHandler = new HttpClientHandler() { CookieContainer = CookieContainer, Proxy = Proxy, };
+
+                if (Plugin.Instance.Configuration.DisableSSLCheck)
+                {
+                    HttpHandler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, errors) => true;
+                }
+
+                if (Plugin.Instance.Configuration.DisableCaching == false)
+                {
+                    Logger.Debug("Caching Enabled");
+                    CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5)));
+                    CloudflareHandler.InnerHandler = CacheHandler;
                 }
                 else
                 {
-                    proxy.Add(new ProxyInfo(
-                        Plugin.Instance.Configuration.ProxyHost,
-                        Plugin.Instance.Configuration.ProxyPort,
-                        Plugin.Instance.Configuration.ProxyLogin,
-                        Plugin.Instance.Configuration.ProxyPassword));
+                    Logger.Debug("Caching Disabled");
+                    CloudflareHandler.InnerHandler = HttpHandler;
                 }
 
-                Proxy = new HttpToSocks5Proxy(proxy.ToArray());
-            }
-
-            HttpHandler = new HttpClientHandler()
-            {
-                CookieContainer = CookieContainer,
-                Proxy = Proxy,
-            };
-
-            if (Plugin.Instance.Configuration.DisableSSLCheck)
-            {
-                HttpHandler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, errors) => true;
-            }
-
-            if (!Plugin.Instance.Configuration.DisableCaching)
-            {
-                Logger.Debug("Caching Enabled");
-                CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5)));
-                CloudflareHandler.InnerHandler = CacheHandler;
+                Http = new HttpClient(CloudflareHandler) { Timeout = TimeSpan.FromSeconds(120), };
             }
             else
             {
-                Logger.Debug("Caching Disabled");
-                CloudflareHandler.InnerHandler = HttpHandler;
+                Http = new HttpClient() { Timeout = TimeSpan.FromSeconds(120), };
             }
-
-            Http = new HttpClient(CloudflareHandler)
-            {
-                Timeout = TimeSpan.FromSeconds(120),
-            };
         }
 
         private static CookieContainer CookieContainer { get; } = new CookieContainer();
@@ -92,10 +89,7 @@ namespace PhoenixAdultRebirth.Helpers.Utils
 
         public static async Task<HTTPResponse> Request(string url, HttpMethod method, HttpContent param, IDictionary<string, string> headers, IDictionary<string, string> cookies, CancellationToken cancellationToken)
         {
-            var result = new HTTPResponse()
-            {
-                IsOK = false,
-            };
+            var result = new HTTPResponse() { IsOK = false, };
 
             url = Uri.EscapeUriString(Uri.UnescapeDataString(url));
 
@@ -146,11 +140,7 @@ namespace PhoenixAdultRebirth.Helpers.Utils
                 Logger.Error($"Request error: {e.Message}");
 
                 await Analytics.Send(
-                    new AnalyticsExeption
-                    {
-                        Request = url,
-                        Exception = e,
-                    }, cancellationToken).ConfigureAwait(false);
+                    new AnalyticsExeption { Request = url, Exception = e, }, cancellationToken).ConfigureAwait(false);
             }
 
             if (response != null)

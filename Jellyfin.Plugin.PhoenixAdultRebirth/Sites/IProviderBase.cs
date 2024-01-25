@@ -8,7 +8,7 @@ using MediaBrowser.Model.Providers;
 
 namespace PhoenixAdultRebirth.Sites
 {
-    internal interface IProviderBase
+    public interface IProviderBase
     {
         Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken);
 

@@ -20,7 +20,7 @@ using System.Net.Http;
 
 namespace PhoenixAdultRebirth.Helpers
 {
-    internal static class Helper
+    public static class Helper
     {
         public static string GetSearchSiteName(int[] siteNum)
         {
