@@ -31,7 +31,7 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var db = new JObject();
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.TokenStorage))
+            if (Plugin.Instance != null && !string.IsNullOrEmpty(Plugin.Instance.Configuration.TokenStorage))
             {
                 db = JObject.Parse(Plugin.Instance.Configuration.TokenStorage);
             }
@@ -72,8 +72,11 @@ namespace PhoenixAdultRebirth.Sites
                     db.Add(keyName, result);
                 }
 
-                Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
-                Plugin.Instance.SaveConfiguration();
+                if (Plugin.Instance != null)
+                {
+                    Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
+                    Plugin.Instance.SaveConfiguration();
+                }
             }
 
             return result;
@@ -113,7 +116,7 @@ namespace PhoenixAdultRebirth.Sites
                 searchSceneID = null;
             }
 
-            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
+            string apiKey = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                    searchParams;
 
             var sceneTypes = new List<string> { "scenes", "movies" };
@@ -132,10 +135,10 @@ namespace PhoenixAdultRebirth.Sites
                 }
                 else
                 {
-                    searchParams = $"query={searchTitle}";
+                    searchParams = $"query={searchTitle}&hitsPerPage=40";
                 }
 
-                var url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
+                var url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKey}";
                 var searchResults = await GetDataFromAPI(url, $"all_{sceneType}", Helper.GetSearchBaseURL(siteNum), searchParams, cancellationToken).ConfigureAwait(false);
 
                 if (searchResults == null)
@@ -176,18 +179,21 @@ namespace PhoenixAdultRebirth.Sites
                         res.PremiereDate = sceneDateObj;
                     }
 
-                    res.ProviderIds.Add(Plugin.Instance.Name, curID);
+                    res.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", curID);
 
                     if (searchResult.ContainsKey("pictures"))
                     {
                         var images = searchResult["pictures"].Where(o => o.Type == JTokenType.Property);
                         if (images.Any())
                         {
-                            res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";
+                            res.ImageUrl = $"https://images-fame.gammacdn.com/movies{(string)images.Last()}";
                         }
                     }
 
-                    result.Add(res);
+                    if (searchDate == null || res.PremiereDate.Equals(searchDate))
+                    {
+                        result.Add(res);
+                    }
                 }
             }
 
@@ -365,7 +371,7 @@ namespace PhoenixAdultRebirth.Sites
             if (sceneData.ContainsKey("pictures"))
             {
                 image = (string)sceneData["pictures"].Last(o => !o.ToString().Equals("resized", StringComparison.OrdinalIgnoreCase));
-                imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
+                imageURL = $"https://images-fame.gammacdn.com/movies{image}";
 
                 result.Add(new RemoteImageInfo
                 {

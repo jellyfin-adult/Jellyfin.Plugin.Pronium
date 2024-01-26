@@ -3,7 +3,7 @@ using PhoenixAdultRebirth.Sites;
 
 namespace PhoenixAdultRebirth.UnitTests;
 
-public class Tests
+public class SiteData18Tests
 {
     private readonly SiteData18 _site = new();
     private readonly string _testSceneUrl = "https://www.data18.com/scenes/144118";
