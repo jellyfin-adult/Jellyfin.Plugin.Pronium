@@ -25,8 +25,7 @@ namespace PhoenixAdultRebirth.Sites
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             Logger.Info($"SiteData18.Search url: {url}");
-            var cookies = new Dictionary<string, string> { { "data_user_captcha", "1" } };
-            var data = await HTML.ElementFromURL(url, cancellationToken, null, cookies).ConfigureAwait(false);
+            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodesSafe("//a");
             Logger.Info($"SiteData18.Search searchResults: {searchResults.Count}");
