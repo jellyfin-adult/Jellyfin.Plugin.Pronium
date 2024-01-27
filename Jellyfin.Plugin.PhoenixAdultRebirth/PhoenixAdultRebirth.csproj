@@ -3,9 +3,9 @@
     <TargetFramework Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">net6.0</TargetFramework>
     <TargetFramework Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">netstandard2.1</TargetFramework>
     <RootNamespace>PhoenixAdultRebirth</RootNamespace>
-    <AssemblyVersion>1.1.0.5</AssemblyVersion>
-    <FileVersion>1.1.0.5</FileVersion>
-    <InformationalVersion>1.1.0.5</InformationalVersion>
+    <AssemblyVersion>1.1.0.6</AssemblyVersion>
+    <FileVersion>1.1.0.6</FileVersion>
+    <InformationalVersion>1.1.0.6</InformationalVersion>
     <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
     <Copyright>© Jellyfin Adult</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
