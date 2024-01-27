@@ -18,9 +18,9 @@ public class SiteData18Tests
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new []{51, 0}, "Elite Dyke Society", null, new CancellationToken());
-        Assert.IsTrue(result.Count > 0);
+        Assert.That(result.Count, Is.GreaterThan(0));
         var id = result[0].ProviderIds.Values.FirstOrDefault();
-        Assert.IsNotEmpty(id);
+        Assert.That(id, Is.Not.Empty);
         Assert.That(Helpers.Helper.Decode(id?.Split('#')[0]), Is.EqualTo(_testSceneUrl));
     }
 
@@ -29,7 +29,7 @@ public class SiteData18Tests
     {
         var result = await _site.Update(new []{51, 0}, new []{Helpers.Helper.Encode(_testSceneUrl), "2010-09-14"}, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Elite Dyke Society"));
-        Assert.IsNotEmpty(result.Item.Overview);
+        Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
         Assert.That(result.People.Count, Is.EqualTo(2));
@@ -38,9 +38,9 @@ public class SiteData18Tests
     [Test]
     public async Task GetImagesIsWorking()
     {
-        var result = await _site.GetImages(new[] { 51, 0 }, new[] { Helpers.Helper.Encode(_testSceneUrl), "2010-09-14" }, null, new CancellationToken());
+        var result = (await _site.GetImages(new[] { 51, 0 }, new[] { Helpers.Helper.Encode(_testSceneUrl), "2010-09-14" }, null, new CancellationToken())).ToList();
 
-        Assert.That(result.Count(), Is.EqualTo(2));
+        Assert.That(result, Has.Count.EqualTo(2));
         Assert.That(result.First().Url, Is.EqualTo("https://cdn.dt18.com/media/t/1/scenes/1/2/44118-kelly-divine-sara-jaymes-hot-and-mean.jpg"));
     }
 }
