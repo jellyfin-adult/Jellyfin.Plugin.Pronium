@@ -38,7 +38,7 @@ public class SitePornWorldTests
     [Test]
     public async Task GetImagesIsWorking()
     {
-        var result = (await _site.GetImages(new[] { 51, 0 }, new[] { Helpers.Helper.Encode(_testSceneUrl), "2010-09-14" }, null, new CancellationToken())).ToList();
+        var result = (await _site.GetImages(new[] { 52, 0 }, new[] { Helpers.Helper.Encode(_testSceneUrl), "2010-09-14" }, null, new CancellationToken())).ToList();
 
         Assert.That(result, Has.Count.EqualTo(2));
         Assert.That(result.First().Url, Is.EqualTo("https://cdn77-image.gtflixtv.com/X7LxYKUBfEo8K5Jx46m09w==,1989961200/75effc570606e5162ccb947dcce735dd42051e5b/1/2110/841/3/822.jpg?method=resize&w=1354&height=762"));
