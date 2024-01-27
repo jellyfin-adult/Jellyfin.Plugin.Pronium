@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,6 +11,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using Newtonsoft.Json.Linq;
 using PhoenixAdultRebirth.Helpers;
 using PhoenixAdultRebirth.Helpers.Utils;
 
@@ -18,34 +21,60 @@ namespace PhoenixAdultRebirth.Sites
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
-            var result = new List<RemoteSearchResult>();
+            var results = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
             {
-                return result;
+                return results;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-            Logger.Info($"SitePornWorld.Search url: {url}");
-            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
-
-            var searchResults = data.SelectNodesSafe("//div[@class='col d-flex']");
-            Logger.Info($"SitePornWorld.Search searchResults: {searchResults.Count}");
-            foreach (var searchResult in searchResults)
+            if (searchTitle.Contains("GP"))
             {
-                var sceneUrl = new Uri(searchResult.SelectSingleNode(".//a").Attributes["href"].Value);
-                var curID = Helper.Encode(sceneUrl.AbsoluteUri);
-                var sceneName = searchResult.SelectSingleText(".//div[@class='card-scene__text']");
-                var scenePoster = searchResult.SelectSingleText(".//img/@src");
-                var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster, };
+                var id = searchTitle.Split(" ").First(t => t.StartsWith("GP"));
+                var http = await HTTP.Request($"https://pornworld.com/autocomplete?query={id}", HttpMethod.Get, null, cancellationToken).ConfigureAwait(false);
+                if (http.IsOK)
+                {
+                    var json = JObject.Parse(http.Content);
+                    try
+                    {
+                        var sceneUrl = new Uri((string)json["terms"]["Scene"].First["url"]);
+                        var sceneName = (string)json["terms"]["Scene"].First["name"];
+                        var result = new RemoteSearchResult { Name = sceneName, };
+                        var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
 
-                Logger.Info($"SitePornWorld.Search sceneURL: {sceneUrl}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}");
+                        result.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", uniqueId);
+                        results.Add(result);
+                    }
+                    catch
+                    {
+                        Logger.Error($"SitePornWorld.error: {http.Content}");
+                    }
+                }
+            }
+            else
+            {
+                var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
+                Logger.Info($"SitePornWorld.Search url: {url}");
+                var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                res.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", curID);
+                var searchResults = data.SelectNodesSafe("//div[@class='col d-flex']");
+                Logger.Info($"SitePornWorld.Search searchResults: {searchResults.Count}");
+                foreach (var searchResult in searchResults)
+                {
+                    var sceneUrl = new Uri(searchResult.SelectSingleNode(".//a").Attributes["href"].Value);
+                    var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
+                    var sceneName = searchResult.SelectSingleText(".//div[@class='card-scene__text']");
+                    var scenePoster = searchResult.SelectSingleText(".//img/@src");
+                    var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster, };
 
-                result.Add(res);
+                    Logger.Info($"SitePornWorld.Search sceneURL: {sceneUrl}, ID: {uniqueId}, sceneName: {sceneName}, scenePoster: {scenePoster}");
+
+                    res.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", uniqueId);
+
+                    results.Add(res);
+                }
             }
 
-            return result;
+            return results;
         }
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
