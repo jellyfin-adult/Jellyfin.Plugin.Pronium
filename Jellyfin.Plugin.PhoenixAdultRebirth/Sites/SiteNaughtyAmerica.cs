@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,7 +9,6 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using Newtonsoft.Json.Linq;
 using PhoenixAdultRebirth.Helpers;
 using PhoenixAdultRebirth.Helpers.Utils;
 
@@ -20,7 +16,8 @@ namespace PhoenixAdultRebirth.Sites
 {
     public class SiteNaughtyAmerica : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var results = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -39,7 +36,7 @@ namespace PhoenixAdultRebirth.Sites
                 var sceneUrl = new Uri(searchResult.SelectSingleNode("./a[@class='contain-img']").Attributes["href"].Value);
                 var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
                 var scenePoster = searchResult.SelectSingleText(".//img[contains(@class, 'main-scene-img')]/@data-srcset");
-                var res = new RemoteSearchResult { Name = string.Empty, ImageUrl = $"https://{scenePoster}", };
+                var res = new RemoteSearchResult { Name = string.Empty, ImageUrl = $"https://{scenePoster}" };
 
                 Logger.Info($"SiteNaughtyAmerica.Search sceneURL: {sceneUrl}, ID: {uniqueId}, scenePoster: {scenePoster}");
 
@@ -53,7 +50,7 @@ namespace PhoenixAdultRebirth.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>(), };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -74,10 +71,15 @@ namespace PhoenixAdultRebirth.Sites
             result.Item.Name = name;
             result.Item.Overview = overview;
             result.Item.AddStudio("Naughty America");
-            result.Item.AddStudio(sceneData.SelectSingleText("//a[contains(@class, 'site-title')]"));
+            var studio = sceneData.SelectSingleText("//a[contains(@class, 'site-title')]")
+            if (!string.IsNullOrWhiteSpace(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var date = sceneData.SelectSingleText("//span[contains(@class, 'entry-date')]");
-            if (!string.IsNullOrEmpty(date) && DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+            if (!string.IsNullOrEmpty(date) &&
+                DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }
@@ -100,7 +102,7 @@ namespace PhoenixAdultRebirth.Sites
                 if (actorImage != null)
                 {
                     var actorImageUrl = actorImage?.Attributes["data-src"].Value ?? string.Empty;
-                    actor.ImageUrl = $"https:{{actorImageUrl}}";
+                    actor.ImageUrl = "https:{actorImageUrl}";
                 }
 
                 result.People.Add(actor);
@@ -111,7 +113,8 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -126,8 +129,8 @@ namespace PhoenixAdultRebirth.Sites
 
             if (!string.IsNullOrEmpty(primaryImage))
             {
-                result.Add(new RemoteImageInfo { Url = $"https:{primaryImage}", Type = ImageType.Primary, });
-                result.Add(new RemoteImageInfo { Url = $"https:{primaryImage}", Type = ImageType.Backdrop, });
+                result.Add(new RemoteImageInfo { Url = $"https:{primaryImage}", Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = $"https:{primaryImage}", Type = ImageType.Backdrop });
             }
 
             var additionalImages = sceneData.SelectNodesSafe("//a[contains(@class, 'fancybox')]");
@@ -136,8 +139,8 @@ namespace PhoenixAdultRebirth.Sites
             {
                 var img = HttpUtility.HtmlDecode(additionalImage.Attributes["href"].Value);
 
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop });
             }
 
             return result;

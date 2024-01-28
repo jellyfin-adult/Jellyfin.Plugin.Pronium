@@ -21,9 +21,10 @@ public class SiteNaughtyAmericaTests
         var result = await _site.Search(new[] { 10, 0 }, "Busty brunette Alison Rey takes friend's boyfriend's dick for a ride", null,
             new CancellationToken());
         Warn.Unless(result.Count, Is.GreaterThan(0));
-        var id = result[0].ProviderIds.Values.FirstOrDefault();
+        var id = result.FirstOrDefault()?.ProviderIds.Values.FirstOrDefault();
         Warn.Unless(id, Is.Not.Empty);
-        Warn.Unless(Helper.Decode(id?.Split('#')[0]), Is.EqualTo(_testSceneUrl));
+        var url = !string.IsNullOrWhiteSpace(id) ? Helper.Decode(id?.Split('#')[0]) : string.Empty);
+        Warn.Unless(url, Is.EqualTo(_testSceneUrl));
     }
 
     [Test]
