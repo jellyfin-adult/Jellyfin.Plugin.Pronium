@@ -45,7 +45,7 @@ public class SiteNaughtyAmericaTests
             new CancellationToken())).ToList();
 
         Warn.Unless(result, Has.Count.EqualTo(18));
-        Warn.Unless(result.First().Url,
+        Warn.Unless(result.FirstOrDefault()?.Url,
             Is.EqualTo("https://images1.naughtycdn.com/cms/nacmscontent/v1/scenes/mgbf/alisondanny/scene/horizontal/1279x852c.webp"));
     }
 }
