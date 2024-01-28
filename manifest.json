@@ -8,6 +8,14 @@
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
+                "checksum": "b04f3be29253fa120314e33fce525cda",
+                "changelog": "Add private support",
+                "targetAbi": "10.8.0.0",
+                "sourceUrl": "https://github.com/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/releases/download/1.2.0.20/Jellyfin.Plugin.PhoenixAdultRebirth.zip",
+                "timestamp": "2024-01-27T16:52:48Z",
+                "version": "1.2.0.20"
+            },
+            {
                 "checksum": "70bfe1b12565d0f83eac3c014a0ba13f",
                 "changelog": "Add pornworld support",
                 "targetAbi": "10.8.0.0",
