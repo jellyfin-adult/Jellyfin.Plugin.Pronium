@@ -71,7 +71,7 @@ namespace PhoenixAdultRebirth.Sites
             result.Item.Name = name;
             result.Item.Overview = overview;
             result.Item.AddStudio("Naughty America");
-            var studio = sceneData.SelectSingleText("//a[contains(@class, 'site-title')]")
+            var studio = sceneData.SelectSingleText("//a[contains(@class, 'site-title')]");
             if (!string.IsNullOrWhiteSpace(studio))
             {
                 result.Item.AddStudio(studio);

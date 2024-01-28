@@ -23,7 +23,7 @@ public class SiteNaughtyAmericaTests
         Warn.Unless(result.Count, Is.GreaterThan(0));
         var id = result.FirstOrDefault()?.ProviderIds.Values.FirstOrDefault();
         Warn.Unless(id, Is.Not.Empty);
-        var url = !string.IsNullOrWhiteSpace(id) ? Helper.Decode(id?.Split('#')[0]) : string.Empty);
+        var url = !string.IsNullOrWhiteSpace(id) ? Helper.Decode(id?.Split('#')[0]) : string.Empty;
         Warn.Unless(url, Is.EqualTo(_testSceneUrl));
     }
 
