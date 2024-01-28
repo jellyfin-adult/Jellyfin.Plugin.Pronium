@@ -19,7 +19,8 @@ namespace PhoenixAdultRebirth.Sites
 {
     public class SitePornWorld : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var results = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -30,7 +31,8 @@ namespace PhoenixAdultRebirth.Sites
             if (searchTitle.Contains("GP"))
             {
                 var id = searchTitle.Split(" ").First(t => t.StartsWith("GP"));
-                var http = await HTTP.Request($"https://pornworld.com/autocomplete?query={id}", HttpMethod.Get, null, cancellationToken).ConfigureAwait(false);
+                var http = await HTTP.Request($"https://pornworld.com/autocomplete?query={id}", HttpMethod.Get, null, cancellationToken)
+                    .ConfigureAwait(false);
                 if (http.IsOK)
                 {
                     var json = JObject.Parse(http.Content);
@@ -38,7 +40,7 @@ namespace PhoenixAdultRebirth.Sites
                     {
                         var sceneUrl = new Uri((string)json["terms"]["Scene"].First["url"]);
                         var sceneName = (string)json["terms"]["Scene"].First["name"];
-                        var result = new RemoteSearchResult { Name = sceneName, };
+                        var result = new RemoteSearchResult { Name = sceneName };
                         var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
 
                         result.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", uniqueId);
@@ -64,9 +66,10 @@ namespace PhoenixAdultRebirth.Sites
                     var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
                     var sceneName = searchResult.SelectSingleText(".//div[@class='card-scene__text']");
                     var scenePoster = searchResult.SelectSingleText(".//img/@src");
-                    var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster, };
+                    var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster };
 
-                    Logger.Info($"SitePornWorld.Search sceneURL: {sceneUrl}, ID: {uniqueId}, sceneName: {sceneName}, scenePoster: {scenePoster}");
+                    Logger.Info(
+                        $"SitePornWorld.Search sceneURL: {sceneUrl}, ID: {uniqueId}, sceneName: {sceneName}, scenePoster: {scenePoster}");
 
                     res.ProviderIds.Add(Plugin.Instance?.Name ?? "PhoenixAdultRebirth", uniqueId);
 
@@ -79,7 +82,7 @@ namespace PhoenixAdultRebirth.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>() { Item = new Movie(), People = new List<PersonInfo>(), };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -102,7 +105,8 @@ namespace PhoenixAdultRebirth.Sites
             result.Item.AddStudio("PornWorld");
 
             var date = sceneData.SelectSingleText("//i[@class='bi bi-calendar3 me-5']//parent::div");
-            if (!string.IsNullOrEmpty(date) && DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+            if (!string.IsNullOrEmpty(date) &&
+                DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }
@@ -119,6 +123,13 @@ namespace PhoenixAdultRebirth.Sites
             foreach (var actorLink in actorsNode)
             {
                 var actor = new PersonInfo { Name = actorLink.InnerText };
+                var actorData = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
+                var actorPhoto = actorData.SelectSingleNode("//div[contains(@class, 'model__left')]/img");
+
+                if (actorPhoto != null)
+                {
+                    actor.ImageUrl = HttpUtility.HtmlDecode(actorPhoto.Attributes["src"].Value);
+                }
 
                 result.People.Add(actor);
             }
@@ -128,7 +139,8 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -145,8 +157,8 @@ namespace PhoenixAdultRebirth.Sites
             {
                 var img = HttpUtility.HtmlDecode(primaryImage.Attributes["data-poster"].Value);
 
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop });
             }
 
             return result;
