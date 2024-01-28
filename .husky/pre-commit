@@ -9,8 +9,6 @@ new_version=$(echo $current_version | awk -F. -v OFS=. '{$NF = $NF + 1;} 1')
 # Update the .csproj file with the new version
 sed -i "s/<AssemblyVersion>$current_version<\/AssemblyVersion>/<AssemblyVersion>$new_version<\/AssemblyVersion>/" Jellyfin.Plugin.PhoenixAdultRebirth/PhoenixAdultRebirth.csproj
 sed -i "s/<FileVersion>$current_version<\/FileVersion>/<FileVersion>$new_version<\/FileVersion>/" Jellyfin.Plugin.PhoenixAdultRebirth/PhoenixAdultRebirth.csproj
-sed -i "s/<InformationalVersion>$current_version<\/InformationalVersion>/<InformationalVersion>$new_version<\/InformationalVersion>/" Jellyfin.Plugin.PhoenixAdultRebirth/PhoenixAdultRebirth.csproj
-
 
 # Stage the modified .csproj file
 git add Jellyfin.Plugin.PhoenixAdultRebirth/PhoenixAdultRebirth.csproj
