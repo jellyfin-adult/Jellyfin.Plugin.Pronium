@@ -16,7 +16,10 @@ namespace PhoenixAdultRebirth.Sites
 {
     public class SitePrivate : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate,
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
             CancellationToken cancellationToken)
         {
             var results = new List<RemoteSearchResult>();
@@ -119,7 +122,11 @@ namespace PhoenixAdultRebirth.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                if (DateTime.TryParseExact(
+                        sceneDate,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
                         out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
@@ -128,8 +135,12 @@ namespace PhoenixAdultRebirth.Sites
             else
             {
                 var date = sceneData.SelectSingleText("//em[contains(., 'Release date:')]/parent::p/span");
-                if (!string.IsNullOrEmpty(date) && DateTime.TryParseExact(date, "MMMM dd, yyyy", CultureInfo.InvariantCulture,
-                        DateTimeStyles.None, out var sceneDateObj))
+                if (!string.IsNullOrEmpty(date) && DateTime.TryParseExact(
+                        date,
+                        "MMMM dd, yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -163,7 +174,10 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item,
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneId,
+            BaseItem item,
             CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();

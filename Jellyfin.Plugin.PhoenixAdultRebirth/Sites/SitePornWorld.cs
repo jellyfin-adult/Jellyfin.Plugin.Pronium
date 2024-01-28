@@ -19,7 +19,10 @@ namespace PhoenixAdultRebirth.Sites
 {
     public class SitePornWorld : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate,
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
             CancellationToken cancellationToken)
         {
             var results = new List<RemoteSearchResult>();
@@ -38,7 +41,7 @@ namespace PhoenixAdultRebirth.Sites
                     var json = JObject.Parse(http.Content);
                     try
                     {
-                        var sceneUrl = new Uri((string)json["terms"]["Scene"].First["url"]);
+                        var sceneUrl = new Uri(((string)json["terms"] !["Scene"] !.First!["url"]) !);
                         var sceneName = (string)json["terms"]["Scene"].First["name"];
                         var result = new RemoteSearchResult { Name = sceneName };
                         var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
@@ -80,18 +83,18 @@ namespace PhoenixAdultRebirth.Sites
             return results;
         }
 
-        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneId, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
-            if (sceneID == null)
+            if (sceneId == null)
             {
                 return result;
             }
 
-            var sceneUrl = Helper.Decode(sceneID[0]);
+            var sceneUrl = Helper.Decode(sceneId[0]);
 
-            Logger.Info($"SitePornWorld.Update sceneID: {sceneID[0]}, sceneURL: {sceneUrl}");
+            Logger.Info($"SitePornWorld.Update sceneID: {sceneId[0]}, sceneURL: {sceneUrl}");
 
             var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken).ConfigureAwait(false);
             var name = sceneData.SelectSingleText("//h1").Split("featuring")[0];
@@ -139,7 +142,10 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item,
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneId,
+            BaseItem item,
             CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();

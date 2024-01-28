@@ -16,7 +16,10 @@ namespace PhoenixAdultRebirth.Sites
 {
     public class SiteNaughtyAmerica : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate,
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
             CancellationToken cancellationToken)
         {
             var results = new List<RemoteSearchResult>();
@@ -48,18 +51,19 @@ namespace PhoenixAdultRebirth.Sites
             return results;
         }
 
-        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneId, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
-            if (sceneID == null)
+            if (sceneId == null)
             {
                 return result;
             }
 
-            var sceneUrl = Helper.Decode(sceneID[0]);
+            var sceneUrl = Helper.Decode(sceneId[0]);
 
-            Logger.Info($"SiteNaughtyAmerica.Update sceneID: {sceneID[0]}, sceneURL: {sceneUrl}");
+            Logger.Info($"SiteNaughtyAmerica.Update sceneID: {sceneId[0]}, sceneURL: {sceneUrl}");
 
             var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken).ConfigureAwait(false);
             var name = HttpUtility.HtmlDecode(sceneData.SelectSingleText("//h1"));
@@ -101,8 +105,8 @@ namespace PhoenixAdultRebirth.Sites
                 var actorImage = actorData.SelectSingleNode("//img[contains(@class, 'performer-pic')]");
                 if (actorImage != null)
                 {
-                    var actorImageUrl = actorImage?.Attributes["data-src"].Value ?? string.Empty;
-                    actor.ImageUrl = "https:{actorImageUrl}";
+                    var actorImageUrl = actorImage.Attributes["data-src"].Value ?? string.Empty;
+                    actor.ImageUrl = $"https:{actorImageUrl}";
                 }
 
                 result.People.Add(actor);
@@ -113,7 +117,11 @@ namespace PhoenixAdultRebirth.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item,
+        /// <inheritdoc />
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneId,
+            BaseItem item,
             CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
