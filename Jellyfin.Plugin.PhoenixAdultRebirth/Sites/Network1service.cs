@@ -94,7 +94,7 @@ namespace PhoenixAdultRebirth.Sites
 
                     var res = new RemoteSearchResult
                     {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        ProviderIds = { { Plugin.Instance?.Name ?? "PhoenixAdultRebirth", curID } },
                         Name = sceneName,
                         ImageUrl = scenePoster,
                         PremiereDate = sceneDateObj,
@@ -262,7 +262,7 @@ namespace PhoenixAdultRebirth.Sites
             }
 
             var db = new JObject();
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.TokenStorage))
+            if (!string.IsNullOrEmpty(Plugin.Instance?.Configuration.TokenStorage))
             {
                 db = JObject.Parse(Plugin.Instance.Configuration.TokenStorage);
             }
@@ -285,10 +285,18 @@ namespace PhoenixAdultRebirth.Sites
                 var instanceToken = http.Cookies?.Where(o => o.Name == "instance_token");
                 if (instanceToken == null || !instanceToken.Any())
                 {
-                    return result;
-                }
+                    result = http.Headers?.FirstOrDefault(t => t.Key == "Set-Cookie").Value
+                        .FirstOrDefault(t => t.Contains("instance_token"))?.Split("=")[1].Split(";")[0] ?? string.Empty;
 
-                result = instanceToken.First().Value;
+                    if (string.IsNullOrWhiteSpace(result))
+                    {
+                        return result;
+                    }
+                }
+                else
+                {
+                    result = instanceToken.First().Value;
+                }
 
                 if (db.ContainsKey(keyName))
                 {
@@ -299,8 +307,11 @@ namespace PhoenixAdultRebirth.Sites
                     db.Add(keyName, result);
                 }
 
-                Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
-                Plugin.Instance.SaveConfiguration();
+                if (Plugin.Instance != null)
+                {
+                    Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
+                    Plugin.Instance.SaveConfiguration();
+                }
             }
 
             return result;

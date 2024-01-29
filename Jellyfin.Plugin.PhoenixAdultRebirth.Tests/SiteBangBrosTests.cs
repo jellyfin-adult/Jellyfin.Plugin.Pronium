@@ -1,4 +1,3 @@
-using PhoenixAdultRebirth.Helpers;
 using PhoenixAdultRebirth.Helpers.Utils;
 using PhoenixAdultRebirth.Sites;
 
@@ -22,17 +21,17 @@ public class SiteBangBrosTests
         Assert.That(result.Count, Is.GreaterThan(0));
         var id = result[0].ProviderIds.Values.FirstOrDefault();
         Assert.That(id, Is.Not.Empty);
-        Assert.That(Helper.Decode(id?.Split('#')[0]), Is.EqualTo(_testSceneUrl));
+        Assert.That(id?.Split('#')[0], Is.EqualTo("8854561"));
     }
 
     [Test]
     public async Task UpdateIsWorking()
     {
-        var result = await _site.Update(new[] { 22, 0 }, new[] { Helper.Encode(_testSceneUrl), "2023-02-23" }, new CancellationToken());
-        Assert.That(result.Item.Name, Is.EqualTo("2023-02-23"));
+        var result = await _site.Update(new[] { 22, 0 }, new[] { "8854561", "scene" }, new CancellationToken());
+        Assert.That(result.Item.Name, Is.EqualTo("Anal Maid Service"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
-        Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
-        Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
+        Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(15));
         Assert.That(result.People.Count, Is.EqualTo(2));
     }
 
@@ -41,13 +40,14 @@ public class SiteBangBrosTests
     {
         var result = (await _site.GetImages(
             new[] { 22, 0 },
-            new[] { Helper.Encode(_testSceneUrl), "2023-02-23" },
+            new[] { "8854561", "scene" },
             null,
             new CancellationToken())).ToList();
 
-        Assert.That(result, Has.Count.EqualTo(2));
+        Assert.That(result, Has.Count.EqualTo(12));
         Assert.That(
             result.First().Url,
-            Is.EqualTo("https://cdn.dt18.com/media/t/1/scenes/1/2/44118-kelly-divine-sara-jaymes-hot-and-mean.jpg"));
+            Is.EqualTo(
+                "https://media-public-ht.project1content.com/m=ea_aGJcWx/71b/47b/ead/1c2/45b/a89/1d0/879/93a/335/f9/poster/poster_01.jpg"));
     }
 }
