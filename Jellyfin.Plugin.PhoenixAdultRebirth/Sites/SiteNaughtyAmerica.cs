@@ -67,7 +67,7 @@ namespace PhoenixAdultRebirth.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken).ConfigureAwait(false);
             var name = HttpUtility.HtmlDecode(sceneData.SelectSingleText("//h1"));
-            var overview = sceneData.SelectSingleText("//div[contains(@class, 'synopsis')]").Replace("SYNOPSIS", string.Empty);
+            var overview = sceneData.SelectSingleText("//div[contains(@class, 'synopsis')]").Replace("Synopsis", string.Empty);
 
             Logger.Info($"SiteNaughtyAmerica.Update name: {name}");
             result.Item.ExternalId = sceneUrl;
