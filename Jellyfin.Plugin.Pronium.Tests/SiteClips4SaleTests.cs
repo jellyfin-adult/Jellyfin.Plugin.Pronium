@@ -40,7 +40,9 @@ public class SiteClips4SaleTests
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
         Assert.That(result.People.Count, Is.EqualTo(0));
+#pragma warning disable NUnit2021 // Incompatible types for EqualTo constraint
         Assert.That(result.Item.PremiereDate, Is.EqualTo(DateTime.Parse("2020-12-12")));
+#pragma warning restore NUnit2021 // Incompatible types for EqualTo constraint
     }
 
     [Test]

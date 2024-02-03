@@ -133,7 +133,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Sex Working
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### Dogfart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
++ #### Dogfart | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - BarbCummings
   - BlackMeatWhiteFeet
   - BlacksOnBlondes
@@ -644,6 +644,9 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - WhenGirlsPlay
 + #### Why Not Bi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Wicked | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### PornWorld | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Site search is not very accurate, in case of issues try adding GPXXXX ID to the title of the scene.
++ #### Private | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 
 ## Adding sites to this list
 When this plugin is inevitably updated to add or update a sites' types of searching, you can use the below markdown formatting in a PR to easily add the site in question here
