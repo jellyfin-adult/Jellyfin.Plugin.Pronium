@@ -4,18 +4,18 @@ using Pronium.Sites;
 
 namespace Pronium.UnitTests;
 
+[TestFixture]
 public class SiteClips4SaleTests
 {
-    private readonly SiteClips4Sale _site = new();
-
-    private readonly string _testSceneUrl =
-        "/studio/33729/24251761/mf-horny-step-son-fucks-his-step-mom-hd-taboo-mandy-flores";
-
     [SetUp]
     public void Setup()
     {
         Database.LoadAll();
     }
+
+    private readonly SiteClips4Sale _site = new();
+
+    private readonly string _testSceneUrl = "/studio/33729/24251761/mf-horny-step-son-fucks-his-step-mom-hd-taboo-mandy-flores";
 
     [Test]
     public async Task SearchIsWorking()
@@ -52,8 +52,6 @@ public class SiteClips4SaleTests
             new CancellationToken())).ToList();
 
         Assert.That(result, Has.Count.EqualTo(2));
-        Assert.That(
-            result.First().Url,
-            Is.EqualTo("https://imagecdn.clips4sale.com/accounts99/33729/clip_images/previewlg_24251761.jpg"));
+        Assert.That(result.First().Url, Is.EqualTo("https://imagecdn.clips4sale.com/accounts99/33729/clip_images/previewlg_24251761.jpg"));
     }
 }

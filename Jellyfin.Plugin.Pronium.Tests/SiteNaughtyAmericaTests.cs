@@ -4,16 +4,17 @@ using Pronium.Sites;
 
 namespace Pronium.UnitTests;
 
+[TestFixture]
 public class SiteNaughtyAmericaTests
 {
-    private readonly SiteNaughtyAmerica _site = new();
-    private readonly string _testSceneUrl = "https://www.naughtyamerica.com/scene/mgbf-alisondanny-31736";
-
     [SetUp]
     public void Setup()
     {
         Database.LoadAll();
     }
+
+    private readonly SiteNaughtyAmerica _site = new();
+    private readonly string _testSceneUrl = "https://www.naughtyamerica.com/scene/mgbf-alisondanny-31736";
 
     [Test]
     public async Task SearchIsWorking()

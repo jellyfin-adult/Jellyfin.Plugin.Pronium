@@ -3,20 +3,21 @@ using Pronium.Sites;
 
 namespace Pronium.UnitTests;
 
+[TestFixture]
 public class GloryholeTests
 {
-    private readonly NetworkGammaEnt _site = new();
-
     [SetUp]
     public void Setup()
     {
         Database.LoadAll();
     }
 
+    private readonly NetworkGammaEnt _site = new();
+
     [Test]
     public async Task SearchIsWorking()
     {
-        var result = await _site.Search(new []{19, 3}, "Alena Croft", DateTime.Parse("2015-09-28"), new CancellationToken());
+        var result = await _site.Search(new[] { 19, 3 }, "Alena Croft", DateTime.Parse("2015-09-28"), new CancellationToken());
         Assert.That(result.Count, Is.EqualTo(2));
         var id = result[0].ProviderIds.Values.FirstOrDefault();
         Assert.That(id, Is.Not.Empty);
@@ -26,7 +27,7 @@ public class GloryholeTests
     [Test]
     public async Task UpdateIsWorking()
     {
-        var result = await _site.Update(new []{19, 3}, new []{"221961", "scenes", "2015-09-28"}, new CancellationToken());
+        var result = await _site.Update(new[] { 19, 3 }, new[] { "221961", "scenes", "2015-09-28" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Alena Croft"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
@@ -37,9 +38,12 @@ public class GloryholeTests
     [Test]
     public async Task GetImagesIsWorking()
     {
-        var result = (await _site.GetImages(new[] { 19, 3 }, new []{"221961", "scenes", "2015-09-28"}, null, new CancellationToken())).ToList();
+        var result = (await _site.GetImages(new[] { 19, 3 }, new[] { "221961", "scenes", "2015-09-28" }, null, new CancellationToken()))
+            .ToList();
 
         Assert.That(result, Has.Count.EqualTo(2));
-        Assert.That(result.First().Url, Is.EqualTo("https://images-fame.gammacdn.com/movies/104458/104458_01/previews/2/685/top_1_resized/104458_01_01.jpg"));
+        Assert.That(
+            result.First().Url,
+            Is.EqualTo("https://images-fame.gammacdn.com/movies/104458/104458_01/previews/2/685/top_1_resized/104458_01_01.jpg"));
     }
 }
