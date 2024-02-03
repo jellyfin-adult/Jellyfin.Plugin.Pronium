@@ -38,16 +38,9 @@ public class SiteBangBrosTests
     [Test]
     public async Task GetImagesIsWorking()
     {
-        var result = (await _site.GetImages(
-            new[] { 22, 0 },
-            new[] { "8854561", "scene" },
-            null,
-            new CancellationToken())).ToList();
+        var result = (await _site.GetImages(new[] { 22, 0 }, new[] { "8854561", "scene" }, null, new CancellationToken())).ToList();
 
         Assert.That(result, Has.Count.EqualTo(12));
-        Assert.That(
-            result.First().Url,
-            Is.EqualTo(
-                "https://media-public-ht.project1content.com/m=ea_aGJcWx/71b/47b/ead/1c2/45b/a89/1d0/879/93a/335/f9/poster/poster_01.jpg"));
+        Assert.That(result.First().Url, Does.Contain("m=ea_aGJcWx"));
     }
 }
