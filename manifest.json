@@ -6,7 +6,16 @@
         "description": "This metadata provider helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.",
         "owner": "JellyfinAdult",
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
+        "imageUrl": "https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/master/logo.png",
         "versions": [
+            {
+                "checksum": "ef622438b5685850b9abf2965c363c09",
+                "changelog": "Plugin rename, minor fixes",
+                "targetAbi": "10.8.0.0",
+                "sourceUrl": "https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/download/2.0.0.44/Jellyfin.Plugin.Pronium.zip",
+                "timestamp": "2024-02-03T22:34:01Z",
+                "version": "2.0.0.44"
+            },
             {
                 "checksum": "9441fc97dc34abbb69bbb466912a6ca7",
                 "changelog": "Fixes for bangbros, naughtyamerica and clips4sale",
