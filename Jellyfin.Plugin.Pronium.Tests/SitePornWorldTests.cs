@@ -58,8 +58,8 @@ public class SitePornWorldTests
         Assert.That(result.Item.Name, Is.EqualTo("Insatiable Babe Rebecca Volpetti Gets DP'd During Boxing Training GP2727"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(1), string.Join(',', result.Item.Studios));
-        Assert.That(result.Item.Genres.Length, Is.EqualTo(39), string.Join(',', result.Item.Genres));
-        Assert.That(result.Item.Genres, Does.Contain("lingerie"));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(40), string.Join(',', result.Item.Genres));
+        Assert.That(result.Item.Genres, Does.Contain("double penetration (DP)"));
         Assert.That(result.Item.Genres, Does.Contain("natural tits"));
         Assert.That(result.People.Count, Is.EqualTo(3), string.Join(',', result.People));
         Assert.That(
