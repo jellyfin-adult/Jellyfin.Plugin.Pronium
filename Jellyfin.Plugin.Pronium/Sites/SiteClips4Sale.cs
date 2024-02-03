@@ -67,9 +67,7 @@ namespace Pronium.Sites
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance?.Name ?? "Pronium", curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
+                    ProviderIds = { { Plugin.Instance?.Name ?? "Pronium", curID } }, Name = sceneName, ImageUrl = scenePoster,
                 };
 
                 result.Add(res);
@@ -87,15 +85,15 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var sceneURL = Helper.Decode(sceneID[0]);
-            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            var sceneUrl = Helper.Decode(sceneID[0]);
+            if (!sceneUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+                sceneUrl = Helper.GetSearchBaseURL(siteNum) + sceneUrl;
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
+            var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken).ConfigureAwait(false);
 
-            result.Item.ExternalId = sceneURL;
+            result.Item.ExternalId = sceneUrl;
             result.Item.Name = CleanupTitle(sceneData.SelectSingleText("//h1"));
             result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'read-more--box')]");
 
@@ -106,7 +104,7 @@ namespace Pronium.Sites
                 result.Item.AddStudio(studioName);
             }
 
-            var sceneDate = sceneData.SelectSingleText("//h1/parent::div/div/div/div/div[1]/span[1]");
+            var sceneDate = sceneData.SelectSingleText("//h1/parent::div/div/div/div/div[1]/span[1]")?.Split(" ").First();
             if (DateTime.TryParseExact(sceneDate, "M/d/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;

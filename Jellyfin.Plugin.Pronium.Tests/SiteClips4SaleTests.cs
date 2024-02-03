@@ -34,12 +34,13 @@ public class SiteClips4SaleTests
     [Test]
     public async Task UpdateIsWorking()
     {
-        var result = await _site.Update(new[] { 49, 0 }, new[] { Helper.Encode(_testSceneUrl), "2010-09-14" }, new CancellationToken());
+        var result = await _site.Update(new[] { 49, 0 }, new[] { Helper.Encode(_testSceneUrl), "2020-12-12" }, new CancellationToken());
         Assert.That(result.Item.Name, Does.Contain("Horny Step-Son fucks his Step-Mom"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
         Assert.That(result.People.Count, Is.EqualTo(0));
+        Assert.That(result.Item.PremiereDate, Is.EqualTo(DateTime.Parse("2020-12-12")));
     }
 
     [Test]
@@ -47,7 +48,7 @@ public class SiteClips4SaleTests
     {
         var result = (await _site.GetImages(
             new[] { 49, 0 },
-            new[] { Helper.Encode(_testSceneUrl), "2010-09-14" },
+            new[] { Helper.Encode(_testSceneUrl), "2020-12-12" },
             null,
             new CancellationToken())).ToList();
 
