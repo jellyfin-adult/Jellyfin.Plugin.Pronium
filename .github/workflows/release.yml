@@ -12,10 +12,10 @@ jobs:
   jellyfin:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
 
       - name: Build app for release
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
@@ -28,7 +28,7 @@ jobs:
           files: Jellyfin.Plugin.Pronium/bin/Release/net6.0/Jellyfin.Plugin.Pronium.pdb Jellyfin.Plugin.Pronium/bin/Release/net6.0/Jellyfin.Plugin.Pronium.dll
           dest: Jellyfin.Plugin.Pronium.zip
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: Jellyfin
@@ -37,10 +37,10 @@ jobs:
   emby:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
 
       - name: Build app for release
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release.Emby
@@ -53,7 +53,7 @@ jobs:
           files: Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Emby.Plugins.Pronium.pdb Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Emby.Plugins.Pronium.dll
           dest: Emby.Plugins.Pronium.zip
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: Emby
