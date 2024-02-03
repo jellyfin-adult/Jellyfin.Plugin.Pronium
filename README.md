@@ -1,18 +1,18 @@
-# PhoenixAdultRebirth
+# Pronium
 
 This metadata provider helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site
 
-[![GPL 2.0 License](https://img.shields.io/github/license/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth)](./LICENSE)
-[![Current Release](https://img.shields.io/github/release/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth)](https://github.com/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/releases/latest)
-[![Build status](https://img.shields.io/github/actions/workflow/status/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/release.yml)](https://github.com/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/releases/tag/nightly)
+[![GPL 2.0 License](https://img.shields.io/github/license/jellyfin-adult/Jellyfin.Plugin.Pronium)](./LICENSE)
+[![Current Release](https://img.shields.io/github/release/jellyfin-adult/Jellyfin.Plugin.Pronium)](https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/latest)
+[![Build status](https://img.shields.io/github/actions/workflow/status/jellyfin-adult/Jellyfin.Plugin.Pronium/release.yml)](https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/tag/nightly)
 
 ------------
 
 ## Install
 - Repository (Jellyfin only):
-  - Add to the list this URL `https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/master/manifest.json`
+  - Add to the list this URL `https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/master/manifest.json`
 - Manual:
-  - Download Archive from [Latest Release](https://github.com/jellyfin-adult/Jellyfin.Plugin.PhoenixAdultRebirth/releases/latest)
+  - Download Archive from [Latest Release](https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/latest)
   - Follow the [Instruction](https://jellyfin.org/docs/general/server/plugins/index.html)
 
 ## Features

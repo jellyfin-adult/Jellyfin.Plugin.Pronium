@@ -2,7 +2,7 @@
     {
         "category": "Metadata",
         "guid": "a6808102-bd49-4f40-8d17-bca2556f7336",
-        "name": "PhoenixAdultRebirth",
+        "name": "Pronium",
         "description": "This metadata provider helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.",
         "owner": "JellyfinAdult",
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",

@@ -5,7 +5,7 @@ on:
       - master
     tags: ["v*"]
     paths:
-      - Jellyfin.Plugin.PhoenixAdultRebirth/**
+      - Jellyfin.Plugin.Pronium/**
       - .github/**
 
 jobs:
@@ -21,19 +21,19 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.dll Jellyfin.Plugin.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth.pdb
+        run: ren Jellyfin.Plugin.Pronium/bin/Release/net6.0/Pronium.dll Jellyfin.Plugin.Pronium.dll && ren Jellyfin.Plugin.Pronium/bin/Release/net6.0/Pronium.pdb Jellyfin.Plugin.Pronium.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdultRebirth.dll
-          dest: Jellyfin.Plugin.PhoenixAdultRebirth.zip
+          files: Jellyfin.Plugin.Pronium/bin/Release/net6.0/Jellyfin.Plugin.Pronium.pdb Jellyfin.Plugin.Pronium/bin/Release/net6.0/Jellyfin.Plugin.Pronium.dll
+          dest: Jellyfin.Plugin.Pronium.zip
 
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: Jellyfin
           retention-days: 90
-          path: Jellyfin.Plugin.PhoenixAdultRebirth.zip
+          path: Jellyfin.Plugin.Pronium.zip
   emby:
     runs-on: windows-latest
     steps:
@@ -46,19 +46,19 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release.Emby
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/PhoenixAdultRebirth.dll ./Emby.Plugins.PhoenixAdultRebirth.dll && ren Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/PhoenixAdultRebirth.pdb ./Emby.Plugins.PhoenixAdultRebirth.pdb
+        run: ren Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Pronium.dll ./Emby.Plugins.Pronium.dll && ren Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Pronium.pdb ./Emby.Plugins.Pronium.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdultRebirth.pdb Jellyfin.Plugin.PhoenixAdultRebirth/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdultRebirth.dll
-          dest: Emby.Plugins.PhoenixAdultRebirth.zip
+          files: Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Emby.Plugins.Pronium.pdb Jellyfin.Plugin.Pronium/bin/Release.Emby/netstandard2.1/Emby.Plugins.Pronium.dll
+          dest: Emby.Plugins.Pronium.zip
 
       - uses: actions/upload-artifact@v3
         with:
           if-no-files-found: error
           name: Emby
           retention-days: 90
-          path: Emby.Plugins.PhoenixAdultRebirth.zip
+          path: Emby.Plugins.Pronium.zip
   deploy:
     runs-on: ubuntu-latest
     needs: [jellyfin, emby]
@@ -73,5 +73,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            **/Jellyfin.Plugin.PhoenixAdultRebirth.zip
-            **/Emby.Plugins.PhoenixAdultRebirth.zip
+            **/Jellyfin.Plugin.Pronium.zip
+            **/Emby.Plugins.Pronium.zip
