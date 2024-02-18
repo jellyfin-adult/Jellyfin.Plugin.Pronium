@@ -39,7 +39,9 @@ public class SiteFreeUseFantasyTests
         Assert.That(result.People.Count, Is.EqualTo(2));
         Assert.That(result.People.Select(t => t.Name), Does.Contain("Daisy Stone"));
         Assert.That(result.People.Select(t => t.Name), Does.Contain("Dharma Jones"));
+#pragma warning disable NUnit2021 // Incompatible types for EqualTo constraint
         Assert.That(result.Item.PremiereDate, Is.EqualTo(new DateTime(2024, 02, 03)).Within(24).Hours);
+#pragma warning restore NUnit2021 // Incompatible types for EqualTo constraint
     }
 
     [Test]
