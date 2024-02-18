@@ -5,10 +5,11 @@ using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using Pronium.Configuration;
-
 #if __EMBY__
+using System.IO;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Model.Logging;
+using MediaBrowser.Model.Drawing;
 #else
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,11 @@ using Sentry;
 
 namespace Pronium
 {
+#if __EMBY__
+    public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages, IHasThumbImage
+#else
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
+#endif
     {
 #if __EMBY__
         public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IHttpClient http, ILogManager logger)
@@ -34,16 +39,13 @@ namespace Pronium
 #if __EMBY__
             if (logger != null)
             {
-                Log = logger.GetLogger(this.Name);
+                Log = logger.GetLogger(Name);
             }
 #else
             Log = logger;
-            this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
+            ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
 
-            SentrySdk.Init(new SentryOptions
-            {
-                Dsn = Consts.SentryDSN,
-            });
+            SentrySdk.Init(new SentryOptions { Dsn = Consts.SentryDSN });
 #endif
         }
 
@@ -62,13 +64,20 @@ namespace Pronium
         public override Guid Id => Guid.Parse("172ff6fc-2297-4c96-979a-e0ad632b6120");
 
         public IEnumerable<PluginPageInfo> GetPages()
-            => new[]
+        {
+            return new[]
             {
-                new PluginPageInfo
-                {
-                    Name = this.Name,
-                    EmbeddedResourcePath = $"{this.GetType().Namespace}.Configuration.configPage.html",
-                },
+                new PluginPageInfo { Name = Name, EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.configPage.html" },
             };
+        }
+
+#if __EMBY__
+        public Stream GetThumbImage()
+        {
+            return GetType().Assembly.GetManifestResourceStream($"{GetType().Namespace}.logo.png");
+        }
+
+        public ImageFormat ThumbImageFormat => ImageFormat.Png;
+#endif
     }
 }
