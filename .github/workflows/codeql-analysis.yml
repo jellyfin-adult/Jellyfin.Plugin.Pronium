@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [master]
+    branches: [master, feat/*]
     paths:
       - "Jellyfin.Plugin.Pronium/**"
       - "Jellyfin.Plugin.Pronium.Tests/**"

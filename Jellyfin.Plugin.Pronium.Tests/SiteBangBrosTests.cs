@@ -13,7 +13,6 @@ public class SiteBangBrosTests
     }
 
     private readonly Network1service _site = new();
-    private readonly string _testSceneUrl = "https://bangbros.com/video/8854561/anal-maid-serviceS";
 
     [Test]
     public async Task SearchIsWorking()
