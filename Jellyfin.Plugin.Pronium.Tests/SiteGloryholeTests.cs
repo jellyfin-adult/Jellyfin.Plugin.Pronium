@@ -4,7 +4,7 @@ using Pronium.Sites;
 namespace Pronium.UnitTests;
 
 [TestFixture]
-public class GloryholeTests
+public class SiteGloryholeTests
 {
     [SetUp]
     public void Setup()

@@ -190,7 +190,7 @@ namespace Pronium.Sites
             var sceneUrl = Helper.Decode(sceneId[0]);
             var sceneData = await HTML.ElementFromURL(sceneUrl, cancellationToken).ConfigureAwait(false);
             var primaryImage =
-                sceneData.SelectSingleNode("//div[@id='trailer_player_finished']//img | //div[contains(@class, dvds-photo)]//img");
+                sceneData.SelectSingleNode("//div[@id='trailer_player_finished']//img | //div[contains(@class, 'dvds-photo')]//img");
 
             if (primaryImage != null)
             {
