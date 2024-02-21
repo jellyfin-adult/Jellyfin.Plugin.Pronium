@@ -1,3 +1,9 @@
+#if __EMBY__
+using MediaBrowser.Common.Net;
+using MediaBrowser.Model.Configuration;
+#else
+using System.Net.Http;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,97 +19,27 @@ using Pronium.Configuration;
 using Pronium.Helpers;
 using Pronium.Helpers.Utils;
 
-#if __EMBY__
-using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Configuration;
-#else
-using System.Net.Http;
-#endif
-
 namespace Pronium.Providers
 {
     public class ActorImageProvider : IRemoteImageProvider
     {
         public string Name => Plugin.Instance.Name;
 
-        public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
+        public bool Supports(BaseItem item)
         {
-            var tasks = new Dictionary<string, Task<string>>();
-            var imageList = new List<RemoteImageInfo>();
-
-            if (string.IsNullOrEmpty(name))
-            {
-                return imageList;
-            }
-
-            Logger.Info($"Searching actor images for \"{name}\"");
-
-            tasks.Add("AdultDVDEmpire", GetFromAdultDVDEmpire(name, cancellationToken));
-            tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
-            tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
-            tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
-
-            var splitedName = name.Split();
-            switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
-            {
-                case JAVActorNamingStyle.JapaneseStyle:
-                    if (splitedName.Length > 1)
-                    {
-                        var nameReversed = string.Join(" ", splitedName.Reverse());
-
-                        tasks.Add("Boobpedia 2", GetFromBoobpedia(nameReversed, cancellationToken));
-                        tasks.Add("Babepedia 2", GetFromBabepedia(nameReversed, cancellationToken));
-                        tasks.Add("IAFD 2", GetFromIAFD(nameReversed, cancellationToken));
-                    }
-
-                    break;
-            }
-
-            try
-            {
-                await Task.WhenAll(tasks.Values).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"GetActorPhotos error: \"{e}\"");
-
-                await Analytics.Send(
-                    new AnalyticsExeption
-                    {
-                        Request = name,
-                        Exception = e,
-                    }, cancellationToken).ConfigureAwait(false);
-            }
-            finally
-            {
-                foreach (var image in tasks)
-                {
-                    var res = image.Value.Result;
-
-                    if (!string.IsNullOrEmpty(res) && !imageList.Where(o => o.Url == res).Any())
-                    {
-                        imageList.Add(new RemoteImageInfo
-                        {
-                            ProviderName = image.Key,
-                            Url = res,
-                        });
-                    }
-                }
-            }
-
-            return imageList;
+            return item is Person;
         }
 
-        public bool Supports(BaseItem item) => item is Person;
-
         public IEnumerable<ImageType> GetSupportedImages(BaseItem item)
-            => new List<ImageType>
-            {
-                ImageType.Primary,
-            };
+        {
+            return new List<ImageType> { ImageType.Primary };
+        }
 
 #if __EMBY__
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            BaseItem item,
+            LibraryOptions libraryOptions,
+            CancellationToken cancellationToken)
 #else
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
 #endif
@@ -117,42 +53,39 @@ namespace Pronium.Providers
 
             images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
 
-            if (item.ProviderIds.TryGetValue(this.Name, out var externalID))
+            if (item.ProviderIds.TryGetValue(Name, out var externalId))
             {
-                var curID = externalID.Split('#');
-                if (curID.Length > 2)
+                var actorId = externalId.Split('#');
+                if (actorId.Length > 2)
                 {
-                    var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
-                    var sceneID = item.ProviderIds;
+                    var siteNum = new int[2]
+                    {
+                        int.Parse(actorId[0], CultureInfo.InvariantCulture), int.Parse(actorId[1], CultureInfo.InvariantCulture),
+                    };
+                    var sceneId = item.ProviderIds;
 
-                    if (sceneID.ContainsKey(this.Name))
+                    if (sceneId.ContainsKey(Name))
                     {
                         var provider = Helper.GetProviderBySiteID(siteNum[0]);
                         if (provider != null)
                         {
-                            IEnumerable<RemoteImageInfo> imgs = new List<RemoteImageInfo>();
+                            IEnumerable<RemoteImageInfo> remoteImageInfos = new List<RemoteImageInfo>();
                             try
                             {
-                                imgs = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                                remoteImageInfos = await provider.GetImages(siteNum, actorId.Skip(2).ToArray(), item, cancellationToken)
+                                    .ConfigureAwait(false);
                             }
                             catch (Exception e)
                             {
                                 Logger.Error($"GetImages error: \"{e}\"");
 
                                 await Analytics.Send(
-                                    new AnalyticsExeption
-                                    {
-                                        Request = string.Join("#", curID.Skip(2)),
-                                        SiteNum = siteNum,
-                                        Exception = e,
-                                    }, cancellationToken).ConfigureAwait(false);
+                                    new AnalyticsExeption { Request = string.Join("#", actorId.Skip(2)), SiteNum = siteNum, Exception = e },
+                                    cancellationToken).ConfigureAwait(false);
                             }
                             finally
                             {
-                                if (imgs.Any())
-                                {
-                                    images.AddRange(imgs);
-                                }
+                                images.AddRange(remoteImageInfos);
                             }
                         }
                     }
@@ -167,7 +100,7 @@ namespace Pronium.Providers
                 {
                     if (string.IsNullOrEmpty(img.ProviderName))
                     {
-                        img.ProviderName = this.Name;
+                        img.ProviderName = Name;
                     }
                 }
 
@@ -186,51 +119,108 @@ namespace Pronium.Providers
             return Helper.GetImageResponse(url, cancellationToken);
         }
 
-        private static async Task<string> GetFromAdultDVDEmpire(string name, CancellationToken cancellationToken)
+        public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
-            string image = null;
+            var tasks = new Dictionary<string, Task<IEnumerable<string>>>();
+            var imageList = new List<RemoteImageInfo>();
 
             if (string.IsNullOrEmpty(name))
             {
-                return image;
+                return imageList;
             }
 
-            string encodedName = HttpUtility.UrlEncode(name),
-                   url = $"https://www.adultdvdempire.com/performer/search?q={encodedName}";
+            Logger.Info($"Searching actor images for \"{name}\"");
+
+            tasks.Add("AdultDVDEmpire", GetFromAdultDvdEmpire(name, cancellationToken));
+            tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
+            tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
+            tasks.Add("IAFD", GetFromIafd(name, cancellationToken));
+
+            var splitedName = name.Split();
+            switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
+            {
+                case JAVActorNamingStyle.JapaneseStyle:
+                    if (splitedName.Length > 1)
+                    {
+                        var nameReversed = string.Join(" ", splitedName.Reverse());
+
+                        tasks.Add("Boobpedia JAV", GetFromBoobpedia(nameReversed, cancellationToken));
+                        tasks.Add("Babepedia JAV", GetFromBabepedia(nameReversed, cancellationToken));
+                        tasks.Add("IAFD JAV", GetFromIafd(nameReversed, cancellationToken));
+                    }
+
+                    break;
+            }
+
+            try
+            {
+                await Task.WhenAll(tasks.Values).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"GetActorPhotos error: \"{e}\"");
+
+                await Analytics.Send(new AnalyticsExeption { Request = name, Exception = e }, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                foreach (var image in tasks)
+                {
+                    var results = image.Value.Result;
+
+                    foreach (var result in results)
+                    {
+                        imageList.Add(new RemoteImageInfo { ProviderName = image.Key, Url = result });
+                    }
+                }
+            }
+
+            return imageList;
+        }
+
+        private static async Task<IEnumerable<string>> GetFromAdultDvdEmpire(string name, CancellationToken cancellationToken)
+        {
+            var images = new List<string>();
+
+            if (string.IsNullOrEmpty(name))
+            {
+                return images;
+            }
+
+            string encodedName = HttpUtility.UrlEncode(name), url = $"https://www.adultdvdempire.com/performer/search?q={encodedName}";
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var actorPageURL = actorData.SelectSingleText("//div[@id='performerlist']/div//a/@href");
-            if (!string.IsNullOrEmpty(actorPageURL))
+            var actorPageUrl = actorData.SelectSingleText("//div[@id='performerlist']/div//a/@href");
+            if (!string.IsNullOrEmpty(actorPageUrl))
             {
-                if (!actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                if (!actorPageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    actorPageURL = "https://www.adultdvdempire.com" + actorPageURL;
+                    actorPageUrl = "https://www.adultdvdempire.com" + actorPageUrl;
                 }
 
-                var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
+                var actorPage = await HTML.ElementFromURL(actorPageUrl, cancellationToken).ConfigureAwait(false);
 
                 var img = actorPage.SelectSingleText("//div[contains(@class, 'performer-image-container')]/a/@href");
                 if (!string.IsNullOrEmpty(img))
                 {
-                    image = img;
+                    images.Add(img);
                 }
             }
 
-            return image;
+            return images;
         }
 
-        private static async Task<string> GetFromBoobpedia(string name, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<string>> GetFromBoobpedia(string name, CancellationToken cancellationToken)
         {
-            string image = null;
+            var images = new List<string>();
 
             if (string.IsNullOrEmpty(name))
             {
-                return image;
+                return images;
             }
 
-            string encodedName = HttpUtility.UrlEncode(name),
-                   url = $"http://www.boobpedia.com/wiki/index.php?search={encodedName}";
+            string encodedName = HttpUtility.UrlEncode(name), url = $"https://www.boobpedia.com/wiki/index.php?search={encodedName}";
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
@@ -239,26 +229,26 @@ namespace Pronium.Providers
             {
                 if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    img = "http://www.boobpedia.com" + img;
+                    img = "https://www.boobpedia.com" + img;
                 }
 
-                image = img;
+                images.Add(img);
             }
 
-            return image;
+            return images;
         }
 
-        private static async Task<string> GetFromBabepedia(string name, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<string>> GetFromBabepedia(string name, CancellationToken cancellationToken)
         {
-            string image = null;
+            var images = new List<string>();
 
             if (string.IsNullOrEmpty(name))
             {
-                return image;
+                return images;
             }
 
             string encodedName = name.Replace(" ", "_", StringComparison.OrdinalIgnoreCase),
-                   url = $"https://www.babepedia.com/babe/{encodedName}";
+                url = $"https://www.babepedia.com/babe/{encodedName}";
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
@@ -270,15 +260,27 @@ namespace Pronium.Providers
                     img = "https://www.babepedia.com" + img;
                 }
 
-                image = img;
+                images.Add(img);
             }
 
-            return image;
+            var profSelectedImages = actorData.SelectNodesSafe("//div[@id='profselect']//a");
+            foreach (var image in profSelectedImages)
+            {
+                var imageUrl = image.Attributes["href"].ToString();
+                if (!imageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    imageUrl = "https://www.babepedia.com" + imageUrl;
+                }
+
+                images.Add(imageUrl);
+            }
+
+            return images;
         }
 
-        private static async Task<string> GetFromIAFD(string name, CancellationToken cancellationToken)
+        private static async Task<IEnumerable<string>> GetFromIafd(string name, CancellationToken cancellationToken)
         {
-            string image = null;
+            var image = new List<string>();
 
             if (string.IsNullOrEmpty(name))
             {
@@ -286,7 +288,7 @@ namespace Pronium.Providers
             }
 
             string encodedName = HttpUtility.UrlEncode(name),
-                   url = $"http://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={encodedName}";
+                url = $"https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={encodedName}";
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
@@ -295,7 +297,7 @@ namespace Pronium.Providers
             {
                 if (!actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    actorPageURL = "http://www.iafd.com" + actorPageURL;
+                    actorPageURL = "https://www.iafd.com" + actorPageURL;
                 }
 
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
@@ -303,7 +305,7 @@ namespace Pronium.Providers
                 var actorImage = actorPage.SelectSingleText("//div[@id='headshot']//img/@src");
                 if (!actorImage.Contains("nophoto", StringComparison.OrdinalIgnoreCase))
                 {
-                    image = actorImage;
+                    image.Add(actorImage);
                 }
             }
 
