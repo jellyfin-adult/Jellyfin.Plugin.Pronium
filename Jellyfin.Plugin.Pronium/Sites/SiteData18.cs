@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -15,7 +16,11 @@ namespace Pronium.Sites
 {
     public class SiteData18 : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -37,14 +42,15 @@ namespace Pronium.Sites
                 var scenePoster = searchResult.SelectSingleText(".//img/@src");
                 var sceneDate = searchResult.SelectSingleText(".//span[@class='gen11'] | ./text()");
 
-                var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster, };
+                var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster };
 
                 if (!string.IsNullOrEmpty(sceneDate))
                 {
                     sceneDate = sceneDate.Replace("&nbsp;", string.Empty).Trim();
                 }
 
-                Logger.Info($"SiteData18.Search sceneURL: {sceneURL}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
+                Logger.Info(
+                    $"SiteData18.Search sceneURL: {sceneURL}, ID: {curID}, sceneName: {sceneName}, scenePoster: {scenePoster}, sceneDate: {sceneDate}");
 
                 if (DateTime.TryParse(sceneDate, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
@@ -68,7 +74,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>() { Item = new Movie(), People = new List<PersonInfo>(), };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -94,10 +100,11 @@ namespace Pronium.Sites
             result.Item.ExternalId = sceneUrl;
 
             result.Item.Name = name;
-            result.Item.Overview = overview
-                .Replace("&nbsp;", " ")
-                .Replace("Description - ", string.Empty, StringComparison.OrdinalIgnoreCase)
-                .Replace("Story - ", string.Empty, StringComparison.OrdinalIgnoreCase);
+            result.Item.Overview = overview.Replace("&nbsp;", " ")
+                .Replace("Description - ", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(
+                    "Story - ",
+                    string.Empty,
+                    StringComparison.OrdinalIgnoreCase);
 
             result.Item.AddStudio("Data18");
             var studios = sceneData.SelectNodesSafe("//div[@class='gen12']/p[contains(., 'Network') or contains(., 'Site')]//a");
@@ -113,7 +120,12 @@ namespace Pronium.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                if (DateTime.TryParseExact(
+                        sceneDate,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -121,7 +133,12 @@ namespace Pronium.Sites
             else
             {
                 var date = sceneData.SelectSingleText("//span[contains(., 'Release date:') and not(contains(., 'No date release yet'))]/a");
-                if (!string.IsNullOrEmpty(date) && DateTime.TryParseExact(date, "MMMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                if (!string.IsNullOrEmpty(date) && DateTime.TryParseExact(
+                        date,
+                        "MMMM dd, yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -138,9 +155,26 @@ namespace Pronium.Sites
             var actorsNode = sceneData.SelectNodesSafe("//h3[contains(., 'Cast')]/parent::div//img");
             foreach (var actorLink in actorsNode)
             {
-                var actor = new PersonInfo { Name = actorLink.SelectSingleText("./@alt"), ImageUrl = actorLink.SelectSingleText("./@src"), };
+                var actorName = actorLink.SelectSingleText("./@alt");
+                var actorProvider = new ActorFreeones();
+                var actors = await actorProvider.Search(new[] { 43, 0 }, actorName, null, cancellationToken);
+                var firstActor = await actorProvider.Update(
+                    new[] { 43, 0 },
+                    actors.First().ProviderIds.Values.ToArray(),
+                    cancellationToken);
 
-                result.People.Add(actor);
+                if (actors.Count > 0 && firstActor.Item.OriginalTitle.Contains(actorName))
+                {
+                    var actor = actors.First();
+
+                    result.People.Add(new PersonInfo { Name = actor.Name, ImageUrl = actor.ImageUrl, ProviderIds = actor.ProviderIds });
+                }
+                else
+                {
+                    var actor = new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@src") };
+
+                    result.People.Add(actor);
+                }
             }
 
             Logger.Info($"SiteData18.Update genres: {result.Item.Genres.Length}, actors: {result.People.Count}");
@@ -148,7 +182,11 @@ namespace Pronium.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneId, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneId,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -166,8 +204,8 @@ namespace Pronium.Sites
             {
                 var img = primaryImage.Attributes["src"].Value;
 
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary, });
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop, });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop });
             }
 
             return result;
