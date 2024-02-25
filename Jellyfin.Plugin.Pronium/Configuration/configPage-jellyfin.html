@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pronium</title>
+</head>
+<body>
+<div class="page type-interior pluginConfigurationPage" data-require="emby-button,emby-checkbox" data-role="page"
+     id="proniumConfigurationPage">
+    <div data-role="content">
+        <div class="content-primary">
+            <h1>Pronium</h1>
+            <p>This metadata agent helps fill Jellyfin with information for your adult videos by pulling from the original site.</p>
+            <form id="proniumConfigForm">
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableCaching" is="emby-checkbox" name="DisableCaching" type="checkbox"/>
+                        <span>Disable Caching</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableSSLCheck" is="emby-checkbox" name="DisableSSLCheck" type="checkbox"/>
+                        <span>Disable SSL Certificate Check</span>
+                    </label>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
+                    <input id="FlareSolverrURL" is="emby-input" name="FlareSolverrURL" type="text"/>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="ProxyEnable" is="emby-checkbox" name="ProxyEnable" type="checkbox"/>
+                        <span>Proxy Enable</span>
+                    </label>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="ProxyHost">Proxy Host</label>
+                    <input id="ProxyHost" is="emby-input" min="0" name="ProxyHost" type="text"/>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="ProxyPort">Proxy Port</label>
+                    <input id="ProxyPort" is="emby-input" name="ProxyPort" type="number"/>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="ProxyLogin">Proxy Login</label>
+                    <input id="ProxyLogin" is="emby-input" name="ProxyLogin" type="text"/>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="ProxyPassword">Proxy Password</label>
+                    <input id="ProxyPassword" is="emby-input" name="ProxyPassword" type="password"/>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="UseFilePath" is="emby-checkbox" name="UseFilePath" type="checkbox"/>
+                        <span>Use FilePath for matching</span>
+                    </label>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="DefaultSiteName">Default SiteName</label>
+                    <input id="DefaultSiteName" is="emby-input" name="DefaultSiteName" type="text"/>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="UseMetadataAPI" is="emby-checkbox" name="UseMetadataAPI" type="checkbox"/>
+                        <span>Use MetadataAPI for not supported sites</span>
+                    </label>
+                </div>
+                <div class="inputContainer">
+                    <label class="inputLabel inputLabelUnfocused" for="MetadataAPIToken">MetadataAPI Token</label>
+                    <input id="MetadataAPIToken" is="emby-input" name="MetadataAPIToken" type="password"/>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableActors" is="emby-checkbox" name="DisableActors" type="checkbox"/>
+                        <span>Disable Actors Saving to Metadata</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableGenres" is="emby-checkbox" name="DisableGenres" type="checkbox"/>
+                        <span>Disable Genres Saving to Metadata</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableImageValidation" is="emby-checkbox" name="DisableImageValidation" type="checkbox"/>
+                        <span>Disable Image Validation</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableImageSize" is="emby-checkbox" name="DisableImageSize" type="checkbox"/>
+                        <span>Disable Image Size</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer checkboxContainer-withDescripton">
+                    <label class="emby-checkbox-label">
+                        <input id="DisableAutoIdentify" is="emby-checkbox" name="DisableAutoIdentify" type="checkbox"/>
+                        <span>Disable Auto Identify</span>
+                    </label>
+                </div>
+                <div class="selectContainer">
+                    <label class="selectLabel" for="PreferedActorNameSource">Actor Name Source</label>
+                    <select class="emby-select-withcolor emby-select" id="PreferedActorNameSource" is="emby-select"
+                            name="PreferedActorNameSource">
+                        <option value="LocalDatabase">Local Database</option>
+                        <option value="NoChange">As in Source</option>
+                    </select>
+                </div>
+                <div class="selectContainer">
+                    <label class="selectLabel" for="JAVActorNamingStyle">JAV Actor Naming Style</label>
+                    <select class="emby-select-withcolor emby-select" id="JAVActorNamingStyle" is="emby-select" name="JAVActorNamingStyle">
+                        <option value="WesternStyle">Western Style</option>
+                        <option value="JapaneseStyle">Japanese Style</option>
+                    </select>
+                </div>
+                <div class="selectContainer">
+                    <label class="selectLabel" for="GenresSortingStyle">Genre Sorting Style</label>
+                    <select class="emby-select-withcolor emby-select" id="GenresSortingStyle" is="emby-select" name="GenresSortingStyle">
+                        <option value="Alphabetical">Alphabetical</option>
+                        <option value="PositionsLast">Positions Last</option>
+                    </select>
+                </div>
+                <button class="raised button-submit block emby-button" is="emby-button" type="submit">
+                    <span>Save</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var proniumConfig = {
+            pluginUniqueId: '172ff6fc-2297-4c96-979a-e0ad632b6120'
+        };
+
+        $('#DisableImageValidation').on('change', function () {
+            $('#DisableImageSize').prop('disabled', $('#DisableImageValidation').prop('checked'));
+        });
+
+        $('#proniumConfigurationPage').on('pageshow', function () {
+            Dashboard.showLoadingMsg();
+            ApiClient.getPluginConfiguration(proniumConfig.pluginUniqueId).then(function (config) {
+                $('#FlareSolverrURL').val(config.FlareSolverrURL).change();
+                $('#DisableCaching').prop('checked', config.DisableCaching);
+                $('#DisableSSLCheck').prop('checked', config.DisableSSLCheck);
+                $('#ProxyEnable').prop('checked', config.ProxyEnable);
+                $('#ProxyHost').val(config.ProxyHost).change();
+                $('#ProxyPort').val(config.ProxyPort).change();
+                $('#ProxyLogin').val(config.ProxyLogin).change();
+                $('#ProxyPassword').val(config.ProxyPassword).change();
+                $('#UseFilePath').prop('checked', config.UseFilePath);
+                $('#DefaultSiteName').val(config.DefaultSiteName).change();
+                $('#UseMetadataAPI').prop('checked', config.UseMetadataAPI);
+                $('#MetadataAPIToken').val(config.MetadataAPIToken).change();
+                $('#DisableActors').prop('checked', config.DisableActors);
+                $('#DisableGenres').prop('checked', config.DisableGenres);
+                $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
+                $('#DisableImageSize').prop('checked', config.DisableImageSize);
+                $('#DisableAutoIdentify').prop('checked', config.DisableAutoIdentify);
+                $('#PreferedActorNameSource').val(config.PreferedActorNameSource).change();
+                $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
+                $('#GenresSortingStyle').val(config.GenresSortingStyle).change();
+                Dashboard.hideLoadingMsg();
+            });
+        });
+
+        $('#proniumConfigForm').on('submit', function () {
+            Dashboard.showLoadingMsg();
+            ApiClient.getPluginConfiguration(proniumConfig.pluginUniqueId).then(function (config) {
+                config.FlareSolverrURL = $('#FlareSolverrURL').val();
+                config.DisableCaching = $('#DisableCaching').prop('checked');
+                config.DisableSSLCheck = $('#DisableSSLCheck').prop('checked');
+                config.ProxyEnable = $('#ProxyEnable').prop('checked');
+                config.ProxyHost = $('#ProxyHost').val();
+                config.ProxyPort = $('#ProxyPort').val();
+                config.ProxyLogin = $('#ProxyLogin').val();
+                config.ProxyPassword = $('#ProxyPassword').val();
+                config.UseFilePath = $('#UseFilePath').prop('checked');
+                config.DefaultSiteName = $('#DefaultSiteName').val();
+                config.MetadataAPIToken = $('#MetadataAPIToken').val();
+                config.UseMetadataAPI = $('#UseMetadataAPI').prop('checked');
+                config.DisableActors = $('#DisableActors').prop('checked');
+                config.DisableGenres = $('#DisableGenres').prop('checked');
+                config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
+                config.DisableImageSize = $('#DisableImageSize').prop('checked');
+                config.DisableAutoIdentify = $('#DisableAutoIdentify').prop('checked');
+                config.PreferedActorNameSource = $('#PreferedActorNameSource').val();
+                config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
+                config.GenresSortingStyle = $('#GenresSortingStyle').val();
+                ApiClient.updatePluginConfiguration(proniumConfig.pluginUniqueId, config).then(function (result) {
+                    Dashboard.processPluginConfigurationUpdateResult(result);
+                });
+            });
+            return false;
+        });
+    </script>
+</div>
+</body>
+</html>

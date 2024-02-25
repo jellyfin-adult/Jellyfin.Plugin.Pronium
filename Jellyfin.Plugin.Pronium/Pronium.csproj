@@ -3,8 +3,8 @@
     <TargetFramework Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">net6.0</TargetFramework>
     <TargetFramework Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">netstandard2.1</TargetFramework>
     <RootNamespace>Pronium</RootNamespace>
-    <AssemblyVersion>2.0.1.57</AssemblyVersion>
-    <FileVersion>2.0.1.57</FileVersion>
+    <AssemblyVersion>2.0.1.58</AssemblyVersion>
+    <FileVersion>2.0.1.58</FileVersion>
     <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
     <Copyright>© Jellyfin Adult</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -59,9 +59,19 @@
   <ItemGroup Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release.Emby'">
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.26"/>
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Configuration\configPage.html"/>
-    <EmbeddedResource Include="Configuration\configPage.html"/>
+  <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+    <None Remove="Configuration\configPage-jellyfin.html"/>
+    <EmbeddedResource Include="Configuration\configPage-jellyfin.html">
+      <LogicalName>Configuration.configPage.html</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Debug.Emby'">
+    <None Remove="Configuration\configPage-emby.html"/>
+    <None Remove="Configuration\configPage.js"/>
+    <EmbeddedResource Include="Configuration\configPage-emby.html">
+      <LogicalName>Configuration.configPage.html</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Configuration\configPage.js"/>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
     <None Remove="..\logo.png"/>

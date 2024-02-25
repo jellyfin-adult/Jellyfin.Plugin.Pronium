@@ -1,0 +1,128 @@
+<div class="view flex flex-direction-column scrollFrameY flex-grow" data-bindheader="true" data-centerfocus="true" data-controller="__plugin/Proniumjs"
+     data-forcescrollbar="true" data-horizontal="false" data-title="Pronium" is="emby-scroller">
+    <div class="scrollSlider flex-grow flex-direction-column padded-left padded-left-page padded-right padded-top-page padded-bottom-page">
+        <form id="proniumConfigForm">
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableCaching" is="emby-checkbox" name="DisableCaching" type="checkbox"/>
+                    <span>Disable Caching</span>
+                </label>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableSSLCheck" is="emby-checkbox" name="DisableSSLCheck" type="checkbox"/>
+                    <span>Disable SSL Certificate Check</span>
+                </label>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
+                <input id="FlareSolverrURL" is="emby-input" name="FlareSolverrURL" type="text"/>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="ProxyEnable" is="emby-checkbox" name="ProxyEnable" type="checkbox"/>
+                    <span>Proxy Enable</span>
+                </label>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="ProxyHost">Proxy Host</label>
+                <input id="ProxyHost" is="emby-input" min="0" name="ProxyHost" type="text"/>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="ProxyPort">Proxy Port</label>
+                <input id="ProxyPort" is="emby-input" name="ProxyPort" type="number"/>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="ProxyLogin">Proxy Login</label>
+                <input id="ProxyLogin" is="emby-input" name="ProxyLogin" type="text"/>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="ProxyPassword">Proxy Password</label>
+                <input id="ProxyPassword" is="emby-input" name="ProxyPassword" type="password"/>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="UseFilePath" is="emby-checkbox" name="UseFilePath" type="checkbox"/>
+                    <span>Use FilePath for matching</span>
+                </label>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="DefaultSiteName">Default SiteName</label>
+                <input id="DefaultSiteName" is="emby-input" name="DefaultSiteName" type="text"/>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="UseMetadataAPI" is="emby-checkbox" name="UseMetadataAPI" type="checkbox"/>
+                    <span>Use MetadataAPI for not supported sites</span>
+                </label>
+            </div>
+            <div class="inputContainer">
+                <label class="inputLabel inputLabelUnfocused" for="MetadataAPIToken">MetadataAPI Token</label>
+                <input id="MetadataAPIToken" is="emby-input" name="MetadataAPIToken" type="password"/>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableActors" is="emby-checkbox" name="DisableActors" type="checkbox"/>
+                    <span>Disable Actors Saving to Metadata</span>
+                </label>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableGenres" is="emby-checkbox" name="DisableGenres" type="checkbox"/>
+                    <span>Disable Genres Saving to Metadata</span>
+                </label>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableImageValidation" is="emby-checkbox" name="DisableImageValidation" type="checkbox"/>
+                    <span>Disable Image Validation</span>
+                </label>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableImageSize" is="emby-checkbox" name="DisableImageSize" type="checkbox"/>
+                    <span>Disable Image Size</span>
+                </label>
+            </div>
+            <div class="checkboxContainer checkboxContainer-withDescripton">
+                <label class="emby-checkbox-label">
+                    <input id="DisableAutoIdentify" is="emby-checkbox" name="DisableAutoIdentify" type="checkbox"/>
+                    <span>Disable Auto Identify</span>
+                </label>
+            </div>
+            <div class="selectContainer">
+                <label class="selectLabel" for="PreferedActorNameSource">Actor Name Source</label>
+                <div class="emby-select-wrapper emby-select-wrapper-smaller">
+                    <select class="emby-select-withcolor emby-select" id="PreferedActorNameSource" is="emby-select"
+                            name="PreferedActorNameSource">
+                        <option value="LocalDatabase">Local Database</option>
+                        <option value="NoChange">As in Source</option>
+                    </select>
+                </div>
+            </div>
+            <div class="selectContainer">
+                <label class="selectLabel" for="JAVActorNamingStyle">JAV Actor Naming Style</label>
+                <div class="emby-select-wrapper emby-select-wrapper-smaller">
+                    <select class="emby-select-withcolor emby-select" id="JAVActorNamingStyle" is="emby-select"
+                            name="JAVActorNamingStyle">
+                        <option value="WesternStyle">Western Style</option>
+                        <option value="JapaneseStyle">Japanese Style</option>
+                    </select>
+                </div>
+            </div>
+            <div class="selectContainer">
+                <label class="selectLabel" for="GenresSortingStyle">Genre Sorting Style</label>
+                <div class="emby-select-wrapper emby-select-wrapper-smaller">
+                    <select class="emby-select-withcolor emby-select" id="GenresSortingStyle" is="emby-select"
+                            name="GenresSortingStyle">
+                        <option value="Alphabetical">Alphabetical</option>
+                        <option value="PositionsLast">Positions Last</option>
+                    </select>
+                </div>
+            </div>
+            <button class="raised button-submit block emby-button" is="emby-button" type="submit">
+                <span>Save</span>
+            </button>
+        </form>
+    </div>
+</div>
