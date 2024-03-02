@@ -98,9 +98,7 @@ namespace Pronium.Sites
             result.Item.ExternalId = sceneUrl;
 
             result.Item.Name = name;
-            result.Item.Overview = overview
-                .Replace("&nbsp;", " ")
-                .Trim();
+            result.Item.Overview = overview.Replace("&nbsp;", " ").Trim();
 
             result.Item.AddStudio("Private");
             var studios = sceneData.SelectNodesSafe("//span[@class='title-site']");
@@ -130,6 +128,8 @@ namespace Pronium.Sites
                         out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
+                    result.Item.OriginalTitle =
+                        $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                 }
             }
             else
@@ -201,9 +201,9 @@ namespace Pronium.Sites
             }
 
             var id = sceneUrl.Split("/").Last();
-            var galleryData = await HTML
-                .ElementFromURL($"https://www.private.com/gallery.php?type=highres&id={id}&langx=en", cancellationToken)
-                .ConfigureAwait(false);
+            var galleryData = await HTML.ElementFromURL(
+                $"https://www.private.com/gallery.php?type=highres&id={id}&langx=en",
+                cancellationToken).ConfigureAwait(false);
             var gallery = galleryData.SelectNodesSafe("//a");
 
             foreach (var photo in gallery)

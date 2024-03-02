@@ -31,6 +31,7 @@ public class SiteData18Tests
     {
         var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode(_testSceneUrl), "2010-09-14" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Elite Dyke Society"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("data18 - 2010-09-14 - Elite Dyke Society"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));

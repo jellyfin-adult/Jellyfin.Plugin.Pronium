@@ -16,7 +16,11 @@ namespace Pronium.Sites
 {
     public class NetworkNubiles : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -42,12 +46,15 @@ namespace Pronium.Sites
 
                     var res = new RemoteSearchResult
                     {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        ImageUrl = posterURL,
+                        ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName, ImageUrl = posterURL,
                     };
 
-                    if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    if (DateTime.TryParseExact(
+                            sceneDate,
+                            "MMM d, yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -61,9 +68,10 @@ namespace Pronium.Sites
                 {
                     var url = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneNum}";
                     var sceneURL = new Uri(url);
-                    var sceneID = new string[] { Helper.Encode(sceneURL.AbsolutePath) };
+                    var sceneID = new[] { Helper.Encode(sceneURL.AbsolutePath) };
 
-                    var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+                    var searchResult = await Helper
+                        .GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
                     if (searchResult.Any())
                     {
                         result.AddRange(searchResult);
@@ -76,11 +84,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -119,6 +123,8 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//div[@class='categories']/a");
@@ -138,17 +144,17 @@ namespace Pronium.Sites
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
                 var actorPhotoURL = "http:" + actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
 
-                result.People.Add(new PersonInfo
-                {
-                    Name = actorName,
-                    ImageUrl = actorPhotoURL,
-                });
+                result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
             }
 
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -168,11 +174,7 @@ namespace Pronium.Sites
             var poster = sceneData.SelectSingleText("//video/@poster");
             if (!string.IsNullOrEmpty(poster))
             {
-                result.Add(new RemoteImageInfo
-                {
-                    Url = poster,
-                    Type = ImageType.Primary,
-                });
+                result.Add(new RemoteImageInfo { Url = poster, Type = ImageType.Primary });
             }
 
             var photoPageURL = "https://nubiles-porn.com/photo/gallery/" + sceneID[0];
@@ -182,11 +184,7 @@ namespace Pronium.Sites
             {
                 var posterURL = sceneImage.Attributes["src"].Value;
 
-                result.Add(new RemoteImageInfo
-                {
-                    Url = posterURL,
-                    Type = ImageType.Backdrop,
-                });
+                result.Add(new RemoteImageInfo { Url = posterURL, Type = ImageType.Backdrop });
             }
 
             return result;

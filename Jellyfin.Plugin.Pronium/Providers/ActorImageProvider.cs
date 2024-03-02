@@ -66,7 +66,7 @@ namespace Pronium.Providers
 
                     if (sceneId.ContainsKey(Name))
                     {
-                        var provider = Helper.GetProviderBySiteID(siteNum[0]);
+                        var provider = Helper.GetProviderBySiteId(siteNum[0]);
                         if (provider != null)
                         {
                             IEnumerable<RemoteImageInfo> remoteImageInfos = new List<RemoteImageInfo>();

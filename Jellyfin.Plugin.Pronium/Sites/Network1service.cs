@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -135,8 +136,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
-                sceneTypeURL = sceneID[1];
+            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host, sceneTypeURL = sceneID[1];
 
             switch (domain)
             {
@@ -167,6 +167,8 @@ namespace Pronium.Sites
 
             var sceneDateObj = (DateTime)sceneData["dateReleased"];
             result.Item.PremiereDate = sceneDateObj;
+            result.Item.OriginalTitle =
+                $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
 
             foreach (var genreLink in sceneData["tags"])
             {

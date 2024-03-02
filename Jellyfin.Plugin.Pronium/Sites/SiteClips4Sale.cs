@@ -96,6 +96,8 @@ namespace Pronium.Sites
             result.Item.ExternalId = sceneUrl;
             result.Item.Name = CleanupTitle(sceneData.SelectSingleText("//h1"));
             result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'read-more--box')]");
+            result.Item.OriginalTitle =
+                $"{Helper.GetSitePrefix(siteNum)} - {sceneUrl.Split("/").Reverse().Skip(2).First()} {result.Item.Name}";
 
             result.Item.AddStudio("Clips4Sale");
             var studioName = sceneData.SelectSingleText("//div[@id='content']/div[1]/div/div/div[1]/a");

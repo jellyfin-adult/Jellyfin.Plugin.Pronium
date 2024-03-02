@@ -16,7 +16,11 @@ namespace Pronium.Sites
 {
     public class SiteLegalPorno : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -30,9 +34,10 @@ namespace Pronium.Sites
             if (!data.SelectSingleText("//title").Contains("Search for", StringComparison.OrdinalIgnoreCase))
             {
                 var sceneURL = new Uri(data.SelectSingleText("//div[@class='user--guest']//a/@href"));
-                var sceneID = new string[] { Helper.Encode(sceneURL.AbsolutePath) };
+                var sceneID = new[] { Helper.Encode(sceneURL.AbsolutePath) };
 
-                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
+                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken)
+                    .ConfigureAwait(false);
                 if (searchResult.Any())
                 {
                     result.AddRange(searchResult);
@@ -49,13 +54,14 @@ namespace Pronium.Sites
                         sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'thumbnail-title')]//a"),
                         sceneDate = searchResult.SelectSingleText("./@release");
 
-                    var res = new RemoteSearchResult
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                    };
+                    var res = new RemoteSearchResult { ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName };
 
-                    if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    if (DateTime.TryParseExact(
+                            sceneDate,
+                            "yyyy/MM/dd",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -80,11 +86,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -113,6 +115,8 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//dd/a[contains(@href, '/niche/')]");
@@ -126,10 +130,7 @@ namespace Pronium.Sites
             var actorsNode = sceneData.SelectNodesSafe("//dd/a[contains(@href, 'model') and not(contains(@href, 'forum'))]");
             foreach (var actorLink in actorsNode)
             {
-                var actor = new PersonInfo
-                {
-                    Name = actorLink.InnerText,
-                };
+                var actor = new PersonInfo { Name = actorLink.InnerText };
 
                 var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
                 var actorPhoto = actorPage.SelectSingleText("//div[@class='model--avatar']//img/@src");
@@ -144,7 +145,11 @@ namespace Pronium.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -162,26 +167,14 @@ namespace Pronium.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var scenePoster = sceneData.SelectSingleText("//div[@id='player']/@style").Split('(')[1].Split(')')[0];
-            result.Add(new RemoteImageInfo
-            {
-                Url = scenePoster,
-                Type = ImageType.Primary,
-            });
+            result.Add(new RemoteImageInfo { Url = scenePoster, Type = ImageType.Primary });
 
             var scenePosters = sceneData.SelectNodesSafe("//div[contains(@class, 'thumbs2 gallery')]//img");
             foreach (var poster in scenePosters)
             {
                 scenePoster = poster.Attributes["src"].Value.Split('?')[0];
-                result.Add(new RemoteImageInfo
-                {
-                    Url = scenePoster,
-                    Type = ImageType.Primary,
-                });
-                result.Add(new RemoteImageInfo
-                {
-                    Url = scenePoster,
-                    Type = ImageType.Backdrop,
-                });
+                result.Add(new RemoteImageInfo { Url = scenePoster, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = scenePoster, Type = ImageType.Backdrop });
             }
 
             return result;

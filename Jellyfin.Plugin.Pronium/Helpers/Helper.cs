@@ -1,3 +1,8 @@
+#if __EMBY__
+using MediaBrowser.Common.Net;
+#else
+using System.Net.Http;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,16 +17,19 @@ using MediaBrowser.Model.Providers;
 using Pronium.Helpers.Utils;
 using Pronium.Sites;
 
-#if __EMBY__
-using MediaBrowser.Common.Net;
-#else
-using System.Net.Http;
-#endif
-
 namespace Pronium.Helpers
 {
     public static class Helper
     {
+        public static string GetSitePrefix(int[] siteNum)
+        {
+            var siteName = Database.SiteList.Sites[siteNum[0]][siteNum[1]][0].Replace(" ", string.Empty);
+            return (Database.SiteList.Abbrieviations
+                    .FirstOrDefault(t => string.Compare(t.Value, siteName, StringComparison.InvariantCultureIgnoreCase) == 0).Key ??
+                siteName)
+                .Replace("^", string.Empty).ToLower();
+        }
+
         public static string GetSearchSiteName(int[] siteNum)
         {
             if (siteNum == null)
@@ -29,7 +37,7 @@ namespace Pronium.Helpers
                 return string.Empty;
             }
 
-            string siteName = Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
+            var siteName = Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
             if (string.IsNullOrEmpty(siteName))
             {
                 siteName = Database.SiteList.Sites[siteNum[0]][0][0];
@@ -40,7 +48,7 @@ namespace Pronium.Helpers
 
         public static string GetSearchBaseURL(int[] siteNum)
         {
-            string url = string.Empty;
+            var url = string.Empty;
 
             if (siteNum == null)
             {
@@ -61,7 +69,7 @@ namespace Pronium.Helpers
 
         public static string GetSearchSearchURL(int[] siteNum)
         {
-            string url = string.Empty;
+            var url = string.Empty;
 
             if (siteNum == null)
             {
@@ -89,10 +97,14 @@ namespace Pronium.Helpers
         }
 
         public static string Encode(string text)
-            => Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
+        {
+            return Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
+        }
 
         public static string Decode(string base64Text)
-            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text) ?? Array.Empty<byte>());
+        {
+            return Encoding.UTF8.GetString(Base58.DecodePlain(base64Text) ?? Array.Empty<byte>());
+        }
 
         public static (int[] siteNum, string siteName) GetSiteFromTitle(string title)
         {
@@ -133,8 +145,7 @@ namespace Pronium.Helpers
                 return title;
             }
 
-            string clearName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title),
-                   clearSite = siteName;
+            string clearName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title), clearSite = siteName;
 
             clearName = clearName.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
 
@@ -149,10 +160,8 @@ namespace Pronium.Helpers
                     matched = true;
                     break;
                 }
-                else
-                {
-                    clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
-                }
+
+                clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
             }
 
             if ((matched || !clearName.Contains(' ')) && !string.IsNullOrEmpty(clearSite))
@@ -167,12 +176,10 @@ namespace Pronium.Helpers
 
         public static (string searchTitle, DateTime? searchDateObj) GetDateFromTitle(string title)
         {
-            string searchDate,
-                   searchTitle = title;
+            string searchDate, searchTitle = title;
             var regExRules = new Dictionary<string, string>
             {
-                { @"\b[0-9]{4} [0-9]{2} [0-9]{2}\b", "yyyy MM dd" },
-                { @"\b[0-9]{2} [0-9]{2} [0-9]{2}\b", "yy MM dd" },
+                { @"\b[0-9]{4} [0-9]{2} [0-9]{2}\b", "yyyy MM dd" }, { @"\b[0-9]{2} [0-9]{2} [0-9]{2}\b", "yy MM dd" },
             };
             var searchData = (searchTitle, default(DateTime?));
 
@@ -181,7 +188,12 @@ namespace Pronium.Helpers
                 var regEx = Regex.Match(searchTitle, regExRule.Key);
                 if (regEx.Groups.Count > 0)
                 {
-                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var searchDateObj))
+                    if (DateTime.TryParseExact(
+                            regEx.Groups[0].Value,
+                            regExRule.Value,
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var searchDateObj))
                     {
                         searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
@@ -197,16 +209,16 @@ namespace Pronium.Helpers
             return searchData;
         }
 
-        public static string ReplaceAbbrieviation(string title)
+        public static string ReplaceAbbreviation(string title)
         {
             var newTitle = title + " ";
 
-            foreach (var abbrieviation in Database.SiteList.Abbrieviations)
+            foreach (var abbreviation in Database.SiteList.Abbrieviations)
             {
-                var regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
+                var regex = new Regex(abbreviation.Key + " ", RegexOptions.IgnoreCase);
                 if (regex.IsMatch(newTitle))
                 {
-                    newTitle = regex.Replace(newTitle, abbrieviation.Value + " ", 1);
+                    newTitle = regex.Replace(newTitle, abbreviation.Value + " ", 1);
                     break;
                 }
             }
@@ -216,11 +228,11 @@ namespace Pronium.Helpers
             return newTitle;
         }
 
-        public static IProviderBase GetProviderBySiteID(int siteID)
+        public static IProviderBase GetProviderBySiteId(int siteId)
         {
-            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
+            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteId))
             {
-                return GetBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+                return GetBaseSiteByName(Database.SiteList.SiteIDList[siteId]);
             }
 
             return null;
@@ -239,7 +251,12 @@ namespace Pronium.Helpers
             return null;
         }
 
-        public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(IProviderBase provider, int[] siteNum, string[] sceneID, DateTime? searchDate, CancellationToken cancellationToken)
+        public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(
+            IProviderBase provider,
+            int[] siteNum,
+            string[] sceneID,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
@@ -247,13 +264,13 @@ namespace Pronium.Helpers
             if (!string.IsNullOrEmpty(sceneData.Item.Name))
             {
                 sceneData.Item.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
-                var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
+                var posters =
+                    (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(
+                        o => o.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = sceneData.Item.ProviderIds,
-                    Name = sceneData.Item.Name,
-                    PremiereDate = sceneData.Item.PremiereDate,
+                    ProviderIds = sceneData.Item.ProviderIds, Name = sceneData.Item.Name, PremiereDate = sceneData.Item.PremiereDate,
                 };
 
                 if (searchDate.HasValue && !res.PremiereDate.HasValue)

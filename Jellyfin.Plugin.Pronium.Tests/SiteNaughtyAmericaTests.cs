@@ -36,6 +36,7 @@ public class SiteNaughtyAmericaTests
     {
         var result = await _site.Update(new[] { 10, 0 }, new[] { Helper.Encode(_testSceneUrl), "2023-03-02" }, new CancellationToken());
         Warn.Unless(result.Item.Name, Is.EqualTo("Busty brunette Alison Rey takes friend's boyfriend's dick for a ride"));
+        Warn.Unless(result.Item.OriginalTitle, Is.EqualTo("bangbros - 2023-02-23 - Anal Maid Service"));
         Warn.Unless(result.Item.Overview, Does.StartWith("Alison Rey has her friend"));
         Warn.Unless(result.Item.Studios.Length, Is.EqualTo(2));
         Warn.Unless(result.Item.Genres.Length, Is.EqualTo(15));
