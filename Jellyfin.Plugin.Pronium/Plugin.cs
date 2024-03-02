@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using MediaBrowser.Common.Configuration;
-using MediaBrowser.Common.Plugins;
-using MediaBrowser.Model.Plugins;
-using MediaBrowser.Model.Serialization;
-using Pronium.Configuration;
 #if __EMBY__
 using System.IO;
 using MediaBrowser.Common.Net;
@@ -15,6 +8,13 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Sentry;
 #endif
+using System;
+using System.Collections.Generic;
+using MediaBrowser.Common.Configuration;
+using MediaBrowser.Common.Plugins;
+using MediaBrowser.Model.Plugins;
+using MediaBrowser.Model.Serialization;
+using Pronium.Configuration;
 
 [assembly: CLSCompliant(false)]
 
@@ -68,6 +68,9 @@ namespace Pronium
             return new[]
             {
                 new PluginPageInfo { Name = Name, EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.configPage.html" },
+#if __EMBY__
+                new PluginPageInfo { Name = $"{Name}js", EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.configPage.js" },
+#endif
             };
         }
 
