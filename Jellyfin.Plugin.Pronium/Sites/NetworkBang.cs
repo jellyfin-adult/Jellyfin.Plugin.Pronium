@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -18,27 +19,11 @@ namespace Pronium.Sites
 {
     public class NetworkBang : IProviderBase
     {
-        public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
-        {
-            JObject json = null;
-
-            var text = $"{{'query':{{'bool':{{'must':[{{'match':{{'{searchType}':'{searchTitle}'}}}},{{'match':{{'type':'movie'}}}}],'must_not':[{{'match':{{'type':'trailer'}}}}]}}}}}}".Replace('\'', '"');
-            var param = new StringContent(text, Encoding.UTF8, "application/json");
-            var headers = new Dictionary<string, string>
-            {
-                { "Authorization", "Basic YmFuZy1yZWFkOktqVDN0RzJacmQ1TFNRazI=" },
-            };
-
-            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken, headers).ConfigureAwait(false);
-            if (http.IsOK)
-            {
-                json = JObject.Parse(http.Content);
-            }
-
-            return json;
-        }
-
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -50,11 +35,13 @@ namespace Pronium.Sites
             var searchSceneID = searchTitle.Split()[0];
             if (int.TryParse(searchSceneID, out _))
             {
-                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken).ConfigureAwait(false);
+                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken)
+                    .ConfigureAwait(false);
             }
             else
             {
-                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
+                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken)
+                    .ConfigureAwait(false);
             }
 
             if (searchResults == null)
@@ -66,9 +53,9 @@ namespace Pronium.Sites
             {
                 var sceneData = searchResult["_source"];
                 string sceneID = (string)sceneData["identifier"],
-                        curID = sceneID,
-                        sceneName = (string)sceneData["name"],
-                        scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
+                    curID = sceneID,
+                    sceneName = (string)sceneData["name"],
+                    scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
                 var sceneDateObj = (DateTime)sceneData["releaseDate"];
 
                 var item = new RemoteSearchResult
@@ -87,18 +74,15 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
                 return result;
             }
 
-            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
+                .ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -106,7 +90,8 @@ namespace Pronium.Sites
 
             sceneData = (JObject)sceneData["hits"]["hits"].First;
 
-            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{ConvertIdentifier((string)sceneData["_id"])}/{(string)sceneData["_id"]}/";
+            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) +
+                                     $"/{ConvertIdentifier((string)sceneData["_id"])}/{(string)sceneData["_id"]}/";
             sceneData = (JObject)sceneData["_source"];
 
             result.Item.Name = (string)sceneData["name"];
@@ -115,6 +100,8 @@ namespace Pronium.Sites
 
             var sceneDateObj = (DateTime)sceneData["releaseDate"];
             result.Item.PremiereDate = sceneDateObj;
+            result.Item.OriginalTitle =
+                $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
 
             foreach (var genreLink in sceneData["genres"])
             {
@@ -125,20 +112,19 @@ namespace Pronium.Sites
 
             foreach (var actorLink in sceneData["actors"])
             {
-                string actorName = (string)actorLink["name"],
-                       actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
+                string actorName = (string)actorLink["name"], actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
 
-                result.People.Add(new PersonInfo
-                {
-                    Name = actorName,
-                    ImageUrl = actorPhoto,
-                });
+                result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhoto });
             }
 
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -147,29 +133,51 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
+                .ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
             }
 
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
-            result.Add(new RemoteImageInfo
-            {
-                Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
-                Type = ImageType.Primary,
-            });
+            result.Add(
+                new RemoteImageInfo { Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg", Type = ImageType.Primary });
 
             foreach (var image in sceneData["screenshots"])
             {
-                result.Add(new RemoteImageInfo
-                {
-                    Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
-                    Type = ImageType.Backdrop,
-                });
+                result.Add(
+                    new RemoteImageInfo
+                    {
+                        Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
+                        Type = ImageType.Backdrop,
+                    });
             }
 
             return result;
+        }
+
+        public static async Task<JObject> GetDataFromAPI(
+            string url,
+            string searchTitle,
+            string searchType,
+            CancellationToken cancellationToken)
+        {
+            JObject json = null;
+
+            var text =
+                $"{{'query':{{'bool':{{'must':[{{'match':{{'{searchType}':'{searchTitle}'}}}},{{'match':{{'type':'movie'}}}}],'must_not':[{{'match':{{'type':'trailer'}}}}]}}}}}}"
+                    .Replace('\'', '"');
+            var param = new StringContent(text, Encoding.UTF8, "application/json");
+            var headers = new Dictionary<string, string> { { "Authorization", "Basic YmFuZy1yZWFkOktqVDN0RzJacmQ1TFNRazI=" } };
+
+            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken, headers).ConfigureAwait(false);
+            if (http.IsOK)
+            {
+                json = JObject.Parse(http.Content);
+            }
+
+            return json;
         }
 
         private static string ConvertIdentifier(string identifier)
@@ -180,10 +188,7 @@ namespace Pronium.Sites
 
         private static byte[] StringToByteArray(string hex)
         {
-            return Enumerable.Range(0, hex.Length)
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray();
+            return Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();
         }
     }
 }

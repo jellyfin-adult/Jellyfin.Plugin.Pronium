@@ -36,6 +36,7 @@ public class SiteClips4SaleTests
     {
         var result = await _site.Update(new[] { 49, 0 }, new[] { Helper.Encode(_testSceneUrl), "2020-12-12" }, new CancellationToken());
         Assert.That(result.Item.Name, Does.Contain("Horny Step-Son fucks his Step-Mom"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("c4s - 33729 MF~ Horny Step-Son fucks his Step-Mom : Taboo: Mandy Flores"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));

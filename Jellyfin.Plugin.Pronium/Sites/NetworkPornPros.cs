@@ -30,7 +30,11 @@ namespace Pronium.Sites
             { "BBCPie", new[] { "Interracial", "BBC", "Creampie" } },
         };
 
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -38,8 +42,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var directURL = searchTitle
-                .Replace(" ", "-", StringComparison.OrdinalIgnoreCase)
+            var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase)
                 .Replace("'", "-", StringComparison.OrdinalIgnoreCase);
             if (int.TryParse(directURL.AsSpan(directURL.Length - 1, 1), out _) && directURL.Substring(directURL.Length - 2, 1) == "-")
             {
@@ -54,7 +57,8 @@ namespace Pronium.Sites
                 sceneID.Add(searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
-            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken)
+                .ConfigureAwait(false);
             if (searchResult.Any())
             {
                 result.AddRange(searchResult);
@@ -65,11 +69,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -113,6 +113,8 @@ namespace Pronium.Sites
                 if (DateTime.TryParseExact(sceneDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
+                    result.Item.OriginalTitle =
+                        $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                 }
             }
 
@@ -132,16 +134,17 @@ namespace Pronium.Sites
             {
                 var actorName = actorLink.InnerText;
 
-                result.People.Add(new PersonInfo
-                {
-                    Name = actorName,
-                });
+                result.People.Add(new PersonInfo { Name = actorName });
             }
 
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -166,16 +169,8 @@ namespace Pronium.Sites
                     img = "https:" + img;
                 }
 
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Primary,
-                });
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Backdrop,
-                });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Backdrop });
             }
 
             return result;

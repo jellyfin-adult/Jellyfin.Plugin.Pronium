@@ -15,7 +15,11 @@ namespace Pronium.Sites
 {
     public class SiteHegre : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -35,27 +39,30 @@ namespace Pronium.Sites
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
-                if (sceneURL.AbsolutePath.Contains("/films/", StringComparison.OrdinalIgnoreCase) || sceneURL.AbsolutePath.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
+                if (sceneURL.AbsolutePath.Contains("/films/", StringComparison.OrdinalIgnoreCase) ||
+                    sceneURL.AbsolutePath.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
                 {
                     string curID = Helper.Encode(sceneURL.AbsolutePath),
                         sceneName = searchResult.SelectSingleText(".//img/@alt"),
                         scenePoster = searchResult.SelectSingleText(".//img/@data-src"),
                         sceneDate = searchResult.SelectSingleText(".//div[@class='details']/span[last()]");
 
-                    var res = new RemoteSearchResult
-                    {
-                        Name = sceneName,
-                        ImageUrl = scenePoster,
-                    };
+                    var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster };
 
                     if (!string.IsNullOrEmpty(sceneDate))
                     {
-                        sceneDate = sceneDate
-                            .Replace("nd", string.Empty, StringComparison.OrdinalIgnoreCase)
+                        sceneDate = sceneDate.Replace("nd", string.Empty, StringComparison.OrdinalIgnoreCase)
                             .Replace("th", string.Empty, StringComparison.OrdinalIgnoreCase)
-                            .Replace("rd", string.Empty, StringComparison.OrdinalIgnoreCase)
-                            .Replace("st", string.Empty, StringComparison.OrdinalIgnoreCase);
-                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                            .Replace("rd", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(
+                                "st",
+                                string.Empty,
+                                StringComparison.OrdinalIgnoreCase);
+                        if (DateTime.TryParseExact(
+                                sceneDate,
+                                "MMM d, yyyy",
+                                CultureInfo.InvariantCulture,
+                                DateTimeStyles.None,
+                                out var sceneDateObj))
                         {
                             res.PremiereDate = sceneDateObj;
                         }
@@ -72,11 +79,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -105,6 +108,8 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//a[@class='tag']");
@@ -121,7 +126,8 @@ namespace Pronium.Sites
                 var actor = new PersonInfo
                 {
                     Name = actorLink.Attributes["title"].Value,
-                    ImageUrl = actorLink.SelectSingleText(".//img/@src").Replace("150x", "480x", StringComparison.OrdinalIgnoreCase).Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
+                    ImageUrl = actorLink.SelectSingleText(".//img/@src").Replace("150x", "480x", StringComparison.OrdinalIgnoreCase)
+                        .Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
                 };
 
                 result.People.Add(actor);
@@ -130,7 +136,11 @@ namespace Pronium.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -149,18 +159,20 @@ namespace Pronium.Sites
 
             var img = sceneData.SelectSingleText("//meta[@name='twitter:image']/@content");
 
-            result.Add(new RemoteImageInfo
-            {
-                Url = img
-                .Replace("board-image", "poster-image", StringComparison.OrdinalIgnoreCase)
-                .Replace("1600x", "640x", StringComparison.OrdinalIgnoreCase),
-                Type = ImageType.Primary,
-            });
-            result.Add(new RemoteImageInfo
-            {
-                Url = img.Replace("1600x", "1920x", StringComparison.OrdinalIgnoreCase),
-                Type = ImageType.Backdrop,
-            });
+            result.Add(
+                new RemoteImageInfo
+                {
+                    Url = img.Replace("board-image", "poster-image", StringComparison.OrdinalIgnoreCase).Replace(
+                        "1600x",
+                        "640x",
+                        StringComparison.OrdinalIgnoreCase),
+                    Type = ImageType.Primary,
+                });
+            result.Add(
+                new RemoteImageInfo
+                {
+                    Url = img.Replace("1600x", "1920x", StringComparison.OrdinalIgnoreCase), Type = ImageType.Backdrop,
+                });
 
             return result;
         }

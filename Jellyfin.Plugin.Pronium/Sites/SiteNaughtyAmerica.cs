@@ -82,10 +82,15 @@ namespace Pronium.Sites
             }
 
             var date = sceneData.SelectSingleText("//span[contains(@class, 'entry-date')]");
-            if (!string.IsNullOrEmpty(date) &&
-                DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+            if (!string.IsNullOrEmpty(date) && DateTime.TryParse(
+                    date,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//div[contains(@class, 'categories')]/a");

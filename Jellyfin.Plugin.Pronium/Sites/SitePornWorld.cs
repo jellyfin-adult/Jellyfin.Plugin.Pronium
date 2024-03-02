@@ -108,10 +108,15 @@ namespace Pronium.Sites
             result.Item.AddStudio("PornWorld");
 
             var date = sceneData.SelectSingleText("//i[@class='bi bi-calendar3 me-5']//parent::div");
-            if (!string.IsNullOrEmpty(date) &&
-                DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+            if (!string.IsNullOrEmpty(date) && DateTime.TryParse(
+                    date,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//div[contains(@class, 'genres-list')]/a");

@@ -128,6 +128,8 @@ namespace Pronium.Sites
                         out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
+                    result.Item.OriginalTitle =
+                        $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                 }
             }
             else
@@ -141,6 +143,8 @@ namespace Pronium.Sites
                         out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
+                    result.Item.OriginalTitle =
+                        $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                 }
             }
 

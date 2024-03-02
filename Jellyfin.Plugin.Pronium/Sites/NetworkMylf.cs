@@ -170,6 +170,8 @@ namespace Pronium.Sites
             if (releaseDate.HasValue)
             {
                 result.Item.PremiereDate = releaseDate.Value;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             string subSite;

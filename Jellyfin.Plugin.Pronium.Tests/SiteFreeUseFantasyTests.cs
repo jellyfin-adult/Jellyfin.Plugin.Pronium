@@ -32,6 +32,7 @@ public class SiteFreeUseFantasyTests
     {
         var result = await _site.Update(new[] { 24, 58 }, new[] { Helper.Encode(_testSceneUrl), "2024-02-03" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Show Us What You’re Good at"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("freeusefantasy - 2024-02-03 - Show Us What You’re Good at"));
         Assert.That(result.Item.Overview, Does.StartWith("It’s been a while since Daisy is jobless, and her roommate"));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(83));

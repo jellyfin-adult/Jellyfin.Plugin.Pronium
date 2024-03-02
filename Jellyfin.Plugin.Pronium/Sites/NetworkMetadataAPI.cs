@@ -16,27 +16,11 @@ namespace Pronium.Sites
 {
     public class NetworkMetadataAPI : IProviderBase
     {
-        public static async Task<JObject> GetDataFromAPI(string url, CancellationToken cancellationToken)
-        {
-            JObject json = null;
-            var headers = new Dictionary<string, string>();
-
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
-            {
-                headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.MetadataAPIToken}");
-                headers.Add("User-Agent", $"{Consts.PluginInstance}/{Consts.PluginVersion}");
-            }
-
-            var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);
-            if (http.IsOK)
-            {
-                json = JObject.Parse(http.Content);
-            }
-
-            return json;
-        }
-
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -49,7 +33,7 @@ namespace Pronium.Sites
                 searchTitle += searchDate.Value.ToString("yyyy-MM-dd");
             }
 
-            string url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
+            var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
             var searchResults = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
             if (searchResults == null)
             {
@@ -65,13 +49,15 @@ namespace Pronium.Sites
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
-                    IndexNumberEnd = idx,
+                    ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName, ImageUrl = scenePoster, IndexNumberEnd = idx,
                 };
 
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                if (DateTime.TryParseExact(
+                        sceneDate,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var sceneDateObj))
                 {
                     res.PremiereDate = sceneDateObj;
                 }
@@ -84,11 +70,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -113,8 +95,7 @@ namespace Pronium.Sites
             {
                 result.Item.AddStudio((string)sceneData["site"]["name"]);
 
-                int? site_id = (int)sceneData["site"]["id"],
-                    network_id = (int?)sceneData["site"]["network_id"];
+                int? site_id = (int)sceneData["site"]["id"], network_id = (int?)sceneData["site"]["network_id"];
 
                 if (network_id.HasValue && !site_id.Equals(network_id))
                 {
@@ -132,6 +113,8 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
+                result.Item.OriginalTitle =
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
             }
 
             if (sceneData.ContainsKey("tags"))
@@ -148,11 +131,7 @@ namespace Pronium.Sites
             {
                 foreach (var actorLink in sceneData["performers"])
                 {
-                    var actor = new PersonInfo
-                    {
-                        Name = (string)actorLink["name"],
-                        ImageUrl = (string)actorLink["image"],
-                    };
+                    var actor = new PersonInfo { Name = (string)actorLink["name"], ImageUrl = (string)actorLink["image"] };
 
                     result.People.Add(actor);
                 }
@@ -161,7 +140,11 @@ namespace Pronium.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -179,23 +162,31 @@ namespace Pronium.Sites
 
             sceneData = (JObject)sceneData["data"];
 
-            result.Add(new RemoteImageInfo
-            {
-                Url = (string)sceneData["poster"],
-                Type = ImageType.Primary,
-            });
-            result.Add(new RemoteImageInfo
-            {
-                Url = (string)sceneData["background"]["full"],
-                Type = ImageType.Primary,
-            });
-            result.Add(new RemoteImageInfo
-            {
-                Url = (string)sceneData["background"]["full"],
-                Type = ImageType.Backdrop,
-            });
+            result.Add(new RemoteImageInfo { Url = (string)sceneData["poster"], Type = ImageType.Primary });
+            result.Add(new RemoteImageInfo { Url = (string)sceneData["background"]["full"], Type = ImageType.Primary });
+            result.Add(new RemoteImageInfo { Url = (string)sceneData["background"]["full"], Type = ImageType.Backdrop });
 
             return result;
+        }
+
+        public static async Task<JObject> GetDataFromAPI(string url, CancellationToken cancellationToken)
+        {
+            JObject json = null;
+            var headers = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
+            {
+                headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.MetadataAPIToken}");
+                headers.Add("User-Agent", $"{Consts.PluginInstance}/{Consts.PluginVersion}");
+            }
+
+            var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);
+            if (http.IsOK)
+            {
+                json = JObject.Parse(http.Content);
+            }
+
+            return json;
         }
     }
 }

@@ -56,6 +56,9 @@ public class SitePornWorldTests
             new[] { Helper.Encode(_testSceneRegularUrl), "2010-09-14" },
             new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Insatiable Babe Rebecca Volpetti Gets DP'd During Boxing Training GP2727"));
+        Assert.That(
+            result.Item.OriginalTitle,
+            Is.EqualTo("pornworld - 2023-07-24 - Insatiable Babe Rebecca Volpetti Gets DP'd During Boxing Training GP2727"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(1), string.Join(',', result.Item.Studios));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(39), string.Join(',', result.Item.Genres));

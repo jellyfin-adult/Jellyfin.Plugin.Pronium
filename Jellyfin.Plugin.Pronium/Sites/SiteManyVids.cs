@@ -22,7 +22,11 @@ namespace Pronium.Sites
         private const string TitleWatermark = " - Manyvids";
         private readonly Regex tagsListMatch = new Regex("tagsIdsList = \"([\\d,]+)\"", RegexOptions.Compiled);
 
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -44,7 +48,8 @@ namespace Pronium.Sites
                 sceneID.Add(searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
-            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken)
+                .ConfigureAwait(false);
             if (searchResult.Any())
             {
                 result.AddRange(searchResult);
@@ -55,19 +60,14 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]),
-                sceneDate = string.Empty;
+            string sceneURL = Helper.Decode(sceneID[0]), sceneDate = string.Empty;
 
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
@@ -98,13 +98,20 @@ namespace Pronium.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                if (DateTime.TryParseExact(
+                        sceneDate,
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
+                    result.Item.OriginalTitle =
+                        $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                 }
             }
 
-            var keywords = await this.GetKeywords(siteNum, sceneData, cancellationToken).ConfigureAwait(false);
+            var keywords = await GetKeywords(siteNum, sceneData, cancellationToken).ConfigureAwait(false);
             foreach (var genre in keywords)
             {
                 result.Item.AddGenre(genre);
@@ -113,7 +120,11 @@ namespace Pronium.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -133,11 +144,7 @@ namespace Pronium.Sites
             var imgUrl = data.SelectSingleText("//div[@id='rmpPlayer']/@data-video-screenshot");
             if (!string.IsNullOrEmpty(imgUrl))
             {
-                result.Add(new RemoteImageInfo
-                {
-                    Url = imgUrl,
-                    Type = ImageType.Primary,
-                });
+                result.Add(new RemoteImageInfo { Url = imgUrl, Type = ImageType.Primary });
             }
 
             return result;
@@ -162,15 +169,13 @@ namespace Pronium.Sites
             var tagsList = tagsListMatch.Groups[1].Captures[0].Value.Split(",").Select(val => int.Parse(val));
 
             var mvToken = rootNode.SelectSingleText("html/@data-mvtoken");
-            var headers = new Dictionary<string, string>
-            {
-                { "x-requested-with", "XMLHttpRequest" },
-            };
+            var headers = new Dictionary<string, string> { { "x-requested-with", "XMLHttpRequest" } };
             var url = Helper.GetSearchBaseURL(siteNum) + $"/includes/json/vid_categories.php?mvtoken={mvToken}";
             var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);
             if (http.IsOK)
             {
-                var allKeywords = JsonConvert.DeserializeObject<ManyVidsKeyword[]>(http.Content).ToDictionary(keyword => keyword.Id, keyword => keyword.Label);
+                var allKeywords = JsonConvert.DeserializeObject<ManyVidsKeyword[]>(http.Content)
+                    .ToDictionary(keyword => keyword.Id, keyword => keyword.Label);
                 result = tagsList.Select(keywordId => allKeywords[keywordId]);
             }
 
@@ -179,24 +184,24 @@ namespace Pronium.Sites
 
         private class ManyVidsKeyword
         {
-            public string Label { get; set; }
+            public string Label { get; }
 
-            public int Id { get; set; }
+            public int Id { get; }
         }
 
         private class ManyVidsMetadata
         {
             public string Name { get; set; }
 
-            public string Description { get; set; }
+            public string Description { get; }
 
             public List<string> Keywords { get; set; }
 
-            public ManyVidsMetadataCreator Creator { get; set; }
+            public ManyVidsMetadataCreator Creator { get; }
 
             internal class ManyVidsMetadataCreator
             {
-                public string Name { get; set; }
+                public string Name { get; }
 
                 public string ProfileUrl { get; set; }
             }

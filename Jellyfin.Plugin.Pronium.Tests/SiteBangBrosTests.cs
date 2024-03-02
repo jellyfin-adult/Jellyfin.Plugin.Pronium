@@ -29,6 +29,7 @@ public class SiteBangBrosTests
     {
         var result = await _site.Update(new[] { 22, 0 }, new[] { "8854561", "scene" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Anal Maid Service"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("bangbros - 2023-02-23 - Anal Maid Service"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(15));

@@ -29,6 +29,7 @@ public class SiteGloryholeTests
     {
         var result = await _site.Update(new[] { 19, 3 }, new[] { "221961", "scenes", "2015-09-28" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Alena Croft"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("gloryhole - 2015-09-28 - Alena Croft"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));

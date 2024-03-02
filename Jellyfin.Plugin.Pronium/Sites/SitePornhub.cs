@@ -18,7 +18,11 @@ namespace Pronium.Sites
 {
     public class SitePornhub : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(
+            int[] siteNum,
+            string searchTitle,
+            DateTime? searchDate,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -26,12 +30,14 @@ namespace Pronium.Sites
                 return result;
             }
 
-            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(' ', StringComparison.OrdinalIgnoreCase))
+            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) &&
+                !searchTitle.Contains(' ', StringComparison.OrdinalIgnoreCase))
             {
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/view_video.php?viewkey={searchTitle}");
-                var sceneID = new string[] { Helper.Encode(sceneURL.PathAndQuery) };
+                var sceneID = new[] { Helper.Encode(sceneURL.PathAndQuery) };
 
-                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
+                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken)
+                    .ConfigureAwait(false);
                 if (searchResult.Any())
                 {
                     result.AddRange(searchResult);
@@ -53,9 +59,7 @@ namespace Pronium.Sites
 
                     var res = new RemoteSearchResult
                     {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        ImageUrl = scenePoster,
+                        ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName, ImageUrl = scenePoster,
                     };
 
                     result.Add(res);
@@ -67,11 +71,7 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<BaseItem>()
-            {
-                Item = new Movie(),
-                People = new List<PersonInfo>(),
-            };
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
 
             if (sceneID == null)
             {
@@ -112,6 +112,8 @@ namespace Pronium.Sites
                     if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                     {
                         result.Item.PremiereDate = sceneDateObj;
+                        result.Item.OriginalTitle =
+                            $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
                     }
                 }
             }
@@ -128,19 +130,19 @@ namespace Pronium.Sites
             foreach (var actorLink in actorsNode)
             {
                 string actorName = actorLink.Attributes["data-mxptext"].Value,
-                        actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
+                    actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
 
-                result.People.Add(new PersonInfo
-                {
-                    Name = actorName,
-                    ImageUrl = actorPhotoURL,
-                });
+                result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
             }
 
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(
+            int[] siteNum,
+            string[] sceneID,
+            BaseItem item,
+            CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
@@ -161,11 +163,7 @@ namespace Pronium.Sites
             var img = sceneData.SelectSingleText("//div[@id='player']//img/@src");
             if (!string.IsNullOrEmpty(img))
             {
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Primary,
-                });
+                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
             }
 
             return result;
