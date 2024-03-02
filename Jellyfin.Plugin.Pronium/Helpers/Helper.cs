@@ -197,16 +197,16 @@ namespace Pronium.Helpers
             return searchData;
         }
 
-        public static string ReplaceAbbrieviation(string title)
+        public static string ReplaceAbbreviation(string title)
         {
             var newTitle = title + " ";
 
-            foreach (var abbrieviation in Database.SiteList.Abbrieviations)
+            foreach (var abbreviation in Database.SiteList.Abbrieviations)
             {
-                var regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
+                var regex = new Regex(abbreviation.Key + " ", RegexOptions.IgnoreCase);
                 if (regex.IsMatch(newTitle))
                 {
-                    newTitle = regex.Replace(newTitle, abbrieviation.Value + " ", 1);
+                    newTitle = regex.Replace(newTitle, abbreviation.Value + " ", 1);
                     break;
                 }
             }
@@ -216,11 +216,11 @@ namespace Pronium.Helpers
             return newTitle;
         }
 
-        public static IProviderBase GetProviderBySiteID(int siteID)
+        public static IProviderBase GetProviderBySiteId(int siteId)
         {
-            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
+            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteId))
             {
-                return GetBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+                return GetBaseSiteByName(Database.SiteList.SiteIDList[siteId]);
             }
 
             return null;
