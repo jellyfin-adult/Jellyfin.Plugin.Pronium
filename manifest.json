@@ -9,6 +9,14 @@
         "imageUrl": "https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/master/logo.png",
         "versions": [
             {
+                "checksum": "c4806ae741af13e2b59512378d31c4be",
+                "changelog": "Secuirty fixes, actors improvements",
+                "targetAbi": "10.8.0.0",
+                "sourceUrl": "https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/download/2.0.3.65/Jellyfin.Plugin.Pronium.zip",
+                "timestamp": "2024-03-03T12:04:22Z",
+                "version": "2.0.3.65"
+            },
+            {
                 "checksum": "e6956ea102618b6a4a94147ac92609a7",
                 "changelog": "Plugin rename, fixes for clips4sale, mylf and teamskeet",
                 "targetAbi": "10.8.0.0",
