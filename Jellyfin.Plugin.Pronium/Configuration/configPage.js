@@ -23,13 +23,13 @@ define(['baseView', 'loading', 'emby-input', 'emby-button', 'emby-checkbox', 'em
         loading.show();
 
         ApiClient.getPluginConfiguration(guid).then(function (config) {
-            page.querySelectorAll('#proniumConfigForm input[type=text]').forEach((t) => {
+            form.querySelectorAll('#proniumConfigForm input[type=text]').forEach((t) => {
                 config[t.id] = t.value;
             });
-            page.querySelectorAll('#proniumConfigForm select').forEach((t) => {
+            form.querySelectorAll('#proniumConfigForm select').forEach((t) => {
                 config[t.id] = t.value;
             });
-            page.querySelectorAll('#proniumConfigForm input[type=checkbox]').forEach((t) => {
+            form.querySelectorAll('#proniumConfigForm input[type=checkbox]').forEach((t) => {
                 config[t.id] = t.checked;
             });
 
