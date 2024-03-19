@@ -68,7 +68,7 @@ namespace Pronium.Sites
                     var sceneUrl = new Uri(searchResult.SelectSingleNode(".//a").Attributes["href"].Value);
                     var uniqueId = Helper.Encode(sceneUrl.AbsoluteUri);
                     var sceneName = searchResult.SelectSingleText(".//div[@class='card-scene__text']");
-                    var scenePoster = searchResult.SelectSingleText(".//img/@src");
+                    var scenePoster = HttpUtility.HtmlDecode(searchResult.SelectSingleText(".//img/@data-src"));
                     var res = new RemoteSearchResult { Name = sceneName, ImageUrl = scenePoster };
 
                     Logger.Info(
