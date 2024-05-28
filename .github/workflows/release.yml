@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - dev
     tags: ["v*"]
     paths:
       - Jellyfin.Plugin.Pronium/**
