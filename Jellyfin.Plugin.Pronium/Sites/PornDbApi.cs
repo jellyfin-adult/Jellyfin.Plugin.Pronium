@@ -49,7 +49,7 @@ namespace Pronium.Sites
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName, ImageUrl = scenePoster, IndexNumberEnd = idx,
+                    ProviderIds = { { Plugin.Instance?.Name ?? "Pronium", curID } }, Name = sceneName, ImageUrl = scenePoster, IndexNumberEnd = idx,
                 };
 
                 if (DateTime.TryParseExact(
