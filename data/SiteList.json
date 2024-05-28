@@ -750,7 +750,7 @@
       "12": [ "VR Channel PornPortal", "https://vr-channel.pornportal.com" ],
     },
     "48": {
-      "0": [ "MetadataAPI", "https://metadataapi.net", "https://api.metadataapi.net" ],
+      "0": [ "ThePornDB", " https://theporndb.net", "https://api.theporndb.net" ],
     },
     "49": {
       "0": [ "Clips4Sale", "https://www.clips4sale.com", "/studio/" ],
@@ -817,7 +817,7 @@
     "45": "NetworkAdultEmpire",
     "46": "Network1service",
     "47": "Network1service",
-    "48": "NetworkMetadataAPI",
+    "48": "PornDbApi",
     "49": "SiteClips4Sale",
     "50": "SiteManyVids",
     "51": "SiteData18",

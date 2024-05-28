@@ -305,7 +305,7 @@ namespace Pronium.Helpers
             }
             else
             {
-                if (Plugin.Instance.Configuration.UseMetadataAPI && !string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
+                if (Plugin.Instance.Configuration.UsePornDb && !string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
                 {
                     searchTitle = $"MetadataAPI {searchTitle}";
                 }
