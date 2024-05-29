@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -113,8 +114,10 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
-                result.Item.OriginalTitle =
-                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
+                var siteName = result.Item.Studios.FirstOrDefault().Replace(" ", string.Empty).ToLower();
+                var resultDate = result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                result.Item.OriginalTitle = $"{siteName} - {resultDate} - {result.Item.Name}";
             }
 
             if (sceneData.ContainsKey("tags"))
