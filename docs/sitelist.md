@@ -236,7 +236,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### LegalPorno | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### ManyVids | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID, Date Add**
-+ #### MetadataAPI | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### PornDB API | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - DoghouseDigital
   - RealityJunkies

@@ -46,8 +46,8 @@ namespace Pronium.Configuration
             this.DefaultSiteName = string.Empty;
             this.UseFilePath = false;
 
-            this.UseMetadataAPI = true;
-            this.MetadataAPIToken = string.Empty;
+            this.UsePornDb = false;
+            this.PornDbApiToken = string.Empty;
 
             this.DisableActors = false;
             this.DisableGenres = false;
@@ -90,9 +90,9 @@ namespace Pronium.Configuration
 
         public bool UseFilePath { get; set; }
 
-        public bool UseMetadataAPI { get; set; }
+        public bool UsePornDb { get; set; }
 
-        public string MetadataAPIToken { get; set; }
+        public string PornDbApiToken { get; set; }
 
         public bool DisableActors { get; set; }
 
@@ -119,7 +119,7 @@ namespace Pronium.Configuration
 
             configuration.DefaultSiteName = configuration.DefaultSiteName.Trim();
             configuration.FlareSolverrURL = configuration.FlareSolverrURL.Trim();
-            configuration.MetadataAPIToken = configuration.MetadataAPIToken.Trim();
+            configuration.PornDbApiToken = configuration.PornDbApiToken.Trim();
 
             configuration.ProxyHost = configuration.ProxyHost.Trim();
             configuration.ProxyLogin = configuration.ProxyLogin.Trim();

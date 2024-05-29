@@ -303,13 +303,6 @@ namespace Pronium.Helpers
             {
                 searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
             }
-            else
-            {
-                if (Plugin.Instance.Configuration.UseMetadataAPI && !string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
-                {
-                    searchTitle = $"MetadataAPI {searchTitle}";
-                }
-            }
 
             return searchTitle;
         }

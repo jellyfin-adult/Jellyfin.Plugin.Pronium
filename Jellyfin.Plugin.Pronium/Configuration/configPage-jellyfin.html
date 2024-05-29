@@ -61,13 +61,13 @@
                 </div>
                 <div class="checkboxContainer checkboxContainer-withDescripton">
                     <label class="emby-checkbox-label">
-                        <input id="UseMetadataAPI" is="emby-checkbox" name="UseMetadataAPI" type="checkbox"/>
-                        <span>Use MetadataAPI for not supported sites</span>
+                        <input id="UsePornDb" is="emby-checkbox" name="UsePornDb" type="checkbox"/>
+                        <span>Use ThePornDB for not supported sites</span>
                     </label>
                 </div>
                 <div class="inputContainer">
-                    <label class="inputLabel inputLabelUnfocused" for="MetadataAPIToken">MetadataAPI Token</label>
-                    <input id="MetadataAPIToken" is="emby-input" name="MetadataAPIToken" type="password"/>
+                    <label class="inputLabel inputLabelUnfocused" for="PornDbApiToken">PornDB API Token</label>
+                    <input id="PornDbApiToken" is="emby-input" name="PornDbApiToken" type="password"/>
                 </div>
                 <div class="checkboxContainer checkboxContainer-withDescripton">
                     <label class="emby-checkbox-label">
@@ -149,8 +149,8 @@
                 $('#ProxyPassword').val(config.ProxyPassword).change();
                 $('#UseFilePath').prop('checked', config.UseFilePath);
                 $('#DefaultSiteName').val(config.DefaultSiteName).change();
-                $('#UseMetadataAPI').prop('checked', config.UseMetadataAPI);
-                $('#MetadataAPIToken').val(config.MetadataAPIToken).change();
+                $('#UsePornDb').prop('checked', config.UsePornDb);
+                $('#PornDbApiToken').val(config.PornDbApiToken).change();
                 $('#DisableActors').prop('checked', config.DisableActors);
                 $('#DisableGenres').prop('checked', config.DisableGenres);
                 $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
@@ -176,8 +176,8 @@
                 config.ProxyPassword = $('#ProxyPassword').val();
                 config.UseFilePath = $('#UseFilePath').prop('checked');
                 config.DefaultSiteName = $('#DefaultSiteName').val();
-                config.MetadataAPIToken = $('#MetadataAPIToken').val();
-                config.UseMetadataAPI = $('#UseMetadataAPI').prop('checked');
+                config.PornDbApiToken = $('#PornDbApiToken').val();
+                config.UsePornDb = $('#UsePornDb').prop('checked');
                 config.DisableActors = $('#DisableActors').prop('checked');
                 config.DisableGenres = $('#DisableGenres').prop('checked');
                 config.DisableImageValidation = $('#DisableImageValidation').prop('checked');

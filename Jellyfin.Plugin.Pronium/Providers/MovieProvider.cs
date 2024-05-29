@@ -151,31 +151,60 @@ namespace Pronium.Providers
                             Exception = e,
                         }, cancellationToken).ConfigureAwait(false);
                 }
+            }
 
-                if (result.Any())
+            if (Plugin.Instance.Configuration.UsePornDb && !string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
+            {
+                var pornDbSite = Helper.GetSiteFromTitle("PornDB");
+                var pordDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
+
+                Logger.Info($"provider: {pordDbProvider}");
+
+                try
                 {
-                    foreach (var scene in result)
-                    {
-                        scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
-                        scene.Name = scene.Name.Trim();
-                        if (scene.PremiereDate.HasValue)
-                        {
-                            scene.ProductionYear = scene.PremiereDate.Value.Year;
-                        }
-                    }
+                    var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    result.AddRange(pornDbResult);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Search error: \"{e}\"");
 
-                    if (result.Any(scene => scene.IndexNumber.HasValue))
+                    await Analytics.Send(
+                        new AnalyticsExeption
+                        {
+                            Request = searchInfo.Name,
+                            SiteNum = site.siteNum,
+                            SearchTitle = searchTitle,
+                            SearchDate = searchDateObj,
+                            ProviderName = provider.ToString(),
+                            Exception = e,
+                        }, cancellationToken).ConfigureAwait(false);
+                }
+            }
+
+            if (result.Any())
+            {
+                foreach (var scene in result)
+                {
+                    scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
+                    scene.Name = scene.Name.Trim();
+                    if (scene.PremiereDate.HasValue)
                     {
-                        result = result.OrderByDescending(o => o.IndexNumber.HasValue).ThenByDescending(o => o.IndexNumber).ToList();
+                        scene.ProductionYear = scene.PremiereDate.Value.Year;
                     }
-                    else if (!string.IsNullOrEmpty(searchDate) && result.All(o => o.PremiereDate.HasValue) && result.Any(o => o.PremiereDate.Value != searchDateObj))
-                    {
-                        result = result.OrderBy(o => Math.Abs((searchDateObj - o.PremiereDate).Value.TotalDays)).ToList();
-                    }
-                    else
-                    {
-                        result = result.OrderByDescending(o => 100 - LevenshteinDistance.Calculate(searchTitle, Helper.GetClearTitle(o.Name), StringComparison.OrdinalIgnoreCase)).ToList();
-                    }
+                }
+
+                if (result.Any(scene => scene.IndexNumber.HasValue))
+                {
+                    result = result.OrderByDescending(o => o.IndexNumber.HasValue).ThenByDescending(o => o.IndexNumber).ToList();
+                }
+                else if (!string.IsNullOrEmpty(searchDate) && result.All(o => o.PremiereDate.HasValue) && result.Any(o => o.PremiereDate.Value != searchDateObj))
+                {
+                    result = result.OrderBy(o => Math.Abs((searchDateObj - o.PremiereDate).Value.TotalDays)).ToList();
+                }
+                else
+                {
+                    result = result.OrderByDescending(o => 100 - LevenshteinDistance.Calculate(searchTitle, Helper.GetClearTitle(o.Name), StringComparison.OrdinalIgnoreCase)).ToList();
                 }
             }
 

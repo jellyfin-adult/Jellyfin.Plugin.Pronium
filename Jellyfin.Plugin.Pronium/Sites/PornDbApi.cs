@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -14,7 +15,7 @@ using Pronium.Helpers.Utils;
 
 namespace Pronium.Sites
 {
-    public class NetworkMetadataAPI : IProviderBase
+    public class PornDbApi : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(
             int[] siteNum,
@@ -34,7 +35,7 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
-            var searchResults = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var searchResults = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (searchResults == null)
             {
                 return result;
@@ -49,7 +50,7 @@ namespace Pronium.Sites
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name, curID } }, Name = sceneName, ImageUrl = scenePoster, IndexNumberEnd = idx,
+                    ProviderIds = { { Plugin.Instance?.Name ?? "Pronium", curID } }, Name = sceneName, ImageUrl = scenePoster, IndexNumberEnd = idx,
                 };
 
                 if (DateTime.TryParseExact(
@@ -78,7 +79,7 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -101,7 +102,7 @@ namespace Pronium.Sites
                 {
                     url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{network_id}";
 
-                    var siteData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+                    var siteData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
                     if (siteData != null)
                     {
                         result.Item.AddStudio((string)siteData["data"]["name"]);
@@ -113,8 +114,10 @@ namespace Pronium.Sites
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
-                result.Item.OriginalTitle =
-                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
+                var siteName = result.Item.Studios.FirstOrDefault().Replace(" ", string.Empty).ToLower();
+                var resultDate = result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                result.Item.OriginalTitle = $"{siteName} - {resultDate} - {result.Item.Name}";
             }
 
             if (sceneData.ContainsKey("tags"))
@@ -154,7 +157,7 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -169,14 +172,14 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<JObject> GetDataFromAPI(string url, CancellationToken cancellationToken)
+        public static async Task<JObject> GetDataFromApi(string url, CancellationToken cancellationToken)
         {
             JObject json = null;
             var headers = new Dictionary<string, string>();
 
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
             {
-                headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.MetadataAPIToken}");
+                headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.PornDbApiToken}");
                 headers.Add("User-Agent", $"{Consts.PluginInstance}/{Consts.PluginVersion}");
             }
 
