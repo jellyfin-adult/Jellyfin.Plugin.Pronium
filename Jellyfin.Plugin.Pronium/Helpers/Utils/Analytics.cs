@@ -36,8 +36,6 @@ namespace Pronium.Helpers.Utils
 
         private static AnalyticsStructure AnalyticsData { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "For future")]
-
         public static async Task Send(AnalyticsExeption exception, CancellationToken cancellationToken)
         {
             AnalyticsData = new AnalyticsStructure

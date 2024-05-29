@@ -303,13 +303,6 @@ namespace Pronium.Helpers
             {
                 searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
             }
-            else
-            {
-                if (Plugin.Instance.Configuration.UsePornDb && !string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
-                {
-                    searchTitle = $"MetadataAPI {searchTitle}";
-                }
-            }
 
             return searchTitle;
         }

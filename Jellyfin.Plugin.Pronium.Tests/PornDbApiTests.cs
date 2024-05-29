@@ -4,6 +4,7 @@ using Pronium.Sites;
 namespace Pronium.UnitTests;
 
 [TestFixture]
+[Ignore("These tests only can be executed locally due to usage of API Token")]
 public class PornDbApiTests
 {
     [SetUp]

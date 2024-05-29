@@ -46,7 +46,7 @@ namespace Pronium.Configuration
             this.DefaultSiteName = string.Empty;
             this.UseFilePath = false;
 
-            this.UsePornDb = true;
+            this.UsePornDb = false;
             this.PornDbApiToken = string.Empty;
 
             this.DisableActors = false;
