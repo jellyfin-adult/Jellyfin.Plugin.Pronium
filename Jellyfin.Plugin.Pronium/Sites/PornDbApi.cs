@@ -176,11 +176,15 @@ namespace Pronium.Sites
         {
             JObject json = null;
             var headers = new Dictionary<string, string>();
+            var token = Environment.GetEnvironmentVariable("API_TOKEN");
 
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
+            if (!string.IsNullOrEmpty(token))
+            {
+                headers.Add("Authorization", $"Bearer {token}");
+            }
+            else if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
             {
                 headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.PornDbApiToken}");
-                headers.Add("User-Agent", $"{Consts.PluginInstance}/{Consts.PluginVersion}");
             }
 
             var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);

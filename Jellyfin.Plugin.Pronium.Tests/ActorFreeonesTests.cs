@@ -24,7 +24,7 @@ public class ActorFreeonesTests
         var id = result[0].ProviderIds.Values.FirstOrDefault();
         Assert.That(id, Is.Not.Empty);
         Assert.That(Helper.Decode(id?.Split('#')[0]), Is.EqualTo(_testSceneUrl));
-        Assert.That(result.First().ImageUrl, Does.Contain("98d087ae-fbb9-4243-9744-851d715cd1d1.jpg"));
+        Assert.That(result.First().ImageUrl, Does.Contain("Natasha-Nice"));
     }
 
     [Test]
@@ -46,6 +46,6 @@ public class ActorFreeonesTests
             new CancellationToken())).ToList();
 
         Assert.That(result, Has.Count.EqualTo(1));
-        Assert.That(result.First().Url, Does.Contain("98d087ae-fbb9-4243-9744-851d715cd1d1.jpg"));
+        Assert.That(result.First().Url, Does.Contain("Natasha-Nice"));
     }
 }
