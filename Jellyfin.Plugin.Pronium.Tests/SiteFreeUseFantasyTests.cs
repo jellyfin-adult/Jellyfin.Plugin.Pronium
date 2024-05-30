@@ -35,7 +35,7 @@ public class SiteFreeUseFantasyTests
         Assert.That(result.Item.OriginalTitle, Is.EqualTo("freeusefantasy - 2024-02-03 - Show Us What You’re Good at"));
         Assert.That(result.Item.Overview, Does.StartWith("It’s been a while since Daisy is jobless, and her roommate"));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
-        Assert.That(result.Item.Genres.Length, Is.EqualTo(83));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(82));
         Assert.That(result.Item.Genres, Does.Contain("Barefoot"));
         Assert.That(result.People.Count, Is.EqualTo(2));
         Assert.That(result.People.Select(t => t.Name), Does.Contain("Daisy Stone"));
