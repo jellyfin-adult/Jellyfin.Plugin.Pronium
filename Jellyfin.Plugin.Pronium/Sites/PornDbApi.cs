@@ -35,7 +35,9 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
+            Logger.Info($"PornDbApi.Search url: {url}");
             var searchResults = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
+            Logger.Info($"PornDbApi.Search searchResults: {searchResults.Count}");
             if (searchResults == null)
             {
                 return result;

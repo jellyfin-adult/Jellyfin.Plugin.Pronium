@@ -139,21 +139,10 @@ namespace Pronium.Providers
                 catch (Exception e)
                 {
                     Logger.Error($"Search error: \"{e}\"");
-
-                    await Analytics.Send(
-                        new AnalyticsExeption
-                        {
-                            Request = searchInfo.Name,
-                            SiteNum = site.siteNum,
-                            SearchTitle = searchTitle,
-                            SearchDate = searchDateObj,
-                            ProviderName = provider.ToString(),
-                            Exception = e,
-                        }, cancellationToken).ConfigureAwait(false);
                 }
             }
 
-            if (Plugin.Instance.Configuration.UsePornDb && !string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
             {
                 var pornDbSite = Helper.GetSiteFromTitle("PornDB");
                 var pordDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
@@ -162,23 +151,12 @@ namespace Pronium.Providers
 
                 try
                 {
-                    var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
                     result.AddRange(pornDbResult);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Search error: \"{e}\"");
-
-                    await Analytics.Send(
-                        new AnalyticsExeption
-                        {
-                            Request = searchInfo.Name,
-                            SiteNum = site.siteNum,
-                            SearchTitle = searchTitle,
-                            SearchDate = searchDateObj,
-                            ProviderName = provider.ToString(),
-                            Exception = e,
-                        }, cancellationToken).ConfigureAwait(false);
                 }
             }
 

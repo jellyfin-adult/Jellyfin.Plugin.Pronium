@@ -46,7 +46,6 @@ namespace Pronium.Configuration
             this.DefaultSiteName = string.Empty;
             this.UseFilePath = false;
 
-            this.UsePornDb = false;
             this.PornDbApiToken = string.Empty;
 
             this.DisableActors = false;
@@ -89,8 +88,6 @@ namespace Pronium.Configuration
         public string DefaultSiteName { get; set; }
 
         public bool UseFilePath { get; set; }
-
-        public bool UsePornDb { get; set; }
 
         public string PornDbApiToken { get; set; }
 
