@@ -19,6 +19,14 @@ public class MovieProviderTests
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "slayed - dollhouse" }, new CancellationToken());
 
-        Assert.That(data.Count(), Is.EqualTo(3));
+        Assert.That(data.Count(), Is.GreaterThan(3));
+    }
+
+    [Test]
+    public async Task SearchForMoviesIsWorking()
+    {
+        var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Dark Woods" }, new CancellationToken());
+
+        Assert.That(data.Count(), Is.GreaterThan(30));
     }
 }

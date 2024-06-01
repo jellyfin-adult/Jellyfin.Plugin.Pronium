@@ -25,6 +25,16 @@ public class PornDbApiTests
     }
 
     [Test]
+    public async Task SearchForMoviesIsWorking()
+    {
+        var result = await _site.Search(new[] { 48, 1 }, "Dark Woods", null, new CancellationToken());
+        Assert.That(result.Count, Is.GreaterThan(0));
+        var id = result[0].ProviderIds.Values.FirstOrDefault();
+        Assert.That(id, Is.Not.Empty);
+        Assert.That(id, Is.EqualTo("48#1#4697054"));
+    }
+
+    [Test]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "2751895" }, new CancellationToken());
@@ -41,6 +51,18 @@ public class PornDbApiTests
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "802284" }, new CancellationToken());
         Assert.That(result.Item.OriginalTitle, Is.EqualTo("rws - 2012-10-30 - Bride Of Frankendick"));
+    }
+
+    [Test]
+    public async Task UpdateForMoviesIsWorking()
+    {
+        var result = await _site.Update(new[] { 48, 1 }, new[] { "4697054" }, new CancellationToken());
+        Assert.That(result.Item.Name, Is.EqualTo("Dark Woods"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("dpg - 2023-04-11 - Dark Woods"));
+        Assert.That(result.Item.Overview, Is.Not.Empty);
+        Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
+        Assert.That(result.People.Count, Is.EqualTo(5));
     }
 
     [Test]

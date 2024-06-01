@@ -750,7 +750,9 @@
       "12": [ "VR Channel PornPortal", "https://vr-channel.pornportal.com" ],
     },
     "48": {
-      "0": [ "PornDB", " https://theporndb.net", "https://api.theporndb.net" ],
+      "0": [ "PornDB", " https://theporndb.net", "https://api.theporndb.net/scenes" ],
+      "1": [ "PornDBMovies", " https://theporndb.net", "https://api.theporndb.net/movies" ],
+      "2": [ "PornDBSites", " https://theporndb.net", "https://api.theporndb.net/sites" ],
     },
     "49": {
       "0": [ "Clips4Sale", "https://www.clips4sale.com", "/studio/" ],

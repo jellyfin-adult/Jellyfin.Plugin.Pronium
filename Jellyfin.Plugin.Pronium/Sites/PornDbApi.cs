@@ -34,7 +34,7 @@ namespace Pronium.Sites
                 searchTitle += searchDate.Value.ToString("yyyy-MM-dd");
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
+            var url = Helper.GetSearchSearchURL(siteNum) + $"?parse={searchTitle}";
             Logger.Info($"PornDbApi.Search url: {url}");
             var searchResults = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             Logger.Info($"PornDbApi.Search searchResults: {searchResults.Count}");
@@ -80,7 +80,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
+            var url = Helper.GetSearchSearchURL(siteNum) + $"/{sceneID[0]}";
             var sceneData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
@@ -88,7 +88,7 @@ namespace Pronium.Sites
             }
 
             sceneData = (JObject)sceneData["data"];
-            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/scenes/{sceneID[0]}";
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneID[0]}";
 
             result.Item.ExternalId = sceneURL;
 
@@ -102,7 +102,8 @@ namespace Pronium.Sites
 
                 if (network_id.HasValue && !site_id.Equals(network_id))
                 {
-                    url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{network_id}";
+                    var sitesApiNum = Helper.GetSiteFromTitle("PornDBSites").siteNum;
+                    url = Helper.GetSearchSearchURL(sitesApiNum) + $"/{network_id}";
 
                     var siteData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
                     if (siteData != null)
@@ -159,7 +160,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
+            var url = Helper.GetSearchSearchURL(siteNum) + $"/{sceneID[0]}";
             var sceneData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
