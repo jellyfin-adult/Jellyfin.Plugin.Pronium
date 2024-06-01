@@ -29,7 +29,6 @@ namespace Pronium.Configuration
             this.TokenStorage = string.Empty;
 
             this.UID = Guid.NewGuid().ToString();
-            this.DisableAnalytics = false;
             this.EnableDebug = false;
 
             this.DisableCaching = false;
@@ -64,8 +63,6 @@ namespace Pronium.Configuration
         public string TokenStorage { get; set; }
 
         public string UID { get; set; }
-
-        public bool DisableAnalytics { get; set; }
 
         public bool EnableDebug { get; set; }
 

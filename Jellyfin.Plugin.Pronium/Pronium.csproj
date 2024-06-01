@@ -3,8 +3,8 @@
     <TargetFramework Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">net6.0</TargetFramework>
     <TargetFramework Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">netstandard2.1</TargetFramework>
     <RootNamespace>Pronium</RootNamespace>
-    <AssemblyVersion>2.1.1.79</AssemblyVersion>
-    <FileVersion>2.1.1.79</FileVersion>
+    <AssemblyVersion>2.1.1.80</AssemblyVersion>
+    <FileVersion>2.1.1.80</FileVersion>
     <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
     <Copyright>© Jellyfin Adult</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -39,7 +39,6 @@
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
     <PackageReference Include="Jellyfin.Controller" Version="10.8.13"/>
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0"/>
-    <PackageReference Include="Sentry.AspNetCore" Version="3.41.2"/>
     <PackageReference Include="SkiaSharp" Version="2.88.8"/>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
