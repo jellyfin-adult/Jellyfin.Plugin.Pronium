@@ -51,9 +51,9 @@ namespace Pronium.Providers
                 return images;
             }
 
-            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
+            images = await this.GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
 
-            if (item.ProviderIds.TryGetValue(Name, out var externalId))
+            if (item.ProviderIds.TryGetValue(this.Name, out var externalId))
             {
                 var actorId = externalId.Split('#');
                 if (actorId.Length > 2)
@@ -64,7 +64,7 @@ namespace Pronium.Providers
                     };
                     var sceneId = item.ProviderIds;
 
-                    if (sceneId.ContainsKey(Name))
+                    if (sceneId.ContainsKey(this.Name))
                     {
                         var provider = Helper.GetProviderBySiteId(siteNum[0]);
                         if (provider != null)
@@ -100,7 +100,7 @@ namespace Pronium.Providers
                 {
                     if (string.IsNullOrEmpty(img.ProviderName))
                     {
-                        img.ProviderName = Name;
+                        img.ProviderName = this.Name;
                     }
                 }
 
@@ -119,7 +119,7 @@ namespace Pronium.Providers
             return Helper.GetImageResponse(url, cancellationToken);
         }
 
-        public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
+        public async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
             var tasks = new Dictionary<string, Task<IEnumerable<string>>>();
             var imageList = new List<RemoteImageInfo>();

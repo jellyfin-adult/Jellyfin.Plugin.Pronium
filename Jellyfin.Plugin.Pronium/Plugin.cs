@@ -43,7 +43,7 @@ namespace Pronium
             }
 #else
             Log = logger;
-            ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
+            this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
 
             SentrySdk.Init(new SentryOptions { Dsn = Consts.SentryDSN });
 #endif
@@ -67,7 +67,7 @@ namespace Pronium
         {
             return new[]
             {
-                new PluginPageInfo { Name = Name, EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.configPage.html" },
+                new PluginPageInfo { Name = this.Name, EmbeddedResourcePath = $"{this.GetType().Namespace}.Configuration.configPage.html" },
 #if __EMBY__
                 new PluginPageInfo { Name = $"{Name}js", EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.configPage.js" },
 #endif

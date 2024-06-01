@@ -21,13 +21,13 @@ public class PornDbApiTests
         Assert.That(result.Count, Is.GreaterThan(0));
         var id = result[0].ProviderIds.Values.FirstOrDefault();
         Assert.That(id, Is.Not.Empty);
-        Assert.That(id?.Split('#')[0], Is.EqualTo("2751895"));
+        Assert.That(id, Is.EqualTo("48#0#2751895"));
     }
 
     [Test]
     public async Task UpdateIsWorking()
     {
-        var result = await _site.Update(new[] { 48, 0 }, new[] { "2751895", "scene" }, new CancellationToken());
+        var result = await _site.Update(new[] { 48, 0 }, new[] { "2751895" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Anal Maid Service"));
         Assert.That(result.Item.OriginalTitle, Is.EqualTo("mydirtymaid - 2023-02-23 - Anal Maid Service"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
@@ -39,7 +39,7 @@ public class PornDbApiTests
     [Test]
     public async Task GetImagesIsWorking()
     {
-        var result = (await _site.GetImages(new[] { 48, 0 }, new[] { "2751895", "scene" }, null, new CancellationToken())).ToList();
+        var result = (await _site.GetImages(new[] { 48, 0 }, new[] { "2751895" }, null, new CancellationToken())).ToList();
 
         Assert.That(result, Has.Count.EqualTo(3));
         Assert.That(result.First().Url, Does.Contain("my-dirty-maid-anal-maid"));

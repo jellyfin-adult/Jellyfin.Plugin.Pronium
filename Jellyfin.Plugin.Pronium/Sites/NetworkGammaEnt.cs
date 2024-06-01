@@ -39,7 +39,7 @@ namespace Pronium.Sites
                 searchSceneID = null;
             }
 
-            string apiKey = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false), searchParams;
+            string apiKey = await this.GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false), searchParams;
 
             var sceneTypes = new List<string> { "scenes", "movies" };
             foreach (var sceneType in sceneTypes)
@@ -61,7 +61,7 @@ namespace Pronium.Sites
                 }
 
                 var url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKey}";
-                var searchResults = await GetDataFromAPI(
+                var searchResults = await this.GetDataFromAPI(
                     url,
                     $"all_{sceneType}",
                     Helper.GetSearchBaseURL(siteNum),
@@ -131,10 +131,10 @@ namespace Pronium.Sites
                 return result;
             }
 
-            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
+            string apiKEY = await this.GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                 sceneType = sceneID[1] == "scenes" ? "clip_id" : "movie_id",
                 url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(
+            var sceneData = await this.GetDataFromAPI(
                 url,
                 $"all_{sceneID[1]}",
                 Helper.GetSearchBaseURL(siteNum),
@@ -209,7 +209,7 @@ namespace Pronium.Sites
             {
                 string actorName = (string)actorLink["name"], actorPhotoURL = string.Empty;
 
-                var data = await GetDataFromAPI(
+                var data = await this.GetDataFromAPI(
                     url,
                     "all_actors",
                     Helper.GetSearchBaseURL(siteNum),
@@ -250,10 +250,10 @@ namespace Pronium.Sites
                 return result;
             }
 
-            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
+            string apiKEY = await this.GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                 sceneType = sceneID[1] == "scenes" ? "clip_id" : "movie_id",
                 url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(
+            var sceneData = await this.GetDataFromAPI(
                 url,
                 $"all_{sceneID[1]}",
                 Helper.GetSearchBaseURL(siteNum),
@@ -309,7 +309,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<string> GetAPIKey(int[] siteNum, CancellationToken cancellationToken)
+        public async Task<string> GetAPIKey(int[] siteNum, CancellationToken cancellationToken)
         {
             var result = string.Empty;
 
@@ -370,7 +370,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<JObject> GetDataFromAPI(
+        public async Task<JObject> GetDataFromAPI(
             string url,
             string indexName,
             string referer,
