@@ -287,6 +287,7 @@ namespace Pronium.Providers
                     }
 
                     result.Item.AddStudio(Helper.GetSearchSiteName(siteNum));
+                    result.Item.OriginalTitle = result.Item.OriginalTitle.Replace(":", string.Empty);
                     var newStudios = new List<string>();
                     foreach (var studio in result.Item.Studios)
                     {

@@ -180,7 +180,7 @@ namespace Pronium.Sites
             foreach (var actorLink in sceneData["actors"])
             {
                 var actorPageURL = $"{Helper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
-                var actorData = await GetDataFromAPI(actorPageURL, instanceToken, cancellationToken).ConfigureAwait(false);
+                var actorData = await this.GetDataFromAPI(actorPageURL, instanceToken, cancellationToken).ConfigureAwait(false);
                 if (actorData != null)
                 {
                     actorData = (JObject)actorData["result"].First;
