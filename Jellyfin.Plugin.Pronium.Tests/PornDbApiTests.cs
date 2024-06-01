@@ -46,11 +46,18 @@ public class PornDbApiTests
         Assert.That(result.People.Count, Is.EqualTo(2));
     }
 
-        [Test]
+    [Test]
     public async Task AbbreviationAreUsed()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "802284" }, new CancellationToken());
         Assert.That(result.Item.OriginalTitle, Is.EqualTo("rws - 2012-10-30 - Bride Of Frankendick"));
+    }
+
+    [Test]
+    public async Task AbbreviationAreUsedWithSpecialChars()
+    {
+        var result = await _site.Update(new[] { 48, 0 }, new[] { "1978334" }, new CancellationToken());
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("mshf - 2022-07-09 - Busty Redhead, Harper Red, Is So Wet and Horny That She Must Get Dick in the Cafe This Instant"));
     }
 
     [Test]
