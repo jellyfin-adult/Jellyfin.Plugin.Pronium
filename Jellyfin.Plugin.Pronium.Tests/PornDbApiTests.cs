@@ -25,6 +25,16 @@ public class PornDbApiTests
     }
 
     [Test]
+    public async Task SearchForUniqueMovie()
+    {
+        var result = await _site.Search(new[] { 48, 1 }, "Confidential file", null, new CancellationToken());
+        Assert.That(result.Count, Is.GreaterThan(0));
+        var id = result[0].ProviderIds.Values.FirstOrDefault();
+        Assert.That(id, Is.Not.Empty);
+        Assert.That(id, Is.EqualTo("48#1#2335556"));
+    }
+
+    [Test]
     public async Task SearchForMoviesIsWorking()
     {
         var result = await _site.Search(new[] { 48, 1 }, "Dark Woods", null, new CancellationToken());
