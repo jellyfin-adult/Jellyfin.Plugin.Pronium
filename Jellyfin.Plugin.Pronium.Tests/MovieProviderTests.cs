@@ -36,5 +36,6 @@ public class MovieProviderTests
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Confidential file" }, new CancellationToken());
 
         Assert.That(data.Count(), Is.GreaterThan(5));
+        Assert.That(data.Any(t => t.ProviderIds.Values.First().Contains("48#1#2335556")), Is.True);
     }
 }
