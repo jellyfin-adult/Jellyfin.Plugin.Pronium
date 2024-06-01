@@ -146,6 +146,7 @@ namespace Pronium.Providers
             if (!string.IsNullOrEmpty(Plugin.Instance?.Configuration.PornDbApiToken) || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("API_TOKEN")))
             {
                 var pornDbSite = Helper.GetSiteFromTitle("PornDB");
+                var pornDbMoviesSite = Helper.GetSiteFromTitle("PornDBMovies");
                 var pordDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
 
                 Logger.Info($"provider: {pordDbProvider}");
@@ -153,6 +154,8 @@ namespace Pronium.Providers
                 try
                 {
                     var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    result.AddRange(pornDbResult);
+                    var pornDbMoviesResult = await pordDbProvider.Search(pornDbMoviesSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
                     result.AddRange(pornDbResult);
                 }
                 catch (Exception e)

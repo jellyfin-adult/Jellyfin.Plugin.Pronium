@@ -21,4 +21,12 @@ public class MovieProviderTests
 
         Assert.That(data.Count(), Is.EqualTo(3));
     }
+
+    [Test]
+    public async Task SearchForMoviesIsWorking()
+    {
+        var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Dark Woods" }, new CancellationToken());
+
+        Assert.That(data.Count(), Is.GreaterThan(30));
+    }
 }
