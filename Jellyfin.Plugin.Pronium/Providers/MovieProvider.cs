@@ -156,7 +156,7 @@ namespace Pronium.Providers
                     var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
                     result.AddRange(pornDbResult);
                     var pornDbMoviesResult = await pordDbProvider.Search(pornDbMoviesSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
-                    result.AddRange(pornDbResult);
+                    result.AddRange(pornDbMoviesResult);
                 }
                 catch (Exception e)
                 {

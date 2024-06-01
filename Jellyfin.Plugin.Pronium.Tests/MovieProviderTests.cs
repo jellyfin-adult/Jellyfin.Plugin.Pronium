@@ -29,4 +29,12 @@ public class MovieProviderTests
 
         Assert.That(data.Count(), Is.GreaterThan(30));
     }
+
+    [Test]
+    public async Task SearchForUniqueMovie()
+    {
+        var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Confidential file" }, new CancellationToken());
+
+        Assert.That(data.Count(), Is.GreaterThan(5));
+    }
 }
