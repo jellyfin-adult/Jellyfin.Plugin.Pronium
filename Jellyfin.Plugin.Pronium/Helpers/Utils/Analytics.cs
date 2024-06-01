@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Pronium.Configuration;
 
-#if __EMBY__
-#else
-using Sentry;
-#endif
-
 namespace Pronium.Helpers.Utils
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "Temp")]
@@ -62,25 +57,6 @@ namespace Pronium.Helpers.Utils
                     Text = exception.Exception.StackTrace,
                 },
             };
-
-            if (!Plugin.Instance.Configuration.DisableAnalytics)
-            {
-#if __EMBY__
-#else
-                SentrySdk.ConfigureScope(scope =>
-                {
-                    scope.User = new User()
-                    {
-                        Id = Plugin.Instance.Configuration.UID,
-                    };
-                    scope.Release = AnalyticsData.User.PluginVersion;
-                    scope.Environment = AnalyticsData.User.ServerPlatform;
-                    scope.Contexts["Options"] = AnalyticsData.User.Options;
-                    scope.Contexts["Info"] = AnalyticsData.Info;
-                });
-                SentrySdk.CaptureException(exception.Exception);
-#endif
-            }
 
             if (Plugin.Instance.Configuration.EnableDebug)
             {

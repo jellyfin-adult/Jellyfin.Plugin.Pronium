@@ -6,7 +6,6 @@ using MediaBrowser.Model.Drawing;
 #else
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
-using Sentry;
 #endif
 using System;
 using System.Collections.Generic;
@@ -44,8 +43,6 @@ namespace Pronium
 #else
             Log = logger;
             this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
-
-            SentrySdk.Init(new SentryOptions { Dsn = Consts.SentryDSN });
 #endif
         }
 
