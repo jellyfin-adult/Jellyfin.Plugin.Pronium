@@ -111,7 +111,7 @@ namespace Pronium.Sites
                 }
             }
 
-            var keywords = await GetKeywords(siteNum, sceneData, cancellationToken).ConfigureAwait(false);
+            var keywords = await this.GetKeywords(siteNum, sceneData, cancellationToken).ConfigureAwait(false);
             foreach (var genre in keywords)
             {
                 result.Item.AddGenre(genre);

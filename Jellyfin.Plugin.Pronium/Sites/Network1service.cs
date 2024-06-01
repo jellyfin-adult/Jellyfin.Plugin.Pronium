@@ -39,7 +39,7 @@ namespace Pronium.Sites
                 searchSceneID = null;
             }
 
-            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            var instanceToken = await this.GetToken(siteNum, cancellationToken).ConfigureAwait(false);
             if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
@@ -57,7 +57,7 @@ namespace Pronium.Sites
                     url = $"/v2/releases?type={sceneType}&id={searchSceneID}";
                 }
 
-                var searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum) + url, instanceToken, cancellationToken)
+                var searchResults = await this.GetDataFromAPI(Helper.GetSearchSearchURL(siteNum) + url, instanceToken, cancellationToken)
                     .ConfigureAwait(false);
                 if (searchResults == null)
                 {
@@ -117,14 +117,14 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            var instanceToken = await this.GetToken(siteNum, cancellationToken).ConfigureAwait(false);
             if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
             }
 
             var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -212,14 +212,14 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            var instanceToken = await this.GetToken(siteNum, cancellationToken).ConfigureAwait(false);
             if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
             }
 
             var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -254,7 +254,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<string> GetToken(int[] siteNum, CancellationToken cancellationToken)
+        public async Task<string> GetToken(int[] siteNum, CancellationToken cancellationToken)
         {
             var result = string.Empty;
 
@@ -319,7 +319,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
+        public async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
         {
             JObject json = null;
             var headers = new Dictionary<string, string> { { "Instance", instance } };

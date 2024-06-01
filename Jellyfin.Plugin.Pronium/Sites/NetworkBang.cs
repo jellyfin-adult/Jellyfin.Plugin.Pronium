@@ -35,12 +35,12 @@ namespace Pronium.Sites
             var searchSceneID = searchTitle.Split()[0];
             if (int.TryParse(searchSceneID, out _))
             {
-                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken)
+                searchResults = await this.GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken)
                     .ConfigureAwait(false);
             }
             else
             {
-                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken)
+                searchResults = await this.GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken)
                     .ConfigureAwait(false);
             }
 
@@ -81,7 +81,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
+            var sceneData = await this.GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
                 .ConfigureAwait(false);
             if (sceneData == null)
             {
@@ -133,7 +133,7 @@ namespace Pronium.Sites
                 return result;
             }
 
-            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
+            var sceneData = await this.GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[0], "identifier", cancellationToken)
                 .ConfigureAwait(false);
             if (sceneData == null)
             {
@@ -157,7 +157,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<JObject> GetDataFromAPI(
+        public async Task<JObject> GetDataFromAPI(
             string url,
             string searchTitle,
             string searchType,

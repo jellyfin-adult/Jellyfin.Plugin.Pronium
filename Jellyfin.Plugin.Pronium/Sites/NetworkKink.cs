@@ -93,7 +93,7 @@ namespace Pronium.Sites
             else
             {
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-                var data = await HTML.ElementFromURL(url, cancellationToken, null, cookies).ConfigureAwait(false);
+                var data = await HTML.ElementFromURL(url, cancellationToken, null, this.cookies).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodesSafe("//div[@class='shoot-card scene']");
                 foreach (var searchResult in searchResults)
@@ -142,7 +142,7 @@ namespace Pronium.Sites
                 sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, cookies).ConfigureAwait(false);
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
 
@@ -182,7 +182,7 @@ namespace Pronium.Sites
 
                 var res = new PersonInfo { Name = actorName };
 
-                var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, cookies).ConfigureAwait(false);
+                var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
                 var actorPhoto = actorHTML.SelectSingleText("//div[contains(@class, 'biography-container')]//img/@src");
 
                 if (!string.IsNullOrEmpty(actorPhoto))
@@ -215,7 +215,7 @@ namespace Pronium.Sites
                 sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, cookies).ConfigureAwait(false);
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
 
             var sceneImages = sceneData.SelectNodesSafe("//video");
             foreach (var sceneImage in sceneImages)

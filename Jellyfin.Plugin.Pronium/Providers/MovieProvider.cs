@@ -28,7 +28,7 @@ namespace Pronium.Providers
             Database.LoadAll();
         }
 
-        public string Name => Plugin.Instance.Name;
+        public string Name => Plugin.Instance?.Name ?? "Pronium";
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
@@ -71,7 +71,7 @@ namespace Pronium.Providers
             if (site.siteNum == null)
             {
                 string newTitle;
-                if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DefaultSiteName))
+                if (!string.IsNullOrEmpty(Plugin.Instance?.Configuration.DefaultSiteName ?? string.Empty))
                 {
                     newTitle = $"{Plugin.Instance.Configuration.DefaultSiteName} {searchInfo.Name}";
                 }
@@ -87,15 +87,10 @@ namespace Pronium.Providers
                     title = Helper.ReplaceAbbreviation(newTitle);
                     site = Helper.GetSiteFromTitle(title);
                 }
-
-                if (site.siteNum == null)
-                {
-                    return result;
-                }
             }
 
-            string searchTitle = Helper.GetClearTitle(title, site.siteName),
-                   searchDate = string.Empty;
+            var searchTitle = site.siteName != null ? Helper.GetClearTitle(title, site.siteName) : string.Empty;
+            var searchDate = string.Empty;
             DateTime? searchDateObj;
             var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
 
@@ -118,31 +113,37 @@ namespace Pronium.Providers
                 }
             }
 
-            if (string.IsNullOrEmpty(searchTitle))
+            if (site.siteNum != null)
             {
-                return result;
+                Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
+                Logger.Info($"searchTitle: {searchTitle}");
+                Logger.Info($"searchDate: {searchDate}");
+
+                var provider = Helper.GetProviderBySiteId(site.siteNum[0]);
+                if (provider != null)
+                {
+                    Logger.Info($"provider: {provider}");
+
+                    try
+                    {
+                        result = await provider.Search(site.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+
+                        if (result.Any())
+                        {
+                            foreach (var scene in result)
+                            {
+                                scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"Search error: \"{e}\"");
+                    }
+                }
             }
 
-            Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
-            Logger.Info($"searchTitle: {searchTitle}");
-            Logger.Info($"searchDate: {searchDate}");
-
-            var provider = Helper.GetProviderBySiteId(site.siteNum[0]);
-            if (provider != null)
-            {
-                Logger.Info($"provider: {provider}");
-
-                try
-                {
-                    result = await provider.Search(site.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error($"Search error: \"{e}\"");
-                }
-            }
-
-            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.PornDbApiToken))
+            if (!string.IsNullOrEmpty(Plugin.Instance?.Configuration.PornDbApiToken) || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("API_TOKEN")))
             {
                 var pornDbSite = Helper.GetSiteFromTitle("PornDB");
                 var pordDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
@@ -164,7 +165,6 @@ namespace Pronium.Providers
             {
                 foreach (var scene in result)
                 {
-                    scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
                     scene.Name = scene.Name.Trim();
                     if (scene.PremiereDate.HasValue)
                     {
@@ -262,17 +262,6 @@ namespace Pronium.Providers
                 catch (Exception e)
                 {
                     Logger.Error($"Update error: \"{e}\"");
-
-                    await Analytics.Send(
-                        new AnalyticsExeption
-                        {
-                            Request = string.Join("#", curID.Skip(2)),
-                            SiteNum = siteNum,
-                            SearchTitle = info.Name,
-                            SearchDate = premiereDateObj,
-                            ProviderName = provider.ToString(),
-                            Exception = e,
-                        }, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (res != null)

@@ -58,7 +58,7 @@ namespace Pronium.Sites
             var searchUrl = Helper.GetSearchSearchURL(siteNum) + searchTitle;
 
             Logger.Info($"NetworkMylf.Search url: {searchUrl}");
-            var searchData = await GetJsonFromPage(searchUrl, cancellationToken).ConfigureAwait(false);
+            var searchData = await this.GetJsonFromPage(searchUrl, cancellationToken).ConfigureAwait(false);
             var searchResults = searchData["searchResults"]["items"]["pages"][0] as JArray;
 
             Logger.Info($"NetworkMylf.Search searchResults: {searchResults.Count}");
@@ -107,7 +107,7 @@ namespace Pronium.Sites
                 sceneDate = sceneID[1];
             }
 
-            var sceneData = await GetJsonFromPage(sceneURL, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetJsonFromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -201,7 +201,7 @@ namespace Pronium.Sites
             {
                 string actorName = (string)actorLink["modelName"], actorID = (string)actorLink["modelId"], actorPhotoURL;
 
-                var actorData = await GetJsonFromPage($"{Helper.GetSearchBaseURL(siteNum)}/models/{actorID}", cancellationToken)
+                var actorData = await this.GetJsonFromPage($"{Helper.GetSearchBaseURL(siteNum)}/models/{actorID}", cancellationToken)
                     .ConfigureAwait(false);
                 if (actorData != null)
                 {
@@ -232,7 +232,7 @@ namespace Pronium.Sites
                 sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
-            var sceneData = await GetJsonFromPage(sceneURL, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetJsonFromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;

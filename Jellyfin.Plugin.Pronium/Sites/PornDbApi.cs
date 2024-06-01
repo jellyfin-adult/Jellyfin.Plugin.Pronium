@@ -36,7 +36,7 @@ namespace Pronium.Sites
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
             Logger.Info($"PornDbApi.Search url: {url}");
-            var searchResults = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
+            var searchResults = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             Logger.Info($"PornDbApi.Search searchResults: {searchResults.Count}");
             if (searchResults == null)
             {
@@ -45,10 +45,10 @@ namespace Pronium.Sites
 
             foreach (var (idx, searchResult) in searchResults["data"].WithIndex())
             {
-                string curID = (string)searchResult["_id"],
-                    sceneName = (string)searchResult["title"],
-                    sceneDate = (string)searchResult["date"],
-                    scenePoster = (string)searchResult["poster"];
+                var curID = $"{siteNum[0]}#{siteNum[1]}#{(string)searchResult["_id"]}";
+                var sceneName = (string)searchResult["title"];
+                var sceneDate = (string)searchResult["date"];
+                var scenePoster = (string)searchResult["poster"];
 
                 var res = new RemoteSearchResult
                 {
@@ -81,7 +81,7 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
-            var sceneData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -104,7 +104,7 @@ namespace Pronium.Sites
                 {
                     url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{network_id}";
 
-                    var siteData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
+                    var siteData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
                     if (siteData != null)
                     {
                         result.Item.AddStudio((string)siteData["data"]["name"]);
@@ -159,7 +159,7 @@ namespace Pronium.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"/scenes/{sceneID[0]}";
-            var sceneData = await GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
+            var sceneData = await this.GetDataFromApi(url, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -174,7 +174,7 @@ namespace Pronium.Sites
             return result;
         }
 
-        public static async Task<JObject> GetDataFromApi(string url, CancellationToken cancellationToken)
+        public async Task<JObject> GetDataFromApi(string url, CancellationToken cancellationToken)
         {
             JObject json = null;
             var headers = new Dictionary<string, string>();
