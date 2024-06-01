@@ -9,11 +9,29 @@ This metadata provider helps fill Jellyfin/Emby with information for your adult 
 ------------
 
 ## Install
-- Repository (Jellyfin only):
+
+### Jellyfin
+
+- Repository:
   - Add to the list this URL `https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/master/manifest.json`
 - Manual:
   - Download Archive from [Latest Release](https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/latest)
   - Follow the [Instruction](https://jellyfin.org/docs/general/server/plugins/index.html)
+
+### Emby (Synology)
+
+1. Download an archive from [Latest Release](https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/latest)
+1. Stop EMBY
+1. Copy DLL file to any location on your NAS (e.g. `home`)
+1. Run script to copy file with permissions
+
+  ```zsh
+  sudo -i
+
+  cp --no-preserve=mode /volume1/home/Emby.Plugins.Pronium.dll /volume1/@appdata/EmbyServer/plugins
+
+  chmod 777 /volume1/@appdata/EmbyServer/plugins/Emby.Plugins.Pronium.dll
+  ```
 
 ## Features
 - Scrapes any available Metadata, including:
