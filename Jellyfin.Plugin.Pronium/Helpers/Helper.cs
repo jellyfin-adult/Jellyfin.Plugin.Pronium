@@ -30,6 +30,14 @@ namespace Pronium.Helpers
                 .Replace("^", string.Empty).ToLower();
         }
 
+        public static string GetSitePrefixByName(string siteName)
+        {
+            return (Database.SiteList.Abbrieviations
+                    .FirstOrDefault(t => string.Compare(t.Value, siteName, StringComparison.InvariantCultureIgnoreCase) == 0).Key ??
+                siteName)
+                .Replace("^", string.Empty).ToLower();
+        }
+
         public static string GetSearchSiteName(int[] siteNum)
         {
             if (siteNum == null)

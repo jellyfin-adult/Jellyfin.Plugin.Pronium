@@ -36,6 +36,13 @@ public class PornDbApiTests
         Assert.That(result.People.Count, Is.EqualTo(2));
     }
 
+        [Test]
+    public async Task AbbreviationAreUsed()
+    {
+        var result = await _site.Update(new[] { 48, 0 }, new[] { "802284" }, new CancellationToken());
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("rws - 2012-10-30 - Bride Of Frankendick"));
+    }
+
     [Test]
     public async Task GetImagesIsWorking()
     {

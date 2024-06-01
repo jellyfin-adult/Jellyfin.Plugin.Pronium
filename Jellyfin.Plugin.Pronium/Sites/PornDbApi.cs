@@ -117,9 +117,10 @@ namespace Pronium.Sites
             {
                 result.Item.PremiereDate = sceneDateObj;
                 var siteName = result.Item.Studios.FirstOrDefault().Replace(" ", string.Empty).ToLower();
+                var prefix = Helper.GetSitePrefixByName(siteName);
                 var resultDate = result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-                result.Item.OriginalTitle = $"{siteName} - {resultDate} - {result.Item.Name}";
+                result.Item.OriginalTitle = $"{prefix} - {resultDate} - {result.Item.Name}";
             }
 
             if (sceneData.ContainsKey("tags"))
