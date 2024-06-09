@@ -32,7 +32,7 @@ namespace Pronium.Sites
 
             if (searchDate.HasValue)
             {
-                searchTitle += searchDate.Value.ToString("yyyy-MM-dd");
+                searchTitle += " " + searchDate.Value.ToString("yyyy-MM-dd");
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"?parse={searchTitle}";

@@ -89,7 +89,7 @@ namespace Pronium.Providers
                 }
             }
 
-            var searchTitle = site.siteName != null ? Helper.GetClearTitle(title, site.siteName) : string.Empty;
+            var searchTitle = site.siteName != null ? Helper.GetClearTitle(title, site.siteName) : title;
             var searchDate = string.Empty;
             DateTime? searchDateObj;
             var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
@@ -147,15 +147,16 @@ namespace Pronium.Providers
             {
                 var pornDbSite = Helper.GetSiteFromTitle("PornDB");
                 var pornDbMoviesSite = Helper.GetSiteFromTitle("PornDBMovies");
-                var pordDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
+                var pornDbProvider = Helper.GetProviderBySiteId(pornDbSite.siteNum[0]);
+                var pornDbTitle = string.IsNullOrEmpty(site.siteName) ? searchTitle : $"{site.siteName} - {searchTitle}";
 
-                Logger.Info($"provider: {pordDbProvider}");
+                Logger.Info($"provider: {pornDbProvider}");
 
                 try
                 {
-                    var pornDbResult = await pordDbProvider.Search(pornDbSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    var pornDbResult = await pornDbProvider.Search(pornDbSite.siteNum, pornDbTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                     result.AddRange(pornDbResult);
-                    var pornDbMoviesResult = await pordDbProvider.Search(pornDbMoviesSite.siteNum, title, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    var pornDbMoviesResult = await pornDbProvider.Search(pornDbMoviesSite.siteNum, pornDbTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                     result.AddRange(pornDbMoviesResult);
                 }
                 catch (Exception e)
