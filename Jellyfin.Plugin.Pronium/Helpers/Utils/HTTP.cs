@@ -91,8 +91,6 @@ namespace Pronium.Helpers.Utils
         {
             var result = new HTTPResponse() { IsOK = false, };
 
-            url = Uri.EscapeUriString(Uri.UnescapeDataString(url));
-
             if (method == null)
             {
                 method = HttpMethod.Get;
