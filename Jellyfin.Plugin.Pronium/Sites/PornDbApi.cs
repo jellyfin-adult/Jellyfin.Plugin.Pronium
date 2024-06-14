@@ -170,7 +170,11 @@ namespace Pronium.Sites
 
             sceneData = (JObject)sceneData["data"];
 
-            result.Add(new RemoteImageInfo { Url = (string)sceneData["poster"], Type = ImageType.Primary });
+            if (!((string)sceneData["poster"]).Contains("smart/filters"))
+            {
+                result.Add(new RemoteImageInfo { Url = (string)sceneData["poster"], Type = ImageType.Primary });
+            }
+
             result.Add(new RemoteImageInfo { Url = (string)sceneData["background"]["full"], Type = ImageType.Primary });
             result.Add(new RemoteImageInfo { Url = (string)sceneData["background"]["full"], Type = ImageType.Backdrop });
 

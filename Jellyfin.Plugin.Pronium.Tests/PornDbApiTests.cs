@@ -87,7 +87,7 @@ public class PornDbApiTests
     {
         var result = (await _site.GetImages(new[] { 48, 0 }, new[] { "2751895" }, null, new CancellationToken())).ToList();
 
-        Assert.That(result, Has.Count.EqualTo(3));
+        Assert.That(result, Has.Count.EqualTo(2));
         Assert.That(result.First().Url, Does.Contain("my-dirty-maid-anal-maid"));
     }
 }
