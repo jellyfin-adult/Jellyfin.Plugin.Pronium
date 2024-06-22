@@ -41,6 +41,20 @@ public class SiteData18Tests
     }
 
     [Test]
+    public async Task UpdateIsWorkingBoyGirl()
+    {
+        var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode("https://www.data18.com/scenes/144862"), "2010-10-18" }, new CancellationToken());
+        Assert.That(result.Item.Name, Is.EqualTo("Block Out Your Husband ... Now Fuck Me"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("data18 - 2010-10-18 - Block Out Your Husband ... Now Fuck Me"));
+        Assert.That(result.Item.Overview, Is.Not.Empty);
+        Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
+        Assert.That(result.Item.Genres.Length, Is.EqualTo(4));
+        Assert.That(result.People.Count, Is.EqualTo(2));
+        Assert.That(result.People[0].ImageUrl, Does.Contain("db0c8c38-c754-4617-8635-6a0abf5c199b.jpg"));
+        Assert.That(result.People[1].ImageUrl, Does.Contain("scott-nails.jpg"));
+    }
+
+    [Test]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(
