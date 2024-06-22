@@ -162,22 +162,27 @@ namespace Pronium.Sites
                 var actorName = actorLink.SelectSingleText("./@alt");
                 var actorProvider = new ActorFreeones();
                 var actors = await actorProvider.Search(new[] { 43, 0 }, actorName, null, cancellationToken);
-                var firstActor = await actorProvider.Update(
-                    new[] { 43, 0 },
-                    actors.First().ProviderIds.Values.ToArray(),
-                    cancellationToken);
 
-                if (actors.Count > 0 && firstActor.Item.OriginalTitle.Contains(actorName))
+                if (actors.Count > 0)
                 {
                     var actor = actors.First();
+                    var firstActor = await actorProvider.Update(
+                        new[] { 43, 0 },
+                        actors.First().ProviderIds.Values.ToArray(),
+                        cancellationToken);
 
-                    result.People.Add(new PersonInfo { Name = actor.Name, ImageUrl = actor.ImageUrl, ProviderIds = actor.ProviderIds });
+                    if (firstActor.Item.OriginalTitle.Contains(actorName))
+                    {
+                        result.People.Add(new PersonInfo { Name = actor.Name, ImageUrl = actor.ImageUrl, ProviderIds = actor.ProviderIds });
+                    }
+                    else
+                    {
+                        result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
+                    }
                 }
                 else
                 {
-                    var actor = new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@src") };
-
-                    result.People.Add(actor);
+                    result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
                 }
             }
 
