@@ -15,6 +15,7 @@ public class SiteGloryholeTests
     private readonly NetworkGammaEnt _site = new();
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 19, 3 }, "Alena Croft", DateTime.Parse("2015-09-28"), new CancellationToken());
@@ -25,6 +26,7 @@ public class SiteGloryholeTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 19, 3 }, new[] { "221961", "scenes", "2015-09-28" }, new CancellationToken());
@@ -37,6 +39,7 @@ public class SiteGloryholeTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(new[] { 19, 3 }, new[] { "221961", "scenes", "2015-09-28" }, null, new CancellationToken()))

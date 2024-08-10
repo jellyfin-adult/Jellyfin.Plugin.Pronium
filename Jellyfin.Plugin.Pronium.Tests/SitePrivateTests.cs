@@ -21,6 +21,7 @@ public class SitePrivateTests
         "https://www.private.com/scene/blonde-babe-kristi-lust-wears-bikini-on-boat-before-hardcore-threeway/9281";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForMovieIsWorking()
     {
         var result = await _site.Search(
@@ -35,6 +36,7 @@ public class SitePrivateTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForSceneIsWorking()
     {
         var result = await _site.Search(
@@ -49,6 +51,7 @@ public class SitePrivateTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateSceneIsWorking()
     {
         var result = await _site.Update(new[] { 53, 0 }, new[] { Helper.Encode(_testSceneUrl), "2012-05-06" }, new CancellationToken());
@@ -63,6 +66,7 @@ public class SitePrivateTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateMovieIsWorking()
     {
         var result = await _site.Update(new[] { 53, 0 }, new[] { Helper.Encode(_testMovieUrl), "2011-10-01" }, new CancellationToken());
@@ -74,6 +78,7 @@ public class SitePrivateTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesForSceneIsWorking()
     {
         var result = (await _site.GetImages(
@@ -87,6 +92,7 @@ public class SitePrivateTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesForMovieIsWorking()
     {
         var result = (await _site.GetImages(

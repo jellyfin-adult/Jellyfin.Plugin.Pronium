@@ -15,6 +15,7 @@ public class MovieProviderTests
     private readonly MovieProvider _provider = new();
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "slayed - dollhouse" }, new CancellationToken());
@@ -23,6 +24,7 @@ public class MovieProviderTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForMoviesIsWorking()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Dark Woods" }, new CancellationToken());
@@ -31,6 +33,7 @@ public class MovieProviderTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForUniqueMovie()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "Confidential file" }, new CancellationToken());
@@ -40,6 +43,7 @@ public class MovieProviderTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task FullNameSearchPornworld()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "pornworld - 2016-10-02 - Double Dong Delight - a Huge Glass Dick Does the Trick" }, new CancellationToken());
@@ -48,6 +52,7 @@ public class MovieProviderTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task FullNameSearchPrivate()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "private - 2001-04-01 - Eternal Love" }, new CancellationToken());
@@ -56,6 +61,7 @@ public class MovieProviderTests
     }
 
         [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task FullNameSearchBrazzersMissingOnOfficial()
     {
         var data = await _provider.GetSearchResults(new MediaBrowser.Controller.Providers.MovieInfo { Name = "rws - 2016-06-08 - One Last Shot" }, new CancellationToken());

@@ -17,6 +17,7 @@ public class ActorFreeonesTests
     private readonly string _testSceneUrl = "/natasha-nice/bio";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 43, 0 }, "Natasha Nice", null, new CancellationToken());
@@ -28,6 +29,7 @@ public class ActorFreeonesTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 43, 0 }, new[] { Helper.Encode(_testSceneUrl), "2024-02-17" }, new CancellationToken());
@@ -37,6 +39,7 @@ public class ActorFreeonesTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

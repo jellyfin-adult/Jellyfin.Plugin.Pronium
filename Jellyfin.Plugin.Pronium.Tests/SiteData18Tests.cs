@@ -17,6 +17,7 @@ public class SiteData18Tests
     private readonly string _testSceneUrl = "https://www.data18.com/scenes/144118";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 51, 0 }, "Elite Dyke Society", null, new CancellationToken());
@@ -27,6 +28,7 @@ public class SiteData18Tests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode(_testSceneUrl), "2010-09-14" }, new CancellationToken());
@@ -41,6 +43,7 @@ public class SiteData18Tests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorkingBoyGirl()
     {
         var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode("https://www.data18.com/scenes/144862"), "2010-10-18" }, new CancellationToken());
@@ -55,6 +58,7 @@ public class SiteData18Tests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

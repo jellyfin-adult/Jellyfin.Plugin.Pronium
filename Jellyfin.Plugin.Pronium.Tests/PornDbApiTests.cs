@@ -15,6 +15,7 @@ public class PornDbApiTests
     private readonly PornDbApi _site = new();
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 48, 0 }, "Anal Maid Service", null, new CancellationToken());
@@ -25,6 +26,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForUniqueMovie()
     {
         var result = await _site.Search(new[] { 48, 1 }, "Casino - Endgame", null, new CancellationToken());
@@ -35,6 +37,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchForMoviesIsWorking()
     {
         var result = await _site.Search(new[] { 48, 1 }, "Dark Woods", null, new CancellationToken());
@@ -45,6 +48,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "2751895" }, new CancellationToken());
@@ -57,6 +61,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task AbbreviationAreUsed()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "802284" }, new CancellationToken());
@@ -64,6 +69,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task AbbreviationAreUsedWithSpecialChars()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "1978334" }, new CancellationToken());
@@ -71,6 +77,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateForMoviesIsWorking()
     {
         var result = await _site.Update(new[] { 48, 1 }, new[] { "4697054" }, new CancellationToken());
@@ -83,6 +90,7 @@ public class PornDbApiTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(new[] { 48, 0 }, new[] { "2751895" }, null, new CancellationToken())).ToList();

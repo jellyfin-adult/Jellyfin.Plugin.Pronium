@@ -18,6 +18,7 @@ public class SiteClips4SaleTests
     private readonly string _testSceneUrl = "/studio/33729/24251761/mf-horny-step-son-fucks-his-step-mom-hd-taboo-mandy-flores";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(
@@ -32,6 +33,7 @@ public class SiteClips4SaleTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 49, 0 }, new[] { Helper.Encode(_testSceneUrl), "2020-12-12" }, new CancellationToken());
@@ -47,6 +49,7 @@ public class SiteClips4SaleTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

@@ -17,6 +17,7 @@ public class SiteFreeUseFantasyTests
     private readonly string _testSceneUrl = "https://www.teamskeet.com/movies/show-us-what-youre-good-at";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 24, 58 }, "Show Us What You’re Good at", null, new CancellationToken());
@@ -28,6 +29,7 @@ public class SiteFreeUseFantasyTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 24, 58 }, new[] { Helper.Encode(_testSceneUrl), "2024-02-03" }, new CancellationToken());
@@ -46,6 +48,7 @@ public class SiteFreeUseFantasyTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(
