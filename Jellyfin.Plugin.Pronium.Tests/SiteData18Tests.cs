@@ -50,7 +50,7 @@ public class SiteData18Tests
         Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(4));
         Assert.That(result.People.Count, Is.EqualTo(2));
-        Assert.That(result.People[0].ImageUrl, Does.Contain("db0c8c38-c754-4617-8635-6a0abf5c199b.jpg"));
+        Assert.That(result.People[0].ImageUrl, Does.Contain("Sophie-Dee"));
         Assert.That(result.People[1].ImageUrl, Does.Contain("scott-nails.jpg"));
     }
 

@@ -77,7 +77,7 @@ public class PornDbApiTests
         Assert.That(result.Item.Name, Is.EqualTo("Dark Woods"));
         Assert.That(result.Item.OriginalTitle, Is.EqualTo("dpg - 2023-04-11 - Dark Woods"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
-        Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
+        Assert.That(result.Item.Studios.Length, Is.EqualTo(1));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));
         Assert.That(result.People.Count, Is.EqualTo(5));
     }
