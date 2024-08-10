@@ -31,8 +31,8 @@ public class SiteFreeUseFantasyTests
         Warn.Unless(result.Count, Is.GreaterThan(1));
         var id = result.FirstOrDefault()?.ProviderIds.Values.FirstOrDefault();
         Warn.Unless(id, Is.Not.Empty);
-        Warn.Unless(Helper.Decode(id?.Split('#')[0]), Is.EqualTo(_testSceneUrl));
-        Warn.Unless(result.First().ImageUrl, Does.Contain("breezy_bri_and_penelope_woods"));
+        Warn.Unless(id != null ? Helper.Decode(id.Split('#')[0]) : "", Is.EqualTo(_testSceneUrl));
+        Warn.Unless(result.FirstOrDefault()?.ImageUrl ?? "", Does.Contain("breezy_bri_and_penelope_woods"));
     }
 
     [Test]
