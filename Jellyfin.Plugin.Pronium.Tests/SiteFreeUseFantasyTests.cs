@@ -35,8 +35,8 @@ public class SiteFreeUseFantasyTests
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 24, 58 }, new[] { Helper.Encode(_testSceneUrl), "2024-08-10" }, new CancellationToken());
-        Warn.Unless(result.Count, Is.GreaterThan(1));
-        if (result.Count >= 1) {
+        Warn.Unless(result.Item, Is.Not.Null);
+        if (result.Item != null) {
             Assert.That(result.Item.Name, Is.EqualTo("Freeused Freeloader"));
             Assert.That(result.Item.OriginalTitle, Is.EqualTo("freeusefantasy - 2024-08-10 - Freeused Freeloader"));
             Assert.That(result.Item.Overview, Does.StartWith("Tyler is pissed at Penelope. She’s not contributing to rent"));

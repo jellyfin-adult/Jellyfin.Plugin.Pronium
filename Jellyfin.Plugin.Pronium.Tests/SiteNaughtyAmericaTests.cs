@@ -38,7 +38,7 @@ public class SiteNaughtyAmericaTests
     {
         var result = await _site.Update(new[] { 10, 0 }, new[] { Helper.Encode(_testSceneUrl), "2023-03-02" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Busty brunette Alison Rey takes friend's boyfriend's dick for a ride"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("nam - 2023-03-02 - Busty brunette Alison Rey takes friend"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("nam - 2023-03-02 - Busty brunette Alison Rey takes friend's boyfriend's dick for a ride"));
         Assert.That(result.Item.Overview, Does.StartWith("Alison Rey has her friend"));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(15));
