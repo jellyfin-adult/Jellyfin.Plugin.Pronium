@@ -21,6 +21,7 @@ public class SitePornWorldTests
         "https://pornworld.com/watch/465350/insatiable_babe_rebecca_volpetti_gets_dp_d_during_boxing_training_gp2727";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task RegularSearchIsWorking()
     {
         var result = await _site.Search(
@@ -35,6 +36,7 @@ public class SitePornWorldTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchByIdIsWorking()
     {
         var result = await _site.Search(
@@ -50,6 +52,7 @@ public class SitePornWorldTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(
@@ -73,6 +76,7 @@ public class SitePornWorldTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

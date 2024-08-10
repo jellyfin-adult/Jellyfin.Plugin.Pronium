@@ -17,6 +17,7 @@ public class SiteData18Tests
     private readonly string _testSceneUrl = "https://www.data18.com/scenes/144118";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 51, 0 }, "Elite Dyke Society", null, new CancellationToken());
@@ -27,6 +28,7 @@ public class SiteData18Tests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode(_testSceneUrl), "2010-09-14" }, new CancellationToken());
@@ -41,6 +43,7 @@ public class SiteData18Tests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorkingBoyGirl()
     {
         var result = await _site.Update(new[] { 51, 0 }, new[] { Helper.Encode("https://www.data18.com/scenes/144862"), "2010-10-18" }, new CancellationToken());
@@ -50,11 +53,12 @@ public class SiteData18Tests
         Assert.That(result.Item.Studios.Length, Is.EqualTo(3));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(4));
         Assert.That(result.People.Count, Is.EqualTo(2));
-        Assert.That(result.People[0].ImageUrl, Does.Contain("db0c8c38-c754-4617-8635-6a0abf5c199b.jpg"));
+        Assert.That(result.People[0].ImageUrl, Does.Contain("Sophie-Dee"));
         Assert.That(result.People[1].ImageUrl, Does.Contain("scott-nails.jpg"));
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

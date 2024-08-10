@@ -17,6 +17,7 @@ public class SiteAnalMomTests
     private readonly string _testSceneUrl = "https://mylf.com/movies/a-hole-lot-of-help-from-my-tutor";
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 23, 26 }, "A Hole Lot of Help From My Tutor", null, new CancellationToken());
@@ -28,6 +29,7 @@ public class SiteAnalMomTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 23, 26 }, new[] { Helper.Encode(_testSceneUrl), "2024-02-17" }, new CancellationToken());
@@ -45,6 +47,7 @@ public class SiteAnalMomTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(

@@ -13,6 +13,7 @@ public class HelperTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task PrefixIsExtractedProperly()
     {
         Assert.That(Helper.GetSitePrefix(new[] { 0, 5 }), Is.EqualTo("btaw"));

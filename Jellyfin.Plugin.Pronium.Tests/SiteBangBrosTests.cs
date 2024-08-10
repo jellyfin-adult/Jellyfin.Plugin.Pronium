@@ -15,6 +15,7 @@ public class SiteBangBrosTests
     private readonly Network1service _site = new();
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
         var result = await _site.Search(new[] { 22, 0 }, "Anal Maid Service", null, new CancellationToken());
@@ -25,6 +26,7 @@ public class SiteBangBrosTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task UpdateIsWorking()
     {
         var result = await _site.Update(new[] { 22, 0 }, new[] { "8854561", "scene" }, new CancellationToken());
@@ -37,6 +39,7 @@ public class SiteBangBrosTests
     }
 
     [Test]
+    [TestCase(TestName = "{c}.{m}")]
     public async Task GetImagesIsWorking()
     {
         var result = (await _site.GetImages(new[] { 22, 0 }, new[] { "8854561", "scene" }, null, new CancellationToken())).ToList();
