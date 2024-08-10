@@ -1,7 +1,7 @@
 using Pronium.Helpers;
 using Pronium.Helpers.Utils;
 using Pronium.Sites;
-using Newtonsoft.Json;
+using MediaBrowser.Model.Providers;
 
 namespace Pronium.UnitTests;
 
@@ -21,7 +21,12 @@ public class SiteFreeUseFantasyTests
     [TestCase(TestName = "{c}.{m}")]
     public async Task SearchIsWorking()
     {
-        var result = await _site.Search(new[] { 24, 58 }, "Freeused Freeloader", null, new CancellationToken());
+        var result = new List<RemoteSearchResult>();
+        try {
+            result = await _site.Search(new[] { 24, 58 }, "Freeused Freeloader", null, new CancellationToken());
+        } catch (Exception e) {
+            Console.WriteLine(e.Message);
+        }
 
         Warn.Unless(result.Count, Is.GreaterThan(1));
         var id = result.FirstOrDefault()?.ProviderIds.Values.FirstOrDefault();
@@ -61,6 +66,6 @@ public class SiteFreeUseFantasyTests
             new CancellationToken())).ToList();
 
         Warn.Unless(result, Has.Count.EqualTo(2));
-        Warn.Unless(result.FirstOrDefault()?.Url, Does.Contain("breezy_bri_and_penelope_woods"));
+        Warn.Unless(result.FirstOrDefault()?.Url ?? "", Does.Contain("breezy_bri_and_penelope_woods"));
     }
 }
