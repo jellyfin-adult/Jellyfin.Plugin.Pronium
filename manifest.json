@@ -9,6 +9,14 @@
         "imageUrl": "https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/dev/logo.png",
         "versions": [
             {
+                "checksum": "e3b55ae7fdbf69edabe4e16eda50d9d7",
+                "changelog": "PornDB improvements, minor fixes",
+                "targetAbi": "10.8.0.0",
+                "sourceUrl": "https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/download/2.1.5.94/Jellyfin.Plugin.Pronium.zip",
+                "timestamp": "2024-06-14T13:46:22Z",
+                "version": "2.1.5.94"
+            },
+            {
                 "checksum": "c4806ae741af13e2b59512378d31c4be",
                 "changelog": "Secuirty fixes, actors improvements",
                 "targetAbi": "10.8.0.0",
