@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">net8.0</TargetFramework>
-    <TargetFramework Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">netstandard2.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Pronium</RootNamespace>
-    <AssemblyVersion>2.1.9.141</AssemblyVersion>
-    <FileVersion>2.1.9.141</FileVersion>
+    <AssemblyVersion>2.1.9.144</AssemblyVersion>
+    <FileVersion>2.1.9.144</FileVersion>
     <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
     <Copyright>© Jellyfin Adult</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -42,8 +41,8 @@
     <PackageReference Include="SkiaSharp" Version="2.88.0"/>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
-    <PackageReference Include="MediaBrowser.Server.Core" Version="4.8.10"/>
-    <PackageReference Include="SkiaSharp" Version="2.88.0"/>
+    <PackageReference Include="MediaBrowser.Server.Core" Version="4.9.1.90"/>
+    <PackageReference Include="SkiaSharp" Version="2.88.6"/>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Debug.Emby'">
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
