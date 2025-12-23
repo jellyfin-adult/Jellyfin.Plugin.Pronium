@@ -39,7 +39,7 @@ public class SiteData18Tests
         Assert.That(result.Item.Genres.Length, Is.EqualTo(4));
         Assert.That(result.People.Count, Is.EqualTo(2));
         Assert.That(result.People[0].ImageUrl, Does.Contain("Ariella-Ferrera"));
-        Assert.That(result.People[1].ImageUrl, Does.Contain("19ef59a8-18ad-4832-83bd-6d102b40525e"));
+        Assert.That(result.People[1].ImageUrl, Does.Contain("Vanessa-Veracruz"));
     }
 
     [Test]
@@ -70,6 +70,6 @@ public class SiteData18Tests
         Assert.That(result, Has.Count.EqualTo(2));
         Assert.That(
             result.First().Url,
-            Is.EqualTo("https://cdn.dt18.com/media/t/1/scenes/1/3/65843-ariella-ferrera-vanessa-veracruz-hot-and-mean.jpg"));
+            Is.EqualTo("https://cdn.dt18.com/media/scenes/1/3/65843-ariella-ferrera-vanessa-veracruz-hot-and-mean.jpg"));
     }
 }
