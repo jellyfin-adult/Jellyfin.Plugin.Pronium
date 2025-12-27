@@ -120,9 +120,8 @@ namespace Pronium.Sites
                 result.Item.PremiereDate = sceneDateObj;
                 var siteName = Regex.Replace(result.Item.Studios.FirstOrDefault().ToLower(), "[^a-z]", string.Empty);
                 var prefix = Helper.GetSitePrefixByName(siteName);
-                var resultDate = result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-                result.Item.OriginalTitle = $"{prefix} - {resultDate} - {result.Item.Name}";
+                result.Item.OriginalTitle = $"{prefix} - {result.Item.Name} ({result.Item.PremiereDate.Value:yyyy})";
             }
 
             if (sceneData.ContainsKey("tags"))
