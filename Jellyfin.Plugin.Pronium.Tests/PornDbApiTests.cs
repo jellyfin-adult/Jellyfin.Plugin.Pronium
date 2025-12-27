@@ -51,7 +51,7 @@ public class PornDbApiTests
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "2751895" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Anal Maid Service"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("mydirtymaid - 2023-02-23 - Anal Maid Service"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("mydirtymaid - Anal Maid Service (2023)"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(15));
@@ -63,7 +63,7 @@ public class PornDbApiTests
     public async Task AbbreviationAreUsed()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "802284" }, new CancellationToken());
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("rws - 2012-10-30 - Bride Of Frankendick"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("rws - Bride Of Frankendick (2012)"));
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class PornDbApiTests
     public async Task AbbreviationAreUsedWithSpecialChars()
     {
         var result = await _site.Update(new[] { 48, 0 }, new[] { "1978334" }, new CancellationToken());
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("mshf - 2022-07-09 - Busty Redhead, Harper Red, Is So Wet and Horny That She Must Get Dick in the Cafe This Instant"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("mshf - Busty Redhead, Harper Red, Is So Wet and Horny That She Must Get Dick in the Cafe This Instant (2022)"));
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class PornDbApiTests
     {
         var result = await _site.Update(new[] { 48, 1 }, new[] { "4697054" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("Dark Woods"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("dpg - 2023-04-11 - Dark Woods"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("dpg - Dark Woods (2023)"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(1));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));

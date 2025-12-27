@@ -116,7 +116,7 @@ namespace Pronium.Sites
             {
                 result.Item.PremiereDate = sceneDateObj;
                 result.Item.OriginalTitle =
-                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} - {result.Item.Name}";
+                    $"{Helper.GetSitePrefix(siteNum)} - {result.Item.Name} ({result.Item.PremiereDate.Value:yyyy})";
             }
 
             var genreNode = sceneData.SelectNodesSafe("//dd/a[contains(@href, '/niche/')]");
