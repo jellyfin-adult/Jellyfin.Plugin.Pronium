@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">net10.0</TargetFramework>
+    <TargetFramework Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">netstandard2.1</TargetFramework>
     <RootNamespace>Pronium</RootNamespace>
-    <AssemblyVersion>2.1.9.148</AssemblyVersion>
-    <FileVersion>2.1.9.148</FileVersion>
+    <AssemblyVersion>2.1.9.149</AssemblyVersion>
+    <FileVersion>2.1.9.149</FileVersion>
     <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
     <Copyright>© Jellyfin Adult</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -36,9 +37,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
-    <PackageReference Include="Jellyfin.Controller" Version="10.10.7" />
+    <PackageReference Include="Jellyfin.Controller" Version="12.1.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.9.1.90" />
