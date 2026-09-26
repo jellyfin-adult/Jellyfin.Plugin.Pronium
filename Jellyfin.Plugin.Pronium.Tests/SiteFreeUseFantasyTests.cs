@@ -42,7 +42,7 @@ public class SiteFreeUseFantasyTests
         var result = await _site.Update(new[] { 24, 58 }, new[] { Helper.Encode(_testSceneUrl), "2024-08-10" }, new CancellationToken());
 
         Assert.That(result.Item.Name, Is.EqualTo("Freeused Freeloader"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("freeusefantasy - 2024-08-10 - Freeused Freeloader"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("freeusefantasy - Freeused Freeloader (2024)"));
         Assert.That(result.Item.Overview, Does.StartWith("Tyler is pissed at Penelope. She’s not contributing to rent"));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(86));

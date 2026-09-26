@@ -58,7 +58,7 @@ public class SitePrivateTests
         Assert.That(result.Item.Name, Is.EqualTo("Blonde Babe Kristi Lust Wears Bikini on Boat before Hardcore Threeway"));
         Assert.That(
             result.Item.OriginalTitle,
-            Is.EqualTo("private - 2012-05-06 - Blonde Babe Kristi Lust Wears Bikini on Boat before Hardcore Threeway"));
+            Is.EqualTo("private - Blonde Babe Kristi Lust Wears Bikini on Boat before Hardcore Threeway (2012)"));
         Assert.That(result.Item.Overview, Does.StartWith("Kristy Lust gets a little bit grumpy "));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(1));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(1));
