@@ -114,7 +114,13 @@ namespace Pronium.Sites
             {
                 string actorName = (string)actorLink["name"], actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
 
+#if __EMBY__
                 result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhoto });
+#else
+                var temp = result.People.ToList();
+                temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhoto });
+                result.People = temp;
+#endif
             }
 
             return result;

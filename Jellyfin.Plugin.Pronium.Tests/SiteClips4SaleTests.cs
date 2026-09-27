@@ -38,7 +38,7 @@ public class SiteClips4SaleTests
     {
         var result = await _site.Update(new[] { 49, 0 }, new[] { Helper.Encode(_testSceneUrl), "2022-05-20" }, new CancellationToken());
         Assert.That(result.Item.Name, Does.Contain("Bad Girls Detention at the Principals"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("c4s - 33729 MF~ Bad Girls Detention at the Principals house 4k Lesbian Uniform Ellie Idol"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("c4s - Bad Girls Detention at the Principals house 4k Lesbian Uniform Ellie Idol (2022)"));
         Assert.That(result.Item.Overview, Is.Not.Empty);
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(6));

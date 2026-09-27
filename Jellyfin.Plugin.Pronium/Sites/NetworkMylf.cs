@@ -206,7 +206,13 @@ namespace Pronium.Sites
                 if (actorData != null)
                 {
                     actorPhotoURL = (string)actorData["modelsContent"][actorID]["img"];
+#if __EMBY__
                     result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+#else
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+                    result.People = temp;
+#endif
                 }
             }
 

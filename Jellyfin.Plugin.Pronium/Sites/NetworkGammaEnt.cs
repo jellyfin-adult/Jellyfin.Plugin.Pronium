@@ -230,7 +230,13 @@ namespace Pronium.Sites
                         actor.ImageUrl = $"https://images-fame.gammacdn.com/actors{actorPhotoURL}";
                     }
 
+#if __EMBY__
                     result.People.Add(actor);
+#else
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(actor);
+                    result.People = temp;
+#endif
                 }
             }
 

@@ -174,7 +174,13 @@ namespace Pronium.Sites
 
                             var actor = new PersonInfo { Name = actorName };
 
+#if __EMBY__
                             result.People.Add(actor);
+#else
+                            var temp = new List<PersonInfo>(result.People);
+                            temp.Add(actor);
+                            result.People = temp;
+#endif
                         }
 
                         break;

@@ -34,7 +34,7 @@ public class SiteAnalMomTests
     {
         var result = await _site.Update(new[] { 23, 26 }, new[] { Helper.Encode(_testSceneUrl), "2024-02-17" }, new CancellationToken());
         Assert.That(result.Item.Name, Is.EqualTo("A Hole Lot of Help From My Tutor"));
-        Assert.That(result.Item.OriginalTitle, Is.EqualTo("analmom - 2024-02-17 - A Hole Lot of Help From My Tutor"));
+        Assert.That(result.Item.OriginalTitle, Is.EqualTo("analmom - A Hole Lot of Help From My Tutor (2024)"));
         Assert.That(result.Item.Overview, Does.StartWith("Max and Nade aren’t the sharpest tools"));
         Assert.That(result.Item.Studios.Length, Is.EqualTo(2));
         Assert.That(result.Item.Genres.Length, Is.EqualTo(70));

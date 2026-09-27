@@ -144,7 +144,13 @@ namespace Pronium.Sites
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
                 var actorPhotoURL = "http:" + actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
 
+#if __EMBY__
                 result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+#else
+                var temp = result.People.ToList();
+                temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+                result.People = temp;
+#endif
             }
 
             return result;

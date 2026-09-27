@@ -324,7 +324,7 @@ namespace Pronium.Providers
 
                     if (result.Item.Genres != null && result.Item.Genres.Any())
                     {
-                        result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People);
+                        result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People?.ToList());
                     }
 
                     if (!string.IsNullOrEmpty(result.Item.ExternalId))

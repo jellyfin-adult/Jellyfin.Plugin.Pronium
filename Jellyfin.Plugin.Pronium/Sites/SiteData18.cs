@@ -173,16 +173,34 @@ namespace Pronium.Sites
 
                     if (firstActor.Item.OriginalTitle.Contains(actorName))
                     {
+#if __EMBY__
                         result.People.Add(new PersonInfo { Name = actor.Name, ImageUrl = actor.ImageUrl, ProviderIds = actor.ProviderIds });
+#else
+                        var temp = new List<PersonInfo>(result.People);
+                        temp.Add(new PersonInfo { Name = actor.Name, ImageUrl = actor.ImageUrl, ProviderIds = actor.ProviderIds });
+                        result.People = temp;
+#endif
                     }
                     else
                     {
+#if __EMBY__
                         result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
+#else
+                        var temp = new List<PersonInfo>(result.People);
+                        temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
+                        result.People = temp;
+#endif
                     }
                 }
                 else
                 {
+#if __EMBY__
                     result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
+#else
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorLink.SelectSingleText("./@data-src") });
+                    result.People = temp;
+#endif
                 }
             }
 

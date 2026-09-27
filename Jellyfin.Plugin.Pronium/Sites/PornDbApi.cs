@@ -141,7 +141,13 @@ namespace Pronium.Sites
                     var imageUrl = actorLink["is_parent"].ToString() == "False" ? actorLink["parent"]["image"].ToString() : actorLink["image"].ToString();
                     var actor = new PersonInfo { Name = (string)actorLink["name"], ImageUrl = imageUrl };
 
+#if __EMBY__
                     result.People.Add(actor);
+#else
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(actor);
+                    result.People = temp;
+#endif
                 }
             }
 

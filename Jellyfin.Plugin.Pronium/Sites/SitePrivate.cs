@@ -166,7 +166,13 @@ namespace Pronium.Sites
                     actor.ImageUrl = actorImage.Attributes["src"].Value;
                 }
 
+#if __EMBY__
                 result.People.Add(actor);
+#else
+                var temp = new List<PersonInfo>(result.People);
+                temp.Add(actor);
+                result.People = temp;
+#endif
             }
 
             Logger.Info($"SitePrivate.Update genres: {result.Item.Genres.Length}, actors: {result.People.Count}");

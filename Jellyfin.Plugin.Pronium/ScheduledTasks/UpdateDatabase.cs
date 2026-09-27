@@ -77,9 +77,15 @@ namespace Pronium.ScheduledTasks
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
         {
+#if __EMBY__
             yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerStartup };
 
             yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerInterval, IntervalTicks = TimeSpan.FromHours(24).Ticks };
+#else
+            yield return new TaskTriggerInfo { Type = TaskTriggerInfoType.StartupTrigger };
+
+            yield return new TaskTriggerInfo { Type = TaskTriggerInfoType.IntervalTrigger, IntervalTicks = TimeSpan.FromHours(24).Ticks };
+#endif
         }
     }
 }

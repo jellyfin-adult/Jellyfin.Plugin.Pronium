@@ -91,7 +91,11 @@ namespace Pronium.ScheduledTasks
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
         {
-            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerInterval, IntervalTicks = TimeSpan.FromHours(24).Ticks };
+#if __EMBY__
+            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerDaily, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
+#else
+            yield return new TaskTriggerInfo { Type = TaskTriggerInfoType.DailyTrigger, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
+#endif
         }
     }
 }

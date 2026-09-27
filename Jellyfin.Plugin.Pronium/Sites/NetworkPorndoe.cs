@@ -130,7 +130,13 @@ namespace Pronium.Sites
                     res.ImageUrl = actorPhoto;
                 }
 
+#if __EMBY__
                 result.People.Add(res);
+#else
+                var temp = new List<PersonInfo>(result.People);
+                temp.Add(res);
+                result.People = temp;
+#endif
             }
 
             return result;

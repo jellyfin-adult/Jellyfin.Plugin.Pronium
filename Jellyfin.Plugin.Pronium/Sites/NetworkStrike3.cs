@@ -129,7 +129,13 @@ namespace Pronium.Sites
                     actor.ImageUrl = (string)actorLink["images"]["listing"].First()["highdpi"]["double"];
                 }
 
+#if __EMBY__
                 result.People.Add(actor);
+#else
+                var temp = new List<PersonInfo>(result.People);
+                temp.Add(actor);
+                result.People = temp;
+#endif
             }
 
             return result;

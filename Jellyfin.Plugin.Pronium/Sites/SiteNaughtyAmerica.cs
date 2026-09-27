@@ -115,7 +115,13 @@ namespace Pronium.Sites
                     actor.ImageUrl = $"https:{actorImageUrl}";
                 }
 
+#if __EMBY__
                 result.People.Add(actor);
+#else
+                var temp = new List<PersonInfo>(result.People);
+                temp.Add(actor);
+                result.People = temp;
+#endif
             }
 
             Logger.Info($"SiteNaughtyAmerica.Update genres: {result.Item.Genres.Length}, actors: {result.People.Count}");
