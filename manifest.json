@@ -9,7 +9,7 @@
         "imageUrl": "https://raw.githubusercontent.com/jellyfin-adult/Jellyfin.Plugin.Pronium/dev/logo.png",
         "versions": [
             {
-                "checksum": "8ad2e8db60f14a6d2c8c454cce7d99d996d6033b7ef8bc5b381717e6ead0e0cf",
+                "checksum": "be8c8a5702e42cc0a12a028cb6115186",
                 "changelog": "Add support for Jellyfin v12 API",
                 "targetAbi": "10.8.0.0",
                 "sourceUrl": "https://github.com/jellyfin-adult/Jellyfin.Plugin.Pronium/releases/download/2.2.0.153/Jellyfin.Plugin.Pronium.zip",
