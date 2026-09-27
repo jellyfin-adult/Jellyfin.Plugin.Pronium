@@ -47,9 +47,8 @@ namespace Pronium.ScheduledTasks
 #if __EMBY__
                 peoples = this.libraryManager.GetItemPeople(item);
 #else
-                peoples = this.libraryManager.GetPeople(item);
+                peoples = this.libraryManager.GetPeople(item).ToList();
 #endif
-
                 if (peoples != null && peoples.Any())
                 {
                     var parent = Actors.Cleanup(peoples, item);
@@ -73,7 +72,7 @@ namespace Pronium.ScheduledTasks
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
         {
-            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerWeekly, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
+            yield return new TaskTriggerInfo { Type = "Weekly", DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
         }
     }
 }

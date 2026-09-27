@@ -192,7 +192,14 @@ namespace Pronium.Sites
                         actor.ImageUrl = (string)actorData["images"]["profile"]["0"]["xs"]["url"];
                     }
 
+#if __EMBY__
                     result.People.Add(actor);
+#else
+                    // Jellyfin has read-only collections, need to convert and reassign 
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(actor);
+                    result.People = temp;
+#endif
                 }
             }
 

@@ -135,7 +135,14 @@ namespace Pronium.Sites
 
                 if (!string.IsNullOrEmpty(actorName))
                 {
+#if __EMBY__
                     result.People.Add(new PersonInfo { Name = actorName });
+#else
+                    // Jellyfin has read-only collections, need to convert and reassign 
+                    var temp = new List<PersonInfo>(result.People);
+                    temp.Add(new PersonInfo { Name = actorName });
+                    result.People = temp;
+#endif
                 }
             }
 

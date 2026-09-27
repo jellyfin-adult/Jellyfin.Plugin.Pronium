@@ -65,7 +65,7 @@ namespace Pronium.ScheduledTasks
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
         {
-            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerWeekly, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
+            yield return new TaskTriggerInfo { Type = "Weekly", DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
         }
     }
 }

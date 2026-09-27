@@ -103,7 +103,12 @@ namespace Pronium.Sites
 
         public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
+#if __EMBY__
             var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
+#else
+            // For Jellyfin, we'll create a list to collect results and then assign appropriately
+            var result = new MetadataResult<BaseItem> { Item = new Movie(), People = new List<PersonInfo>() };
+#endif
 
             if (sceneID == null)
             {
@@ -174,7 +179,14 @@ namespace Pronium.Sites
 
                             var actor = new PersonInfo { Name = actorName };
 
+#if __EMBY__
                             result.People.Add(actor);
+#else
+                            // Jellyfin has read-only collections, need to convert and reassign 
+                            var temp = new List<PersonInfo>(result.People);
+                            temp.Add(actor);
+                            result.People = temp;
+#endif
                         }
 
                         break;

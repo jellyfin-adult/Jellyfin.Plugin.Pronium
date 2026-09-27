@@ -132,7 +132,14 @@ namespace Pronium.Sites
                 string actorName = actorLink.Attributes["data-mxptext"].Value,
                     actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
 
+#if __EMBY__
                 result.People.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+#else
+                // Convert to mutable list first (Jellyfin has read-only collections)
+                var temp = result.People.ToList();
+                temp.Add(new PersonInfo { Name = actorName, ImageUrl = actorPhotoURL });
+                result.People = temp;
+#endif
             }
 
             return result;
